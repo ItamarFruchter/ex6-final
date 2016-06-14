@@ -1,5 +1,7 @@
 package oop.ex6.blockAnalayzer;
 
+import java.util.regex.Pattern;
+
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.variables.Member;
 
@@ -51,8 +53,15 @@ public class NonMethodBlock extends Block {
 
 	// This block's type.
 	private final NonMethodBlockType type;
-	
-	private static final 
+
+	// A regular expression for the structure of condition.
+	private static final String MEMBER_NAME_REGEX = "\\s*\\w+\\s*",
+			RAW_MEMBER_REGEX = "\\s*((-?\\d+(.\\d+)?)|true|false)\\s*";
+	private static final String CONDITION_REGEX = "(" + MEMBER_NAME_REGEX + "|"
+			+ RAW_MEMBER_REGEX + ")(((\\|\\|)|(\\&\\&))(" + MEMBER_NAME_REGEX
+			+ "|" + RAW_MEMBER_REGEX + "))*";
+	private static final Pattern CONDITION_PATTERN = Pattern
+			.compile(CONDITION_REGEX);
 
 	/**
 	 * Constructs a non method block, or throws a relevant exception if there
@@ -81,7 +90,7 @@ public class NonMethodBlock extends Block {
 
 	@Override
 	protected boolean checkCondition(String condition) {
-		
+
 		return false;
 	}
 

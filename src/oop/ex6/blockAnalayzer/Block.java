@@ -14,7 +14,7 @@ public abstract class Block {
 	 /**
 	  * The known local members this block (scope wise).
 	  */
-	 protected LinkedList<Member> globalMembers;
+	 protected Member[] globalMembers;
 	 
 	 /**
 	 * Checks the condition: for an if/while checks whether the string
