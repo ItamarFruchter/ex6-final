@@ -6,15 +6,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.regex.*;
 
 /**
  * this class process the file containing the code 
  */
 public class FileProcessor {	
-	
-	private final static Pattern NOT_EMPTY_LINE = Pattern.compile("\\S");
-	
+		
 	private FileProcessor() {}
 	
 	/**
@@ -28,12 +25,7 @@ public class FileProcessor {
 		br = new BufferedReader(new FileReader(file));
 		String str = br.readLine();
 		while (str != null){
-			Matcher notEmptyMatcher = NOT_EMPTY_LINE.matcher(str);
-			if (notEmptyMatcher.find()){ // if there is even one char which is not a white
-				// space the line is significant
-				lines.add(str);
-			}
-			str = br.readLine();
+			lines.add(str);
 		}
 		br.close();
 		return lines.toArray(new String[lines.size()]);

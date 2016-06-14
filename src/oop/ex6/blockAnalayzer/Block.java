@@ -131,7 +131,7 @@ public abstract class Block {
 			case METHOD_CALLING:
 				break;
 
-			case COMMENT_LINE:
+			case IGNORABLE_LINE:
 				break;
 
 			case CLOSING_BLOCK:

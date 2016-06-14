@@ -81,8 +81,8 @@ public class MemberFactory {
 				allRelevantMembers.addAll(localMembers);
 				allRelevantMembers.addAll(outerScopeMembers);
 				for (Member memberToCheck : allRelevantMembers) {
-					if (error.name.equals(memberToCheck.name)
-							&& Type.canBeCasted(Type.findType(type), error.type)
+					if (error.getName().equals(memberToCheck.name)
+							&& Type.canBeCasted(Type.findType(type), error.getType())
 							&& memberToCheck.hasValue) {
 						memberParameters.value = memberToCheck.getType().getDefaultValue();
 						listOfMembers.add(new Member(memberParameters.name, type, memberParameters.value, modifier));

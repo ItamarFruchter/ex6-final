@@ -8,5 +8,9 @@ import oop.ex6.error.IllegalCodeException;
 public class InvalidTypeException extends IllegalCodeException {
 
 	private static final long serialVersionUID = 1L;
-	
+	private final static String MESSAGE = "The type given is not valid.";
+
+	public InvalidTypeException() {
+		this.meaningfulMessage = MESSAGE;
+	}
 }

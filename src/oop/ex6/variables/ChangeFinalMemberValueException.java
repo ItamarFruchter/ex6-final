@@ -7,6 +7,11 @@ import oop.ex6.error.IllegalCodeException;
  */
 public class ChangeFinalMemberValueException extends IllegalCodeException {
 
+	private final static String MESSAGE = "can not assign new value because variable is final.";
+
+	public ChangeFinalMemberValueException() {
+		this.meaningfulMessage = MESSAGE;
+	}
 	
 	private static final long serialVersionUID = 1L;
 
