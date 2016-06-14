@@ -13,24 +13,26 @@ import oop.ex6.variables.Member;
  */
 public class BlockFactory {
 
-	private static final int BLOCK_DECLERATION = 0;
+	private static final int BLOCK_DECELERATION = 0;
 	private static final Pattern WORD = Pattern.compile("\\w+");
 	private static final Pattern IN_BRACKETS = Pattern.compile("\\(.*\\)");
 	private static final int ADJUST_INDEX_1 = 1;
 	private static final int ADJUST_INDEX_2 = 2;
 
+	/**
+	 * we don't want instances of this class
+	 */
 	private BlockFactory() {}
 	
 	/**
-	 * 
-	 * @param blockLines
-	 * @param outerScope
-	 * @return
+	 * @param blockLines - the lines of the code in an array, line by line
+	 * @param outerScope - the members from outer scopes
+	 * @return a method block object
 	 * @throws IllegalCodeException
 	 */
 	public static MethodBlock createMethodBlock(String[] blockLines, Member[] outerScope)
 			throws IllegalCodeException {
-		String blockDecleration = new String(blockLines[BLOCK_DECLERATION]);
+		String blockDecleration = new String(blockLines[BLOCK_DECELERATION]);
 		String type = getType(blockDecleration);
 		String name = getName(blockDecleration);
 		String arguments = getInBrackets(blockDecleration);
@@ -38,21 +40,33 @@ public class BlockFactory {
 		return new MethodBlock(type, name, arguments, content, outerScope);
 	}
 
+	/**
+	 * @param blockLines - the lines of the code in an array, line by line
+	 * @param outerScope - the members from outer scopes
+	 * @return a non-method block object
+	 * @throws IllegalCodeException
+	 */
 	public static NonMethodBlock createNonMethodBlock(String[] blockLines, Member[] outerScope)
 			throws IllegalCodeException {
-		String blockDecleration = new String(blockLines[BLOCK_DECLERATION]);
+		String blockDecleration = new String(blockLines[BLOCK_DECELERATION]);
 		String type = getType(blockDecleration);
 		String condition = getInBrackets(blockDecleration);
 		String[] content = getContent(blockLines);
 		return new NonMethodBlock(type, condition, content, outerScope);
 	}
 
+	/*
+	 * returns the type of the block
+	 */
 	private static String getType(String blockDecleration){
 		Matcher wordMatcher = WORD.matcher(blockDecleration);
 		wordMatcher.find();
 		return blockDecleration.substring(wordMatcher.start(), wordMatcher.end());
 	}
 	
+	/*
+	 * if it is a method block, return the name of the method
+	 */
 	private static String getName(String blockDecleration){
 		Matcher wordMatcher = WORD.matcher(blockDecleration);
 		wordMatcher.find();
@@ -60,6 +74,9 @@ public class BlockFactory {
 		return blockDecleration.substring(wordMatcher.start(), wordMatcher.end());
 	}
 	
+	/*
+	 * return the string that inside the brackets
+	 */
 	private static String getInBrackets (String blockDecleration){
 		Matcher conditionMatcher = IN_BRACKETS.matcher(blockDecleration);
 		conditionMatcher.find();
@@ -67,6 +84,9 @@ public class BlockFactory {
 				conditionMatcher.end() - ADJUST_INDEX_1);
 	}
 	
+	/*
+	 * returns the content of the block line by line (without the deceleration and closing line)
+	 */
 	private static String[] getContent (String[] blockLines){
 		// adjusts the array to its right size
 		String[] content = new String[blockLines.length - ADJUST_INDEX_2];
