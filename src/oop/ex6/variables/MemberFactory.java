@@ -43,12 +43,14 @@ public class MemberFactory {
 	}
 
 	/**
-	 * @param line the line we want generate members from.
+	 * @param line
+	 *            the line we want generate members from.
 	 * @return an array of the members.
 	 * @throws IllegalCodeException
 	 */
 	public static LinkedList<Member> createMembers(String line,
-			LinkedList<Member> outerScopeMembers) throws IllegalCodeException {
+			LinkedList<Member> outerScopeMembers, LinkedList<Member> localMembers)
+			throws IllegalCodeException {
 		LinkedList<Member> listOfMembers = new LinkedList<Member>();
 		String tempString = new String(line);
 		tempString = tempString.trim();
@@ -65,21 +67,29 @@ public class MemberFactory {
 		String type = tempString.substring(wordMatcher.start(), wordMatcher.end());
 		tempString = tempString.substring(wordMatcher.end());
 		MemberParameters[] members = extractMembers(tempString);
-		for (MemberParameters member : members) {
+		for (MemberParameters memberParameters : members) {
 			try {
-				listOfMembers.add(new Member(member.name, type, member.value, modifier));
+				if (isNewMember(memberParameters.name, localMembers)){
+					listOfMembers.add(new Member(memberParameters.name, type, memberParameters.value, modifier));
+				}
+				else {
+					throw new MemberAlreadyExistsException();
+				}
 			} catch (NonValidValueException error) {
 				boolean fixed = false;
-				for (Member outerScopeMember : outerScopeMembers) {
-					if (error.name.equals(outerScopeMember.name)
-							&& Type.canBeCasted(Type.findType(type) , error.type)
-							&& outerScopeMember.hasValue) {
-						member.value = outerScopeMember.getType().getDefaultValue();
-						listOfMembers.add(new Member(member.name, type, member.value, modifier));
+				LinkedList<Member> allRelevantMembers = new LinkedList<Member>();
+				allRelevantMembers.addAll(localMembers);
+				allRelevantMembers.addAll(outerScopeMembers);
+				for (Member memberToCheck : allRelevantMembers) {
+					if (error.name.equals(memberToCheck.name)
+							&& Type.canBeCasted(Type.findType(type), error.type)
+							&& memberToCheck.hasValue) {
+						memberParameters.value = memberToCheck.getType().getDefaultValue();
+						listOfMembers.add(new Member(memberParameters.name, type, memberParameters.value, modifier));
 						fixed = true;
 					}
 				}
-				if (!fixed){
+				if (!fixed) {
 					throw error;
 				}
 			}
@@ -87,7 +97,15 @@ public class MemberFactory {
 		return listOfMembers;
 	}
 
-
+	private static boolean isNewMember(String name, LinkedList<Member> localMembers) {
+		boolean isNew = true;
+		for (Member member : localMembers){
+			if (name.equals(member.name)){
+				isNew = false;
+			}
+		}
+		return isNew;
+	}
 
 	/*
 	 * generate an array of MemberParameter from the line given
