@@ -95,6 +95,8 @@ public class NonMethodBlock extends Block {
 		if (!checkCondition(condition)) {
 			throw new NonValidConditionException();
 		}
+		
+		this.content = content;
 	}
 
 	/*
@@ -137,6 +139,13 @@ public class NonMethodBlock extends Block {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	@Override
+	public void checkContent() {
+		for (String line : content) {
+			LineType lt;
 		}
 	}
 }
