@@ -10,7 +10,7 @@ import oop.ex6.error.IllegalCodeException;
  */
 public class Member {
 	// The pattern of a legal name.
-	private static final Pattern namePattern = Pattern
+	private static final Pattern NAME_PATTERN = Pattern
 			.compile("(_\\w+|[A-Za-z])\\w*");
 	// The reserved S-java words.
 	private static final String[] RESERVED_WORDS = new String[] { "int",
@@ -93,7 +93,7 @@ public class Member {
 	 */
 	private boolean checkName(String name) {
 		String trimmedName = name.trim();
-		Matcher nameMatcher = namePattern.matcher(trimmedName);
+		Matcher nameMatcher = NAME_PATTERN.matcher(trimmedName);
 		return (nameMatcher.matches() && !isReservedWord(trimmedName));
 	}
 

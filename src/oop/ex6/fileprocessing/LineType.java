@@ -9,7 +9,7 @@ enum LineType{
 	ASSIGNMENT("\\s*\\w+\\s*=\\s*[\\w\"\\.']+\\s*;\\s*"),
 	// such as if/while blocks
 	NON_METHOD_BLOCK("\\s*\\w+\\s*\\(\\s*([\\w\"\\.']|(\\|\\|)|(\\&\\&))+\\s*\\)\\s*\\{\\s*"),
-	METHOD_DECLERATION("\\s*\\w+\\s+\\w+\\s*\\((\\s*\\w+\\s*\\w+(\\s*,\\s*\\w+\\s*\\w+)*)?\\)\\s*\\{\\s*"),
+	METHOD_DECLERATION("\\s*(\\w+\\s+){1,2}\\w+\\s*\\((\\s*\\w+\\s*\\w+(\\s*,\\s*\\w+\\s*\\w+)*)?\\)\\s*\\{\\s*"),
 	METHOD_CALLING("\\s*\\w+\\s*\\((\\s*[\\w\"\\.']+(\\s*,\\s*[\\w\"\\.']+)*)?\\)\\s*;\\s*"),
 	COMMENT_LINE("\\s*//.*"),
 	RETURN_STATEMENT("\\s*return\\s*;\\s*");
