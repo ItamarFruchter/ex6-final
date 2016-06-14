@@ -21,6 +21,13 @@ public class BlockFactory {
 
 	private BlockFactory() {}
 	
+	/**
+	 * 
+	 * @param blockLines
+	 * @param outerScope
+	 * @return
+	 * @throws IllegalCodeException
+	 */
 	public static MethodBlock createMethodBlock(String[] blockLines, Member[] outerScope)
 			throws IllegalCodeException {
 		String blockDecleration = new String(blockLines[BLOCK_DECLERATION]);
