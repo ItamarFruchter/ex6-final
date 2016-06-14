@@ -73,6 +73,40 @@ public abstract class Block {
 	protected LinkedList<Block> containedBlocks;
 
 	/**
+	 * Initializes all the members in this block's scope.
+	 * 
+	 * @throws IllegalCodeException
+	 */
+	public void initializesAllMembers() throws IllegalCodeException {
+		int ScopeCounter = 0;
+		for (String line : content) {
+			LineType currentLineType = LineType.fitType(line);
+			switch (currentLineType) {
+			case DECLERATION:
+				handleDecleration(line);
+				break;
+
+			case ASSIGNMENT:
+				handleAssignment(line);
+				break;
+
+			case NON_METHOD_BLOCK:
+				ScopeCounter++;
+				break;
+				CONTINUE FROM HERE
+			// Consider noting the index of the lines in which the blocks start
+			// and end.
+			case METHOD_DECLERATION:
+				ScopeCounter++;
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	/**
 	 * Checks the content of the block (it's code lines).
 	 */
 	public void checkContent(MethodBlock[] knownMethods)
@@ -188,9 +222,10 @@ public abstract class Block {
 	/**
 	 * Handles a creation of an inner block.
 	 * 
-	 * @param line The decleration line for this block.
+	 * @param line
+	 *            The decleration line for this block.
 	 */
 	protected void handleNonMethodBlockDecleration(String line) {
-		
+
 	}
 }
