@@ -5,11 +5,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import oop.ex6.error.IllegalCodeException;
-import oop.ex6.fileprocessing.LineType;
 import oop.ex6.fileprocessing.ReservedWord;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
-import oop.ex6.variables.Type;
 
 /**
  * this class represents a method block
@@ -24,6 +22,7 @@ public class MethodBlock extends Block {
 	public MethodBlock(String type, String name, String arguments,
 			String[] content, LinkedList<Member> higherScopeMembers)
 			throws IllegalCodeException {
+		this.type = BlockType.blockTypeFromString(type);
 		if (checkName(name)) {
 			this.name = name;
 			String[] argumentsArray = arguments.split(",");
@@ -31,7 +30,10 @@ public class MethodBlock extends Block {
 				localMembers.addAll(MemberFactory.createMembers(argument,
 						higherScopeMembers));
 			}
-			this.HigherScopeMembers = higherScopeMembers;
+			this.higherScopeMembers = higherScopeMembers;
+			this.containedBlocks = new LinkedList<Block>();
+		} else {
+			throw new InvalidMethodName();
 		}
 	}
 

@@ -61,12 +61,16 @@ public abstract class Block {
 	private static final String ASSIGNMENT_SEPERATOR = "=";
 	private static final int MEMBER_INDEX = 0, VALUE_INDEX = 1;
 
+	// this block's type.
+	protected BlockType type;
 	/** The known local members this block (scope wise). */
 	protected LinkedList<Member> localMembers;
 	/** The known local members this block (scope wise). */
 	protected LinkedList<Member> higherScopeMembers;
 	/** The content of this block. */
 	protected String[] content;
+	/** The contained blocks within this block. */
+	protected LinkedList<Block> containedBlocks;
 
 	/**
 	 * Checks the content of the block (it's code lines).
@@ -132,7 +136,13 @@ public abstract class Block {
 		return null;
 	}
 
-	
+	/**
+	 * Handles deceleration of a parameter in this block.
+	 * 
+	 * @param line
+	 *            The line to check.
+	 * @throws IllegalCodeException
+	 */
 	protected void handleDecleration(String line) throws IllegalCodeException {
 		/*
 		 * LinkedList<Member> newMembers = MemberFactory.createMembers(line,
@@ -173,5 +183,14 @@ public abstract class Block {
 				throw e;
 			}
 		}
+	}
+
+	/**
+	 * Handles a creation of an inner block.
+	 * 
+	 * @param line The decleration line for this block.
+	 */
+	protected void handleNonMethodBlockDecleration(String line) {
+		
 	}
 }

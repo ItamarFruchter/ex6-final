@@ -14,9 +14,6 @@ import oop.ex6.fileprocessing.LineType;
  * A non-method block. In the current build - an if block or while block.
  */
 public class NonMethodBlock extends Block {
-	// This block's type.
-	private final BlockType type;
-
 	// A regular expression for the structure of condition.
 	private static final String MEMBER_NAME_REGEX = "\\s*\\w+\\s*",
 			RAW_MEMBER_REGEX = "\\s*((-?\\d+(.\\d+)?)|true|false)\\s*";
@@ -49,15 +46,17 @@ public class NonMethodBlock extends Block {
 	 */
 	public NonMethodBlock(String type, String condition, String[] content,
 			LinkedList<Member> higherScopeMembers) throws IllegalCodeException {
+		
 		this.type = BlockType.blockTypeFromString(type); // May throw
 															// UnknownBlockTypeException.
-		this.HigherScopeMembers = higherScopeMembers;
+		this.higherScopeMembers = higherScopeMembers;
 
 		if (!checkCondition(condition)) {
 			throw new NonValidConditionException();
 		}
 
 		this.content = content;
+		this.containedBlocks = new LinkedList<Block>();
 	}
 
 	/*
@@ -85,7 +84,7 @@ public class NonMethodBlock extends Block {
 					}
 				} else if (memberNameMatcher.matches()) {
 					boolean foundKnownMember = false;
-					for (Member knownMember : HigherScopeMembers) {
+					for (Member knownMember : higherScopeMembers) {
 						if (knownMember.name.equals(conditionString)) {
 							foundKnownMember = true;
 						}
