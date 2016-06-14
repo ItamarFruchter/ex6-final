@@ -14,15 +14,15 @@ public abstract class Block {
 	 /**
 	  * The known local members this block (scope wise).
 	  */
-	 protected final LinkedList<Member> globalMembers;
+	 protected LinkedList<Member> globalMembers;
 	 
 	 /**
-	  * Creates the block of
-	  * @param content The lines to parse in the block.
-	  */
-	 public Block(String content) {
-		 
-	 }
-	 
+	 * Checks the condition: for an if/while checks whether the string
+	 * represents a legal condition, and for a method the correct types.
+	 * 
+	 * @param condition
+	 *            The condition to check.
+	 * @return true iff the given string represents a legal condition.
+	 */
 	 protected abstract boolean checkCondition(String condition);
 }
