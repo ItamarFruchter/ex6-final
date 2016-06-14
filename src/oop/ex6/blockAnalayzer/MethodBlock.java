@@ -3,6 +3,7 @@ package oop.ex6.blockAnalayzer;
 import java.util.regex.Pattern;
 
 import oop.ex6.error.IllegalCodeException;
+import oop.ex6.variables.Member;
 import oop.ex6.variables.Type;
 
 public class MethodBlock extends Block {
@@ -56,5 +57,9 @@ public class MethodBlock extends Block {
 			}
 			throw new UnknownBlockTypeException();
 		}
+	}
+	
+	public MethodBlock(String type, String name, String arguments, String[] content, Member[] higherScopeMembers) {
+		// TODO Auto-generated constructor stub
 	}
 }

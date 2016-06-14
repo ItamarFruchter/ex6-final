@@ -8,41 +8,64 @@ import oop.ex6.blockAnalayzer.NonMethodBlock;
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.variables.Member;
 
+/**
+ * this class can generate block objects
+ */
 public class BlockFactory {
 
 	private static final int BLOCK_DECLERATION = 0;
 	private static final Pattern WORD = Pattern.compile("\\w+");
 	private static final Pattern IN_BRACKETS = Pattern.compile("\\(.*\\)");
-	private static final int ADJUST_INDEX = 1;
+	private static final int ADJUST_INDEX_1 = 1;
+	private static final int ADJUST_INDEX_2 = 2;
 
+	private BlockFactory() {}
+	
 	public static MethodBlock createMethodBlock(String[] blockLines, Member[] outerScope)
 			throws IllegalCodeException {
-
+		String blockDecleration = new String(blockLines[BLOCK_DECLERATION]);
+		String type = getType(blockDecleration);
+		String name = getName(blockDecleration);
+		String arguments = getInBrackets(blockDecleration);
+		String[] content = getContent(blockLines);
+		return new MethodBlock(type, name, arguments, content, outerScope);
 	}
 
 	public static NonMethodBlock createNonMethodBlock(String[] blockLines, Member[] outerScope)
 			throws IllegalCodeException {
-
+		String blockDecleration = new String(blockLines[BLOCK_DECLERATION]);
+		String type = getType(blockDecleration);
+		String condition = getInBrackets(blockDecleration);
+		String[] content = getContent(blockLines);
+		return new NonMethodBlock(type, condition, content, outerScope);
 	}
 
-	public static NonMethodBlock createBlock(String[] blockLines, Member[] outerScope)
-			throws IllegalCodeException {
-		String blockDecleration = new String(blockLines[BLOCK_DECLERATION]);
+	private static String getType(String blockDecleration){
 		Matcher wordMatcher = WORD.matcher(blockDecleration);
 		wordMatcher.find();
-		String type = blockDecleration.substring(wordMatcher.start(), wordMatcher.end());
-		Matcher conditionMatcher = IN_BRACKETS.matcher(blockDecleration);
-		conditionMatcher.find();
-		String condition = blockDecleration.substring(conditionMatcher.start() + ADJUST_INDEX,
-				conditionMatcher.end() - ADJUST_INDEX);
-		return new NonMethodBlock(type, condition, blockLines, outerScope);
-
+		return blockDecleration.substring(wordMatcher.start(), wordMatcher.end());
 	}
 	
-	private static String findType(String[] blockLines){
-		String blockDecleration = new String(blockLines[BLOCK_DECLERATION]);
+	private static String getName(String blockDecleration){
 		Matcher wordMatcher = WORD.matcher(blockDecleration);
 		wordMatcher.find();
-		String type = blockDecleration.substring(wordMatcher.start(), wordMatcher.end());
+		wordMatcher.find();
+		return blockDecleration.substring(wordMatcher.start(), wordMatcher.end());
+	}
+	
+	private static String getInBrackets (String blockDecleration){
+		Matcher conditionMatcher = IN_BRACKETS.matcher(blockDecleration);
+		conditionMatcher.find();
+		return blockDecleration.substring(conditionMatcher.start() + ADJUST_INDEX_1,
+				conditionMatcher.end() - ADJUST_INDEX_1);
+	}
+	
+	private static String[] getContent (String[] blockLines){
+		// adjusts the array to its right size
+		String[] content = new String[blockLines.length - ADJUST_INDEX_2];
+		for (int i = 1; i <= content.length; i++){
+			content[i - ADJUST_INDEX_1] = blockLines[i];
+		}
+		return content;
 	}
 }
