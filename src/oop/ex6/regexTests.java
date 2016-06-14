@@ -4,8 +4,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import oop.ex6.error.IllegalCodeException;
-import oop.ex6.fileprocessing.MemberFactory;
 import oop.ex6.variables.Member;
+import oop.ex6.variables.MemberFactory;
 
 public class regexTests {
 	public static void main(String args[]) {

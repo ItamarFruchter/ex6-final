@@ -133,4 +133,12 @@ public class Member {
 			}
 		} 
 	}
+	
+	/**
+	 * A getter for the type 
+	 * @return
+	 */
+	public Type getType() {
+		return type;
+	}
 }

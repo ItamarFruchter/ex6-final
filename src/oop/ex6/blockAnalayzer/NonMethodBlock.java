@@ -5,7 +5,9 @@ import java.util.regex.Pattern;
 
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.variables.Member;
+import oop.ex6.variables.MemberFactory;
 import oop.ex6.variables.Type;
+import oop.ex6.fileprocessing.LineType;
 
 /**
  * A non-method block. In the current build - an if block or while block.
@@ -91,11 +93,11 @@ public class NonMethodBlock extends Block {
 		this.type = NonMethodBlockType.blockTypeFromString(type); // May throw
 																	// UnknownBlockTypeException.
 		this.HigherScopeMembers = higherScopeMembers;
-		
+
 		if (!checkCondition(condition)) {
 			throw new NonValidConditionException();
 		}
-		
+
 		this.content = content;
 	}
 
@@ -143,9 +145,40 @@ public class NonMethodBlock extends Block {
 	}
 
 	@Override
-	public void checkContent() {
+	public void checkContent(MethodBlock[] knownMethods)
+			throws IllegalCodeException {
 		for (String line : content) {
-			LineType lt;
+			LineType currentLineType = LineType.fitType(line);
+			switch (currentLineType) {
+			case DECLERATION:
+				
+				break;
+
+			case ASSIGNMENT:
+				
+				break;
+
+			case NON_METHOD_BLOCK:
+				break;
+
+			case METHOD_DECLERATION:
+				break;
+
+			case METHOD_CALLING:
+				break;
+
+			case COMMENT_LINE:
+				break;
+
+			case CLOSING_BLOCK:
+				break;
+
+			case RETURN_STATEMENT:
+				break;
+
+			default:
+				break;
+			}
 		}
 	}
 }

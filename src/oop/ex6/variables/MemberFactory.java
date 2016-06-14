@@ -1,10 +1,9 @@
-package oop.ex6.fileprocessing;
+package oop.ex6.variables;
 
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import oop.ex6.error.IllegalCodeException;
-import oop.ex6.variables.Member;
 
 /**
  * this class creates samples of members from a given line
