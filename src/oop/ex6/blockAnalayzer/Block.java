@@ -14,5 +14,5 @@ public abstract class Block {
 	 /**
 	  * The known local members this block (scope wise).
 	  */
-	 protected Member[] globalMembers;
+	 protected Member[] HigherScopeMembers;
 }
