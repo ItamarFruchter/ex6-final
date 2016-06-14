@@ -21,8 +21,8 @@ public abstract class Block {
 		// The string representation of this block type.
 		private String stringRepresentation;
 
-		// Indicates whether the type is a method block.
-		private boolean isMethod;
+		/** Indicates whether the type represents a method block. */
+		public boolean isMethod;
 
 		// A constructor.
 		private BlockType(String stringRepresentation, boolean isMethod) {
@@ -55,6 +55,10 @@ public abstract class Block {
 		}
 	}
 
+	// Constants meant to help with handling assignment.
+	private static final String ASSIGNMENT_SEPERATOR = "=";
+	private static final int MEMBER_INDEX = 0, VALUE_INDEX = 1;
+
 	/** The known local members this block (scope wise). */
 	protected LinkedList<Member> localMembers;
 	/** The known local members this block (scope wise). */
@@ -68,20 +72,28 @@ public abstract class Block {
 	public abstract void checkContent(MethodBlock[] knownMethods)
 			throws IllegalCodeException;
 
-	protected void handleDecleration(String line) throws IllegalCodeException {
-		try {
-			Member[] newMembers = MemberFactory.createMembers(line);
-			for (Member newMember : newMembers) {
-				localMembers.add(newMember);
-			}
-		} catch (NonValidValueException e) {
-			for (Member knownMember : localMembers) {
-				if (knownMember.name.equals(e.name)) {
-					if (knownMember.getType().equals(e.type)) {
-CONTINUE THIS ITAMAR (AFTER OHAD FINISHES THE MEMBER FACTORY)
-					}
-				}
+	/*
+	 * protected void handleDecleration(String line) throws IllegalCodeException
+	 * { try { Member[] newMembers = MemberFactory.createMembers(line); for
+	 * (Member newMember : newMembers) { localMembers.add(newMember); } } catch
+	 * (NonValidValueException e) { for (Member knownMember : localMembers) { if
+	 * (knownMember.name.equals(e.name)) { if
+	 * (knownMember.getType().equals(e.type)) { CONTINUE THIS ITAMAR (AFTER OHAD
+	 * FINISHES THE MEMBER FACTORY) } } } } }
+	 */
+
+	protected void handleAssignment(String line) {
+		String[] lineArguments = line.split(ASSIGNMENT_SEPERATOR);
+		String memberName = lineArguments[MEMBER_INDEX];
+		String valueString = lineArguments[VALUE_INDEX];
+
+		Member memberFound = null;
+
+		for (Member knownMember : localMembers) {
+			if (knownMember.name.equals(memberName) && memberFound != null) {
+				memberFound = knownMember;
 			}
 		}
+
 	}
 }

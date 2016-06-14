@@ -55,6 +55,6 @@ public class MethodBlock extends Block {
 	@Override
 	public void checkContent(MethodBlock[] knownMethods)
 			throws IllegalCodeException {
-
+		
 	}
 }
