@@ -78,7 +78,7 @@ public class MemberFactory {
 				boolean fixed = false;
 				for (Member outerScopeMember : outerScopeMembers) {
 					if (error.name.equals(outerScopeMember.name)
-							&& error.type.equals(outerScopeMember.getType())
+							&& Type.canBeCasted(Type.findType(type) , error.type)
 							&& outerScopeMember.hasValue) {
 						member.value = outerScopeMember.getType().getDefaultValue();
 						listOfMembers.add(new Member(member.name, type, member.value));
@@ -116,7 +116,7 @@ public class MemberFactory {
 				boolean fixed = false;
 				for (Member outerScopeMember : outerScopeMembers) {
 					if (error.name.equals(outerScopeMember.name)
-							&& error.type.equals(outerScopeMember.getType())
+							&& Type.canBeCasted(Type.findType(type) , error.type)
 							&& outerScopeMember.hasValue) {
 						member.value = outerScopeMember.getType().getDefaultValue();
 						listOfMembers.add(new Member(member.name, type, member.value, modifier));

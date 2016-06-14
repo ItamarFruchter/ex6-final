@@ -124,6 +124,11 @@ public enum Type {
 		}
 	}
 
+	/**
+	 * @param neededType the type we want to assign value to
+	 * @param givenType the type of the value we want to assign
+	 * @return true if we can assign the value, false otherwise
+	 */
 	public static boolean canBeCasted(Type neededType, Type givenType) {
 		boolean matched = false;
 		switch (neededType) {
