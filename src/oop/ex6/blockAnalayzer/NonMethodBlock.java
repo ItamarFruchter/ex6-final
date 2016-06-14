@@ -13,50 +13,8 @@ import oop.ex6.fileprocessing.LineType;
  * A non-method block. In the current build - an if block or while block.
  */
 public class NonMethodBlock extends Block {
-	/**
-	 * All of the possible non-method block types. Currently - only while and
-	 * if.
-	 */
-	private enum NonMethodBlockType {
-		IF("if"), WHILE("while");
-
-		// The string representation of this block type.
-		private String stringRepresentation;
-
-		// A constructor.
-		private NonMethodBlockType(String stringRepresentation) {
-			this.stringRepresentation = stringRepresentation;
-		}
-
-		private String getRepresentation() {
-			return stringRepresentation;
-		}
-
-		/**
-		 * Returns the non-method block type fitting for the given string.
-		 * Throws an exception if non exist.
-		 * 
-		 * @param stringRepresentation
-		 *            The requested type's string representation.
-		 * @return The non-method block type fitting for this string
-		 *         representation, if exists.
-		 * @throws IllegalCodeException
-		 */
-		public static NonMethodBlockType blockTypeFromString(
-				String stringRepresentation) throws IllegalCodeException {
-			for (NonMethodBlockType nonMethodType : NonMethodBlockType
-					.values()) {
-				if (nonMethodType.getRepresentation()
-						.equals(stringRepresentation)) {
-					return nonMethodType;
-				}
-			}
-			throw new UnknownBlockTypeException();
-		}
-	}
-
 	// This block's type.
-	private final NonMethodBlockType type;
+	private final BlockType type;
 
 	// A regular expression for the structure of condition.
 	private static final String MEMBER_NAME_REGEX = "\\s*\\w+\\s*",
@@ -90,8 +48,8 @@ public class NonMethodBlock extends Block {
 	 */
 	public NonMethodBlock(String type, String condition, String[] content,
 			Member[] higherScopeMembers) throws IllegalCodeException {
-		this.type = NonMethodBlockType.blockTypeFromString(type); // May throw
-																	// UnknownBlockTypeException.
+		this.type = BlockType.blockTypeFromString(type); // May throw
+															// UnknownBlockTypeException.
 		this.HigherScopeMembers = higherScopeMembers;
 
 		if (!checkCondition(condition)) {
@@ -151,11 +109,11 @@ public class NonMethodBlock extends Block {
 			LineType currentLineType = LineType.fitType(line);
 			switch (currentLineType) {
 			case DECLERATION:
-				
+
 				break;
 
 			case ASSIGNMENT:
-				
+
 				break;
 
 			case NON_METHOD_BLOCK:
