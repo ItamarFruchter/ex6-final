@@ -3,6 +3,7 @@ package oop.ex6.variables;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import oop.ex6.fileprocessing.ReservedWord;
 import oop.ex6.error.IllegalCodeException;
 
 /**
@@ -12,10 +13,6 @@ public class Member {
 	// The pattern of a legal name.
 	private static final Pattern NAME_PATTERN = Pattern
 			.compile("(_\\w+|[A-Za-z])\\w*");
-	// The reserved S-java words.
-	private static final String[] RESERVED_WORDS = new String[] { "int",
-			"double", "boolean", "char", "String", "void", "final", "if",
-			"while", "true", "false", "return" };
 
 	// This member's type.
 	private final Type type;
@@ -81,10 +78,11 @@ public class Member {
 	 *            This member's type.
 	 * @param valueString
 	 *            This member's value.
-	 * @throws IllegalCodeException 
-	 * @throws NonValidValueException 
+	 * @throws IllegalCodeException
+	 * @throws NonValidValueException
 	 */
-	public Member(String nameString, String typeString, String valueString) throws NonValidValueException, IllegalCodeException {
+	public Member(String nameString, String typeString, String valueString)
+			throws NonValidValueException, IllegalCodeException {
 		this(nameString, typeString, valueString, null);
 	}
 
@@ -94,16 +92,8 @@ public class Member {
 	private boolean checkName(String name) {
 		String trimmedName = name.trim();
 		Matcher nameMatcher = NAME_PATTERN.matcher(trimmedName);
-		return (nameMatcher.matches() && !isReservedWord(trimmedName));
-	}
-
-	private boolean isReservedWord(String name) {
-		for (String reserved : RESERVED_WORDS) {
-			if (reserved.equals(name)) {
-				return true;
-			}
-		}
-		return false;
+		return (nameMatcher.matches()
+				&& !ReservedWord.isReservedWord(trimmedName));
 	}
 
 	/**
@@ -122,20 +112,21 @@ public class Member {
 	public void setValue(String newValue) throws IllegalCodeException {
 		if (modifier.equals(Modifier.FINAL)) {
 			if (hasValue) {
-				throw new ChangeFinalMemberValueException();				
+				throw new ChangeFinalMemberValueException();
 			} else {
 				if (newValue != null) {
-					this.hasValue = true; 
+					this.hasValue = true;
 					if (!type.isValidValue(newValue)) {
 						throw new NonValidValueException(type, newValue.trim());
 					}
 				}
 			}
-		} 
+		}
 	}
-	
+
 	/**
-	 * A getter for the type 
+	 * A getter for the type
+	 * 
 	 * @return
 	 */
 	public Type getType() {

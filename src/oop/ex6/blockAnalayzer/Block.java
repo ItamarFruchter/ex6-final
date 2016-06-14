@@ -78,7 +78,7 @@ public abstract class Block {
 			for (Member knownMember : localMembers) {
 				if (knownMember.name.equals(e.name)) {
 					if (knownMember.getType().equals(e.type)) {
-
+CONTINUE THIS ITAMAR (AFTER OHAD FINISHES THE MEMBER FACTORY)
 					}
 				}
 			}

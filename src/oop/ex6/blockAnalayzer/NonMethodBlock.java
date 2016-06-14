@@ -1,5 +1,6 @@
 package oop.ex6.blockAnalayzer;
 
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +48,7 @@ public class NonMethodBlock extends Block {
 	 * @throws IllegalCodeException
 	 */
 	public NonMethodBlock(String type, String condition, String[] content,
-			Member[] higherScopeMembers) throws IllegalCodeException {
+			LinkedList<Member> higherScopeMembers) throws IllegalCodeException {
 		this.type = BlockType.blockTypeFromString(type); // May throw
 															// UnknownBlockTypeException.
 		this.HigherScopeMembers = higherScopeMembers;
