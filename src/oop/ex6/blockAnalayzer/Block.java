@@ -58,7 +58,7 @@ public abstract class Block {
 	/** The known local members this block (scope wise). */
 	protected LinkedList<Member> localMembers;
 	/** The known local members this block (scope wise). */
-	protected Member[] HigherScopeMembers;
+	protected LinkedList<Member> HigherScopeMembers;
 	/** The content of this block. */
 	protected String[] content;
 
