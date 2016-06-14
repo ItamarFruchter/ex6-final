@@ -87,16 +87,14 @@ public class NonMethodBlock extends Block {
 	 * @throws IllegalCodeException
 	 */
 	public NonMethodBlock(String type, String condition, String[] content,
-			Member[] globalMembers) throws IllegalCodeException {
+			Member[] higherScopeMembers) throws IllegalCodeException {
 		this.type = NonMethodBlockType.blockTypeFromString(type); // May throw
 																	// UnknownBlockTypeException.
-		this.globalMembers = globalMembers;
-		if (checkCondition(condition)) {
-
-		} else {
-
+		this.HigherScopeMembers = higherScopeMembers;
+		
+		if (!checkCondition(condition)) {
+			throw new NonValidConditionException();
 		}
-
 	}
 
 	/*
@@ -124,7 +122,7 @@ public class NonMethodBlock extends Block {
 					}
 				} else if (memberNameMatcher.matches()) {
 					boolean foundKnownMember = false;
-					for (Member knownMember : globalMembers) {
+					for (Member knownMember : HigherScopeMembers) {
 						if (knownMember.name.equals(conditionString)) {
 							foundKnownMember = true;
 						}
