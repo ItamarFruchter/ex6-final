@@ -106,38 +106,6 @@ public class NonMethodBlock extends Block {
 	@Override
 	public void checkContent(MethodBlock[] knownMethods)
 			throws IllegalCodeException {
-		for (String line : content) {
-			LineType currentLineType = LineType.fitType(line);
-			switch (currentLineType) {
-			case DECLERATION:
 
-				break;
-
-			case ASSIGNMENT:
-
-				break;
-
-			case NON_METHOD_BLOCK:
-				break;
-
-			case METHOD_DECLERATION:
-				break;
-
-			case METHOD_CALLING:
-				break;
-
-			case COMMENT_LINE:
-				break;
-
-			case CLOSING_BLOCK:
-				break;
-
-			case RETURN_STATEMENT:
-				break;
-
-			default:
-				break;
-			}
-		}
 	}
 }

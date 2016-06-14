@@ -3,6 +3,7 @@ package oop.ex6.blockAnalayzer;
 import java.util.LinkedList;
 
 import oop.ex6.error.IllegalCodeException;
+import oop.ex6.fileprocessing.LineType;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
 import oop.ex6.variables.NonValidValueException;
@@ -70,8 +71,42 @@ public abstract class Block {
 	/**
 	 * Checks the content of the block (it's code lines).
 	 */
-	public abstract void checkContent(MethodBlock[] knownMethods)
-			throws IllegalCodeException;
+	public void checkContent(MethodBlock[] knownMethods)
+			throws IllegalCodeException {
+		for (String line : content) {
+			LineType currentLineType = LineType.fitType(line);
+			switch (currentLineType) {
+			case DECLERATION:
+				handleDecleration(line);
+				break;
+
+			case ASSIGNMENT:
+				handleAssignment(line);
+				break;
+
+			case NON_METHOD_BLOCK:
+				break;
+
+			case METHOD_DECLERATION:
+				break;
+
+			case METHOD_CALLING:
+				break;
+
+			case COMMENT_LINE:
+				break;
+
+			case CLOSING_BLOCK:
+				break;
+
+			case RETURN_STATEMENT:
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
 
 	/**
 	 * Checks whether a given string is a name of a member (local or global
@@ -97,15 +132,13 @@ public abstract class Block {
 		return null;
 	}
 
-	/*
-	 * protected void handleDecleration(String line) throws IllegalCodeException
-	 * { try { Member[] newMembers = MemberFactory.createMembers(line); for
-	 * (Member newMember : newMembers) { localMembers.add(newMember); } } catch
-	 * (NonValidValueException e) { for (Member knownMember : localMembers) { if
-	 * (knownMember.name.equals(e.name)) { if
-	 * (knownMember.getType().equals(e.type)) { CONTINUE THIS ITAMAR (AFTER OHAD
-	 * FINISHES THE MEMBER FACTORY) } } } } }
-	 */
+	protected void handleDecleration(String line) throws IllegalCodeException {
+		/*
+		 * LinkedList<Member> newMembers = MemberFactory.createMembers(line,
+		 * higherScopeMembers); for (Member newMember : newMembers) {
+		 * localMembers.add(newMember); }
+		 */
+	}
 
 	/**
 	 * Handles an assignment line in the block.
@@ -130,8 +163,10 @@ public abstract class Block {
 		} catch (NonValidValueException e) {
 			Member knownMember = isKnownMember(e.name);
 			if (knownMember != null) {
-				if (knownMember.hasValue && Type.canBeCasted(e.type, knownMember.getType())) {
-					memberFound.setValue(knownMember.getType().getDefaultValue());
+				if (knownMember.hasValue
+						&& Type.canBeCasted(e.type, knownMember.getType())) {
+					memberFound
+							.setValue(knownMember.getType().getDefaultValue());
 				}
 			} else {
 				throw e;
