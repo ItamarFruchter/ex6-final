@@ -6,6 +6,7 @@ import oop.ex6.error.IllegalCodeException;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
 import oop.ex6.variables.NonValidValueException;
+import oop.ex6.variables.Type;
 
 /**
  * Represents any block in S-java.
@@ -62,7 +63,7 @@ public abstract class Block {
 	/** The known local members this block (scope wise). */
 	protected LinkedList<Member> localMembers;
 	/** The known local members this block (scope wise). */
-	protected LinkedList<Member> HigherScopeMembers;
+	protected LinkedList<Member> higherScopeMembers;
 	/** The content of this block. */
 	protected String[] content;
 
@@ -71,6 +72,30 @@ public abstract class Block {
 	 */
 	public abstract void checkContent(MethodBlock[] knownMethods)
 			throws IllegalCodeException;
+
+	/**
+	 * Checks whether a given string is a name of a member (local or global
+	 * relatively to this block's scope.
+	 * 
+	 * @param nameToCheck
+	 *            The name to check.
+	 * @return The member found if one was found, none if none was found.
+	 */
+	protected Member isKnownMember(String nameToCheck) {
+		for (Member knownMember : localMembers) {
+			if (knownMember.name.equals(nameToCheck)) {
+				return knownMember;
+			}
+		}
+
+		for (Member knownGlobalMember : higherScopeMembers) {
+			if (knownGlobalMember.name.equals(nameToCheck)) {
+				return knownGlobalMember;
+			}
+		}
+
+		return null;
+	}
 
 	/*
 	 * protected void handleDecleration(String line) throws IllegalCodeException
@@ -82,18 +107,35 @@ public abstract class Block {
 	 * FINISHES THE MEMBER FACTORY) } } } } }
 	 */
 
-	protected void handleAssignment(String line) {
+	/**
+	 * Handles an assignment line in the block.
+	 * 
+	 * @param line
+	 *            The assignment line to validate.
+	 * @throws IllegalCodeException
+	 */
+	protected void handleAssignment(String line) throws IllegalCodeException {
 		String[] lineArguments = line.split(ASSIGNMENT_SEPERATOR);
 		String memberName = lineArguments[MEMBER_INDEX];
 		String valueString = lineArguments[VALUE_INDEX];
 
-		Member memberFound = null;
+		Member memberFound = isKnownMember(memberName);
 
-		for (Member knownMember : localMembers) {
-			if (knownMember.name.equals(memberName) && memberFound != null) {
-				memberFound = knownMember;
-			}
+		if (memberFound == null) {
+			throw new UnknownMemberName();
 		}
 
+		try {
+			memberFound.setValue(valueString);
+		} catch (NonValidValueException e) {
+			Member knownMember = isKnownMember(e.name);
+			if (knownMember != null) {
+				if (knownMember.hasValue && Type.canBeCasted(e.type, knownMember.getType())) {
+					memberFound.setValue(knownMember.getType().getDefaultValue());
+				}
+			} else {
+				throw e;
+			}
+		}
 	}
 }

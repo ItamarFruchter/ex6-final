@@ -75,17 +75,20 @@ public enum Type {
 	}
 
 	// The declaration representation of the types.
-	private static final String STRING_STRING = "String", CHAR_STRING = "char", INT_STRING = "int",
-			DOUBLE_STRING = "double", BOOLEAN_STRING = "boolean";
+	private static final String STRING_STRING = "String", CHAR_STRING = "char",
+			INT_STRING = "int", DOUBLE_STRING = "double",
+			BOOLEAN_STRING = "boolean";
 
 	// The regular expression patterns for each variable.
-	private static final String STRING_REGEX = "\\s*\".*\"\\s*", CHAR_REGEX = "\\s*\'.\'\\s*",
-			INT_REGEX = "\\s*-?\\d+\\s*", DOUBLE_REGEX = "\\s*-?\\d+(.\\d+)?\\s*",
+	private static final String STRING_REGEX = "\\s*\".*\"\\s*",
+			CHAR_REGEX = "\\s*\'.\'\\s*", INT_REGEX = "\\s*-?\\d+\\s*",
+			DOUBLE_REGEX = "\\s*-?\\d+(.\\d+)?\\s*",
 			BOOLEAN_REGEX = "\\s*((-?\\d+(.\\d+)?)|true|false)\\s*";
 
 	// The patterns.
 	private static final Pattern STRING_PATTERN = Pattern.compile(STRING_REGEX),
-			CHAR_PATTERN = Pattern.compile(CHAR_REGEX), INT_PATTERN = Pattern.compile(INT_REGEX),
+			CHAR_PATTERN = Pattern.compile(CHAR_REGEX),
+			INT_PATTERN = Pattern.compile(INT_REGEX),
 			DOUBLE_PATTERN = Pattern.compile(DOUBLE_REGEX),
 			BOOLEAN_PATTERN = Pattern.compile(BOOLEAN_REGEX);
 
@@ -125,8 +128,10 @@ public enum Type {
 	}
 
 	/**
-	 * @param neededType the type we want to assign value to
-	 * @param givenType the type of the value we want to assign
+	 * @param neededType
+	 *            the type we want to assign value to
+	 * @param givenType
+	 *            the type of the value we want to assign
 	 * @return true if we can assign the value, false otherwise
 	 */
 	public static boolean canBeCasted(Type neededType, Type givenType) {
@@ -138,7 +143,8 @@ public enum Type {
 			}
 			break;
 		case BOOLEAN:
-			if (givenType.equals(BOOLEAN) || givenType.equals(INT) || givenType.equals(DOUBLE)) {
+			if (givenType.equals(BOOLEAN) || givenType.equals(INT)
+					|| givenType.equals(DOUBLE)) {
 				matched = true;
 			}
 			break;
