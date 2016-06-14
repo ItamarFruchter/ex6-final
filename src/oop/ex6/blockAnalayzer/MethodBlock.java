@@ -27,7 +27,7 @@ public class MethodBlock extends Block {
 			this.name = name;
 			String[] argumentsArray = arguments.split(",");
 			for (String argument : argumentsArray) {
-				localMembers.addAll(MemberFactory.createMembers(argument));
+				localMembers.addAll(MemberFactory.createMembers(argument, higherScopeMembers));
 			}
 			this.HigherScopeMembers = higherScopeMembers;
 		}
