@@ -47,7 +47,7 @@ public class Member {
 			String modifierString)
 			throws IllegalCodeException, NonValidValueException {
 		if (checkName(nameString)) {
-			this.name = nameString;
+			this.name = nameString.trim();
 			this.type = Type.findType(typeString); // May throw invalid type
 													// exception.
 

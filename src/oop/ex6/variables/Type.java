@@ -109,7 +109,7 @@ public enum Type {
 		case CHAR_STRING:
 			return CHAR;
 		case INT_STRING:
-			return STRING;
+			return INT;
 		case DOUBLE_STRING:
 			return DOUBLE;
 		case BOOLEAN_STRING:

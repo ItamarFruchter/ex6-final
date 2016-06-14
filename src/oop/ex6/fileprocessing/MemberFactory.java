@@ -6,18 +6,21 @@ import java.util.regex.Pattern;
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.variables.Member;
 
-
+/**
+ * this class creates samples of members from a given line
+ */
 public class MemberFactory {
 
-	private static final String EMPTY_STRING = "";
-	private static final char SPACE_CHAR = ' ';
-	private static final Pattern SPACES = Pattern.compile("\\s+");
+	private static final char SPACE = ' ';
+	private static final char SEMICOLON = ';';
 	private static final Pattern WORD = Pattern.compile("\\w+");
 	private static final Pattern WITH_MODIFIER = Pattern.compile("\\w+\\s+\\w+\\s+\\w+");
 	private static final int MEMBER_VALUE = 1;
 	private static final int MEMBER_NAME = 0;
 	
-	
+	/*
+	 * this class represents an object that holds the member name and value
+	 */
 	private static class MemberParameters{
 		
 		private String name;
@@ -36,9 +39,14 @@ public class MemberFactory {
 	
 	private MemberFactory(){}
 	
+	/**
+	 * @param line - the line we want generate members from
+	 * @return an array of the members
+	 * @throws IllegalCodeException
+	 */
 	public static Member[] createMembers(String line) throws IllegalCodeException{
 		String tempString = new String(line);
-		clearSpaces(tempString);
+		tempString = tempString.trim();
 		Matcher withModifireMatcher = WITH_MODIFIER.matcher(tempString);
 		if (withModifireMatcher.lookingAt()){
 			return createMembersWithModifire(tempString);
@@ -48,12 +56,15 @@ public class MemberFactory {
 		}
 	}	
 	
+	/*
+	 * handles the case there is a modifier to the objects
+	 */
 	private static Member[] createMembersWithoutModifire(String tempString) throws IllegalCodeException {
 		LinkedList<Member> listOfMembers = new LinkedList<Member>();
 		Matcher wordMatcher = WORD.matcher(tempString);
 		wordMatcher.find();
 		String type = tempString.substring(wordMatcher.start(), wordMatcher.end());
-		wordMatcher.replaceFirst(EMPTY_STRING);
+		tempString = tempString.substring(wordMatcher.end());
 		MemberParameters[] members = extractMembers(tempString);
 		for (MemberParameters member : members ){
 			listOfMembers.add(new Member(member.name, type, member.value));
@@ -61,15 +72,19 @@ public class MemberFactory {
 		return listOfMembers.toArray(new Member[listOfMembers.size()]);
 	}
 
+	/*
+	 * handles the case there is no modifier
+	 */
 	private static Member[] createMembersWithModifire(String tempString) throws IllegalCodeException {
 		LinkedList<Member> listOfMembers = new LinkedList<Member>();
 		Matcher wordMatcher = WORD.matcher(tempString);
 		wordMatcher.find();
 		String modifier = tempString.substring(wordMatcher.start(), wordMatcher.end());
-		wordMatcher.replaceFirst(EMPTY_STRING);
+		tempString = tempString.substring(wordMatcher.end());
 		wordMatcher.reset(tempString);
+		wordMatcher.find();
 		String type = tempString.substring(wordMatcher.start(), wordMatcher.end());
-		wordMatcher.replaceFirst(EMPTY_STRING);
+		tempString = tempString.substring(wordMatcher.end());
 		MemberParameters[] members = extractMembers(tempString);
 		for (MemberParameters member : members ){
 			listOfMembers.add(new Member(member.name, type, member.value, modifier));
@@ -77,12 +92,17 @@ public class MemberFactory {
 		return listOfMembers.toArray(new Member[listOfMembers.size()]);
 	}
 	
+	
+	/*
+	 * generate an array of MemberParameter from the line given
+	 */
 	private static MemberParameters[] extractMembers(String tempString) {
 		LinkedList<MemberParameters> members = new LinkedList<MemberParameters>();
 		String[] membersString = tempString.split(",");
 		for (int i = 0; i < membersString.length; i++){
 			if (i == membersString.length-1){
-				membersString[i].replace(';', SPACE_CHAR);
+				// removes the semicolon from the end of the line
+				membersString[i] = membersString[i].replace(SEMICOLON, SPACE);
 			}
 			String[] parameters = membersString[i].split("=");
 			if (parameters.length == 2){
@@ -93,13 +113,5 @@ public class MemberFactory {
 			}
 		}
 		return members.toArray(new MemberParameters[members.size()]);
-	}
-
-
-	private static void clearSpaces(String stringToWork){
-		Matcher spacesMatcher = SPACES.matcher(stringToWork);
-		if (spacesMatcher.lookingAt()){
-			spacesMatcher.replaceFirst(EMPTY_STRING);
-		}
 	}
 }
