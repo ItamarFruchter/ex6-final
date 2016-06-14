@@ -3,7 +3,7 @@ package oop.ex6.fileprocessing;
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.variables.Type;
 
-public class MethodFactory {
+public class NonMethodFactory {
 
 	private class Argument{
 		
@@ -17,5 +17,7 @@ public class MethodFactory {
 	}
 	
 	
-	
+	public static createMethod(String[] blockLines, Members[] outerScope){
+		
+	}
 }
