@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * check whether a given string represents a legal value for the said type.
  */
 public enum Type {
-	STRING {
+	STRING("\"\"") {
 		@Override
 		public boolean isValidValue(String value) {
 			Matcher STRING_MATCHER = STRING_PATTERN.matcher(value);
@@ -19,7 +19,7 @@ public enum Type {
 			}
 		}
 	},
-	CHAR {
+	CHAR("'A'") {
 		@Override
 		public boolean isValidValue(String value) {
 			Matcher CHAR_MATCHER = CHAR_PATTERN.matcher(value);
@@ -30,9 +30,9 @@ public enum Type {
 			}
 		}
 	},
-	INT {
+	INT("0") {
 		@Override
-		public boolean isValidValue(String value)  {
+		public boolean isValidValue(String value) {
 			Matcher INT_MATCHER = INT_PATTERN.matcher(value);
 			if (!INT_MATCHER.matches()) {
 				return false;
@@ -41,9 +41,9 @@ public enum Type {
 			}
 		}
 	},
-	DOUBLE {
+	DOUBLE("0") {
 		@Override
-		public boolean isValidValue(String value)  {
+		public boolean isValidValue(String value) {
 			Matcher DOUBLE_MATCHER = DOUBLE_PATTERN.matcher(value);
 			if (!DOUBLE_MATCHER.matches()) {
 				return false;
@@ -52,9 +52,9 @@ public enum Type {
 			}
 		}
 	},
-	BOOLEAN {
+	BOOLEAN("true") {
 		@Override
-		public boolean isValidValue(String value)  {
+		public boolean isValidValue(String value) {
 			Matcher BOOLEAN_MATCHER = BOOLEAN_PATTERN.matcher(value);
 			if (!BOOLEAN_MATCHER.matches()) {
 				return false;
@@ -64,25 +64,30 @@ public enum Type {
 		}
 	};
 
-	// The declaration representation of the types.
-	private static final String STRING_STRING = "String", CHAR_STRING = "char",
-			INT_STRING = "int", DOUBLE_STRING = "double",
-			BOOLEAN_STRING = "boolean";
+	private String defaultValue;
 
+	private Type(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	// The declaration representation of the types.
+	private static final String STRING_STRING = "String", CHAR_STRING = "char", INT_STRING = "int",
+			DOUBLE_STRING = "double", BOOLEAN_STRING = "boolean";
 
 	// The regular expression patterns for each variable.
-	private static final String STRING_REGEX = "\\s*\".*\"\\s*",
-			CHAR_REGEX = "\\s*\'.\'\\s*", INT_REGEX = "\\s*-?\\d+\\s*",
-			DOUBLE_REGEX = "\\s*-?\\d+(.\\d+)?\\s*",
+	private static final String STRING_REGEX = "\\s*\".*\"\\s*", CHAR_REGEX = "\\s*\'.\'\\s*",
+			INT_REGEX = "\\s*-?\\d+\\s*", DOUBLE_REGEX = "\\s*-?\\d+(.\\d+)?\\s*",
 			BOOLEAN_REGEX = "\\s*((-?\\d+(.\\d+)?)|true|false)\\s*";
 
-	// The patterns, pre-compiled.
+	// The patterns.
 	private static final Pattern STRING_PATTERN = Pattern.compile(STRING_REGEX),
-			CHAR_PATTERN = Pattern.compile(CHAR_REGEX),
-			INT_PATTERN = Pattern.compile(INT_REGEX),
+			CHAR_PATTERN = Pattern.compile(CHAR_REGEX), INT_PATTERN = Pattern.compile(INT_REGEX),
 			DOUBLE_PATTERN = Pattern.compile(DOUBLE_REGEX),
 			BOOLEAN_PATTERN = Pattern.compile(BOOLEAN_REGEX);
-
 
 	/**
 	 * Checks if a given value fits the variable specifications.
@@ -92,7 +97,7 @@ public enum Type {
 	 * @return true iff the value given fit's the type.
 	 */
 	public abstract boolean isValidValue(String value);
-	
+
 	/**
 	 * Returns the type object fitting for this string.
 	 * 
@@ -100,10 +105,10 @@ public enum Type {
 	 *            The string to check.
 	 * @return The type fitting for the string given. null if no type was
 	 *         identified.
-	 * @throws InvalidTypeException 
+	 * @throws InvalidTypeException
 	 */
 	public static Type findType(String typeString) throws InvalidTypeException {
-		switch(typeString) {
+		switch (typeString) {
 		case STRING_STRING:
 			return STRING;
 		case CHAR_STRING:
@@ -115,7 +120,7 @@ public enum Type {
 		case BOOLEAN_STRING:
 			return BOOLEAN;
 		default:
-			throw new InvalidTypeException(); 
+			throw new InvalidTypeException();
 		}
 	}
 }

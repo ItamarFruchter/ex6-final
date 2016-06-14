@@ -13,8 +13,7 @@ public class MemberFactory {
 	private static final char SPACE = ' ';
 	private static final char SEMICOLON = ';';
 	private static final Pattern WORD = Pattern.compile("\\w+");
-	private static final Pattern WITH_MODIFIER = Pattern
-			.compile("\\w+\\s+\\w+\\s+\\w+");
+	private static final Pattern WITH_MODIFIER = Pattern.compile("\\w+\\s+\\w+\\s+\\w+");
 	private static final int MEMBER_VALUE = 1;
 	private static final int MEMBER_NAME = 0;
 
@@ -49,32 +48,48 @@ public class MemberFactory {
 	 * @return an array of the members.
 	 * @throws IllegalCodeException
 	 */
-	public static LinkedList<Member> createMembers(String line)
-			throws IllegalCodeException {
+	public static LinkedList<Member> createMembers(String line,
+			LinkedList<Member> outerScopeMembers) throws IllegalCodeException {
 		String tempString = new String(line);
 		tempString = tempString.trim();
 		Matcher withModifireMatcher = WITH_MODIFIER.matcher(tempString);
 		if (withModifireMatcher.lookingAt()) {
-			return createMembersWithModifire(tempString);
+			return createMembersWithModifire(tempString, outerScopeMembers);
 		} else {
-			return createMembersWithoutModifire(tempString);
+			return createMembersWithoutModifire(tempString, outerScopeMembers);
 		}
 	}
 
 	/*
 	 * handles the case there is a modifier to the objects
 	 */
-	private static LinkedList<Member> createMembersWithoutModifire(
-			String tempString) throws IllegalCodeException {
+	private static LinkedList<Member> createMembersWithoutModifire(String tempString,
+			LinkedList<Member> outerScopeMembers) throws IllegalCodeException {
 		LinkedList<Member> listOfMembers = new LinkedList<Member>();
 		Matcher wordMatcher = WORD.matcher(tempString);
 		wordMatcher.find();
-		String type = tempString.substring(wordMatcher.start(),
-				wordMatcher.end());
+		String type = tempString.substring(wordMatcher.start(), wordMatcher.end());
 		tempString = tempString.substring(wordMatcher.end());
 		MemberParameters[] members = extractMembers(tempString);
 		for (MemberParameters member : members) {
-			listOfMembers.add(new Member(member.name, type, member.value));
+			try {
+				listOfMembers.add(new Member(member.name, type, member.value));
+			} catch (NonValidValueException error) {
+				boolean fixed = false;
+				for (Member outerScopeMember : outerScopeMembers) {
+					if (error.name.equals(outerScopeMember.name)
+							&& error.type.equals(outerScopeMember.getType())
+							&& outerScopeMember.hasValue) {
+						member.value = outerScopeMember.getType().getDefaultValue();
+						listOfMembers.add(new Member(member.name, type, member.value));
+						fixed = true;
+					}
+				}
+				if (!fixed){
+					throw error;
+				}
+			}
+			
 		}
 		return listOfMembers;
 	}
@@ -82,23 +97,36 @@ public class MemberFactory {
 	/*
 	 * handles the case there is no modifier
 	 */
-	private static LinkedList<Member> createMembersWithModifire(
-			String tempString) throws IllegalCodeException {
+	private static LinkedList<Member> createMembersWithModifire(String tempString,
+			LinkedList<Member> outerScopeMembers) throws IllegalCodeException {
 		LinkedList<Member> listOfMembers = new LinkedList<Member>();
 		Matcher wordMatcher = WORD.matcher(tempString);
 		wordMatcher.find();
-		String modifier = tempString.substring(wordMatcher.start(),
-				wordMatcher.end());
+		String modifier = tempString.substring(wordMatcher.start(), wordMatcher.end());
 		tempString = tempString.substring(wordMatcher.end());
 		wordMatcher.reset(tempString);
 		wordMatcher.find();
-		String type = tempString.substring(wordMatcher.start(),
-				wordMatcher.end());
+		String type = tempString.substring(wordMatcher.start(), wordMatcher.end());
 		tempString = tempString.substring(wordMatcher.end());
 		MemberParameters[] members = extractMembers(tempString);
 		for (MemberParameters member : members) {
-			listOfMembers
-					.add(new Member(member.name, type, member.value, modifier));
+			try {
+				listOfMembers.add(new Member(member.name, type, member.value, modifier));
+			} catch (NonValidValueException error) {
+				boolean fixed = false;
+				for (Member outerScopeMember : outerScopeMembers) {
+					if (error.name.equals(outerScopeMember.name)
+							&& error.type.equals(outerScopeMember.getType())
+							&& outerScopeMember.hasValue) {
+						member.value = outerScopeMember.getType().getDefaultValue();
+						listOfMembers.add(new Member(member.name, type, member.value, modifier));
+						fixed = true;
+					}
+				}
+				if (!fixed){
+					throw error;
+				}
+			}
 		}
 		return listOfMembers;
 	}
@@ -116,11 +144,10 @@ public class MemberFactory {
 			}
 			String[] parameters = membersString[i].split("=");
 			if (parameters.length == 2) {
-				members.add(new MemberParameters(parameters[MEMBER_NAME],
-						parameters[MEMBER_VALUE]));
-			} else {
 				members.add(
-						new MemberParameters(parameters[MEMBER_NAME], null));
+						new MemberParameters(parameters[MEMBER_NAME], parameters[MEMBER_VALUE]));
+			} else {
+				members.add(new MemberParameters(parameters[MEMBER_NAME], null));
 			}
 		}
 		return members.toArray(new MemberParameters[members.size()]);
