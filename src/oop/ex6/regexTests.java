@@ -1,20 +1,21 @@
 package oop.ex6;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import oop.ex6.variables.Modifier;
+import oop.ex6.error.IllegalCodeException;
+import oop.ex6.fileprocessing.MemberFactory;
+import oop.ex6.variables.Member;
 
 public class regexTests {
 	public static void main(String args[]) {
-		Pattern stringPattern = Pattern.compile("\\s*((-?\\d+(.\\d+)?)||true||false)\\s*");
-		Matcher StringMatcher = stringPattern.matcher("   -true   ");
-		if(StringMatcher.matches()) {
-			System.out.println(StringMatcher.group(0));
-		} else {
-			System.out.println("NO");
+		String line = "    int a = 3, b, c=8;";
+		try {
+			Member[] members = MemberFactory.createMembers(line);
+			for (Member member : members){
+				System.out.println(member.name);
+				System.out.println(member.hasValue);
+				System.out.println(member.modifier);
+			}
+		} catch (IllegalCodeException e) {
+			System.out.println("ERROR");
 		}
-		
-		System.out.println(Modifier.modifierFromString("final"));
 	}
 }
