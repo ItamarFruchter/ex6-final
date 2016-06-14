@@ -132,6 +132,7 @@ public abstract class Block {
 		return null;
 	}
 
+	
 	protected void handleDecleration(String line) throws IllegalCodeException {
 		/*
 		 * LinkedList<Member> newMembers = MemberFactory.createMembers(line,
