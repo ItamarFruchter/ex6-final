@@ -11,12 +11,24 @@ public class NonValidValueException extends IllegalCodeException {
 	
 	private static final long serialVersionUID = 1L;
 	/** The variable type to check. */
-	public Type type;
+	private Type type;
 	/** The name to check. */
-	public String name;
+	private String name;
+	
+	private final static String MESSAGE = "The value to assign is not valid.";
+
 	
 	public NonValidValueException(Type type, String name) {
 		this.type = type;
 		this.name = name;
+		this.meaningfulMessage = MESSAGE;
+	}
+	
+	public Type getType(){
+		return type;
+	}
+	
+	public String getName(){
+		return name;
 	}
 }

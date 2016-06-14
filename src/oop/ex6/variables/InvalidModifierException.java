@@ -8,5 +8,12 @@ import oop.ex6.error.IllegalCodeException;
 public class InvalidModifierException extends IllegalCodeException{
 
 	private static final long serialVersionUID = 1L;
+	
+	private final static String MESSAGE = "The modifier given is not valid.";
+	
+	public InvalidModifierException() {
+		this.meaningfulMessage = MESSAGE;
+	}
+
 
 }
