@@ -1,13 +1,29 @@
 package oop.ex6.blockAnalayzer;
 
+import java.util.regex.Pattern;
+
 import oop.ex6.error.IllegalCodeException;
+import oop.ex6.variables.Type;
 
 public class MethodBlock extends Block {
 
-	
+	private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z]\\w*");
+
+	/*
+	private class Argument {
+
+		private Type typeOfArgument;
+		private String nameOfArgument;
+
+		private Argument(String type, String name) throws IllegalCodeException {
+			this.typeOfArgument = Type.findType(type);
+			this.nameOfArgument = checkName(name);
+		}
+	}
+	*/
 	
 	private enum MethodBlockType {
-		Void("void");
+		VOID("void");
 
 		// The string representation of this method type.
 		private String stringRepresentation;
@@ -31,8 +47,8 @@ public class MethodBlock extends Block {
 		 *         representation, if exists.
 		 * @throws IllegalCodeException
 		 */
-		public static MethodBlockType methodTypeFromString(
-				String stringRepresentation) throws IllegalCodeException {
+		public static MethodBlockType methodTypeFromString(String stringRepresentation)
+				throws IllegalCodeException {
 			for (MethodBlockType nonMethodType : MethodBlockType.values()) {
 				if (nonMethodType.getRepresentation().equals(stringRepresentation)) {
 					return nonMethodType;
@@ -41,11 +57,4 @@ public class MethodBlock extends Block {
 			throw new UnknownBlockTypeException();
 		}
 	}
-	
-	@Override
-	protected boolean checkCondition(String condition) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
