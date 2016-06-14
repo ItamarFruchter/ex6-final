@@ -43,67 +43,23 @@ public class MemberFactory {
 	}
 
 	/**
-	 * @param line
-	 *            the line we want generate members from.
+	 * @param line the line we want generate members from.
 	 * @return an array of the members.
 	 * @throws IllegalCodeException
 	 */
 	public static LinkedList<Member> createMembers(String line,
 			LinkedList<Member> outerScopeMembers) throws IllegalCodeException {
+		LinkedList<Member> listOfMembers = new LinkedList<Member>();
 		String tempString = new String(line);
 		tempString = tempString.trim();
+		String modifier = null;
 		Matcher withModifireMatcher = WITH_MODIFIER.matcher(tempString);
+		Matcher wordMatcher = WORD.matcher(tempString);
 		if (withModifireMatcher.lookingAt()) {
-			return createMembersWithModifire(tempString, outerScopeMembers);
-		} else {
-			return createMembersWithoutModifire(tempString, outerScopeMembers);
+			wordMatcher.find();
+			modifier = tempString.substring(wordMatcher.start(), wordMatcher.end());
+			tempString = tempString.substring(wordMatcher.end());
 		}
-	}
-
-	/*
-	 * handles the case there is a modifier to the objects
-	 */
-	private static LinkedList<Member> createMembersWithoutModifire(String tempString,
-			LinkedList<Member> outerScopeMembers) throws IllegalCodeException {
-		LinkedList<Member> listOfMembers = new LinkedList<Member>();
-		Matcher wordMatcher = WORD.matcher(tempString);
-		wordMatcher.find();
-		String type = tempString.substring(wordMatcher.start(), wordMatcher.end());
-		tempString = tempString.substring(wordMatcher.end());
-		MemberParameters[] members = extractMembers(tempString);
-		for (MemberParameters member : members) {
-			try {
-				listOfMembers.add(new Member(member.name, type, member.value));
-			} catch (NonValidValueException error) {
-				boolean fixed = false;
-				for (Member outerScopeMember : outerScopeMembers) {
-					if (error.name.equals(outerScopeMember.name)
-							&& Type.canBeCasted(Type.findType(type) , error.type)
-							&& outerScopeMember.hasValue) {
-						member.value = outerScopeMember.getType().getDefaultValue();
-						listOfMembers.add(new Member(member.name, type, member.value));
-						fixed = true;
-					}
-				}
-				if (!fixed){
-					throw error;
-				}
-			}
-			
-		}
-		return listOfMembers;
-	}
-
-	/*
-	 * handles the case there is no modifier
-	 */
-	private static LinkedList<Member> createMembersWithModifire(String tempString,
-			LinkedList<Member> outerScopeMembers) throws IllegalCodeException {
-		LinkedList<Member> listOfMembers = new LinkedList<Member>();
-		Matcher wordMatcher = WORD.matcher(tempString);
-		wordMatcher.find();
-		String modifier = tempString.substring(wordMatcher.start(), wordMatcher.end());
-		tempString = tempString.substring(wordMatcher.end());
 		wordMatcher.reset(tempString);
 		wordMatcher.find();
 		String type = tempString.substring(wordMatcher.start(), wordMatcher.end());
@@ -130,6 +86,8 @@ public class MemberFactory {
 		}
 		return listOfMembers;
 	}
+
+
 
 	/*
 	 * generate an array of MemberParameter from the line given
