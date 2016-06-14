@@ -123,4 +123,37 @@ public enum Type {
 			throw new InvalidTypeException();
 		}
 	}
+
+	public static boolean canBeCasted(Type neededType, Type givenType) {
+		boolean matched = false;
+		switch (neededType) {
+		case DOUBLE:
+			if (givenType.equals(DOUBLE) || givenType.equals(INT)) {
+				matched = true;
+			}
+			break;
+		case BOOLEAN:
+			if (givenType.equals(BOOLEAN) || givenType.equals(INT) || givenType.equals(DOUBLE)) {
+				matched = true;
+			}
+			break;
+		case CHAR:
+			if (givenType.equals(CHAR)) {
+				matched = true;
+			}
+			break;
+		case INT:
+			if (givenType.equals(INT)) {
+				matched = true;
+			}
+			break;
+		case STRING:
+			if (givenType.equals(STRING)) {
+				matched = true;
+			}
+		default:
+			break;
+		}
+		return matched;
+	}
 }
