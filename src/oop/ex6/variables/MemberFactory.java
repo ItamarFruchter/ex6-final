@@ -43,7 +43,7 @@ public class MemberFactory {
 	 * @return an array of the members
 	 * @throws IllegalCodeException
 	 */
-	public static Member[] createMembers(String line) throws IllegalCodeException{
+	public static LinkedList<Member> createMembers(String line) throws IllegalCodeException{
 		String tempString = new String(line);
 		tempString = tempString.trim();
 		Matcher withModifireMatcher = WITH_MODIFIER.matcher(tempString);
@@ -58,7 +58,7 @@ public class MemberFactory {
 	/*
 	 * handles the case there is a modifier to the objects
 	 */
-	private static Member[] createMembersWithoutModifire(String tempString) throws IllegalCodeException {
+	private static LinkedList<Member> createMembersWithoutModifire(String tempString) throws IllegalCodeException {
 		LinkedList<Member> listOfMembers = new LinkedList<Member>();
 		Matcher wordMatcher = WORD.matcher(tempString);
 		wordMatcher.find();
@@ -68,13 +68,13 @@ public class MemberFactory {
 		for (MemberParameters member : members ){
 			listOfMembers.add(new Member(member.name, type, member.value));
 		}
-		return listOfMembers.toArray(new Member[listOfMembers.size()]);
+		return listOfMembers;
 	}
 
 	/*
 	 * handles the case there is no modifier
 	 */
-	private static Member[] createMembersWithModifire(String tempString) throws IllegalCodeException {
+	private static LinkedList<Member> createMembersWithModifire(String tempString) throws IllegalCodeException {
 		LinkedList<Member> listOfMembers = new LinkedList<Member>();
 		Matcher wordMatcher = WORD.matcher(tempString);
 		wordMatcher.find();
@@ -88,7 +88,7 @@ public class MemberFactory {
 		for (MemberParameters member : members ){
 			listOfMembers.add(new Member(member.name, type, member.value, modifier));
 		}
-		return listOfMembers.toArray(new Member[listOfMembers.size()]);
+		return listOfMembers;
 	}
 	
 	
