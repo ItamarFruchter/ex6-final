@@ -8,7 +8,9 @@ import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
 
 public class regexTests {
+	
 	public static void main(String args[]) {
+		/**
 		String line = "boolean a, b ,c , d = true, e, f = 5;";
 		try {
 			Member[] members = MemberFactory.createMembers(line);
@@ -25,5 +27,7 @@ public class regexTests {
 		Pattern p = Pattern.compile("("+Memb+"|"+Var+")(((\\|\\|)|(\\&\\&))("+Memb+"|"+Var+"))*");
 		Matcher m = p.matcher(" a || && 0.2");
 		System.out.println(m.matches());
+		*/
+		System.out.println("\'");
 	}
 }
