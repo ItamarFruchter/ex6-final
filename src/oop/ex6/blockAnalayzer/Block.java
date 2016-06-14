@@ -15,14 +15,4 @@ public abstract class Block {
 	  * The known local members this block (scope wise).
 	  */
 	 protected Member[] globalMembers;
-	 
-	 /**
-	 * Checks the condition: for an if/while checks whether the string
-	 * represents a legal condition, and for a method the correct types.
-	 * 
-	 * @param condition
-	 *            The condition to check.
-	 * @return true iff the given string represents a legal condition.
-	 */
-	 protected abstract boolean checkCondition(String condition);
 }

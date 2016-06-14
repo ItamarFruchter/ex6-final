@@ -1,5 +1,6 @@
 package oop.ex6.blockAnalayzer;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import oop.ex6.error.IllegalCodeException;
@@ -81,17 +82,27 @@ public class NonMethodBlock extends Block {
 																	// UnknownBlockTypeException.
 		this.globalMembers = globalMembers;
 		if (checkCondition(condition)) {
-
+			
 		} else {
-
+			
 		}
 
 	}
 
-	@Override
-	protected boolean checkCondition(String condition) {
-
-		return false;
+	/*
+	 * Checks the condition: for an if/while checks whether the string
+	 * represents a legal condition.
+	 * 
+	 * @param condition
+	 *            The condition to check.
+	 * @return true iff the given string represents a legal condition.
+	 */
+	private boolean checkCondition(String condition) {
+		Matcher coditionMatcher = CONDITION_PATTERN.matcher(condition);
+		if (coditionMatcher.matches()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-
 }
