@@ -3,6 +3,8 @@ package oop.ex6.variables;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import oop.ex6.error.IllegalCodeException;
+
 /**
  * Every type is represented by an Enum in this class. Each holds a method to
  * check whether a given string represents a legal value for the said type.
@@ -75,20 +77,17 @@ public enum Type {
 	}
 
 	// The declaration representation of the types.
-	private static final String STRING_STRING = "String", CHAR_STRING = "char",
-			INT_STRING = "int", DOUBLE_STRING = "double",
-			BOOLEAN_STRING = "boolean";
+	private static final String STRING_STRING = "String", CHAR_STRING = "char", INT_STRING = "int",
+			DOUBLE_STRING = "double", BOOLEAN_STRING = "boolean";
 
 	// The regular expression patterns for each variable.
-	private static final String STRING_REGEX = "\\s*\".*\"\\s*",
-			CHAR_REGEX = "\\s*\'.\'\\s*", INT_REGEX = "\\s*-?\\d+\\s*",
-			DOUBLE_REGEX = "\\s*-?\\d+(.\\d+)?\\s*",
+	private static final String STRING_REGEX = "\\s*\".*\"\\s*", CHAR_REGEX = "\\s*\'.\'\\s*",
+			INT_REGEX = "\\s*-?\\d+\\s*", DOUBLE_REGEX = "\\s*-?\\d+(.\\d+)?\\s*",
 			BOOLEAN_REGEX = "\\s*((-?\\d+(.\\d+)?)|true|false)\\s*";
 
 	// The patterns.
 	private static final Pattern STRING_PATTERN = Pattern.compile(STRING_REGEX),
-			CHAR_PATTERN = Pattern.compile(CHAR_REGEX),
-			INT_PATTERN = Pattern.compile(INT_REGEX),
+			CHAR_PATTERN = Pattern.compile(CHAR_REGEX), INT_PATTERN = Pattern.compile(INT_REGEX),
 			DOUBLE_PATTERN = Pattern.compile(DOUBLE_REGEX),
 			BOOLEAN_PATTERN = Pattern.compile(BOOLEAN_REGEX);
 
@@ -127,6 +126,28 @@ public enum Type {
 		}
 	}
 
+	public static Type typeOfValue(String value) throws IllegalCodeException {
+		Type type = null;
+		if (INT.isValidValue(value)) {
+			type = INT;
+		} else if (DOUBLE.isValidValue(value)) {
+			type = DOUBLE;
+		} else if (BOOLEAN.isValidValue(value)){
+			type = BOOLEAN;
+		} else if (STRING.isValidValue(value)){
+			type = STRING;
+		} else if (CHAR.isValidValue(value)){
+			type = CHAR;
+		}
+		if (type == null){
+			throw new ValueWithoutTypeException();
+		} else {
+			return type;
+		}
+		
+
+	}
+
 	/**
 	 * @param neededType
 	 *            the type we want to assign value to
@@ -143,8 +164,7 @@ public enum Type {
 			}
 			break;
 		case BOOLEAN:
-			if (givenType.equals(BOOLEAN) || givenType.equals(INT)
-					|| givenType.equals(DOUBLE)) {
+			if (givenType.equals(BOOLEAN) || givenType.equals(INT) || givenType.equals(DOUBLE)) {
 				matched = true;
 			}
 			break;
