@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.fileprocessing.LineType;
+import oop.ex6.fileprocessing.MeaninglessLineException;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
 import oop.ex6.variables.NonValidValueException;
@@ -80,46 +81,35 @@ public abstract class Block {
 	 * 
 	 * @throws IllegalCodeException
 	 */
-	public void shellowProcessing() throws IllegalCodeException {
-		int ScopeCounter = 0;
+	public void shellowProcessing() throws IllegalCodeException {s
 		for (int lineCounter = 0; lineCounter < content.length; lineCounter++) {
 			String line = content[lineCounter];
 			LineType currentLineType = LineType.fitType(line);
 			switch (currentLineType) {
 			case DECLERATION:
-				if (ScopeCounter == 0) {
-					handleDecleration(line);
-				}
+				handleDecleration(line);
 				break;
 
 			case ASSIGNMENT:
-				if (ScopeCounter == 0) {
-					handleAssignment(line);
-				}
+				handleAssignment(line);
 				break;
 
 			case NON_METHOD_BLOCK:
-				ScopeCounter++;
 				handleNonMethodBlockDecleration(line);
 				break;
 
 			case METHOD_DECLERATION:
-				ScopeCounter++;
 				handleMethodBlockDecleration(line);
 				break;
 
 			case CLOSING_BLOCK:
-				ScopeCounter--;
-				if (ScopeCounter < 0) {
-					throw new NonValidBlockClosingException();
-				}
+				if (lineCounter == content.)
+				throw new NonValidBlockClosingException();
+				break;
+				
 			default:
 				break;
 			}
-		}
-
-		if (ScopeCounter > 0) {
-			throw new UnclosedBlockException();
 		}
 	}
 
@@ -259,10 +249,43 @@ public abstract class Block {
 		throw new IllegalMethodDeclerationLocationException();
 	}
 
+	/**
+	 * Finds the end of the block declared in the given line. Returns -1 if the
+	 * block was never closed.
+	 * 
+	 * @param startLineNumber
+	 * @return
+	 */
 	private int findBlockEnd(int startLineNumber) {
-		ScopeCounter
-		for (int curLine = startLineNumber; curLine < content.length; curLine++) {
-			
+		int ScopeCounter = 0;
+		for (int curLineIndex = startLineNumber; curLineIndex < content.length; curLineIndex++) {
+			LineType currentLineType;
+			try {
+				currentLineType = LineType.fitType(content[curLineIndex]);
+			} catch (IllegalCodeException e) { // Can only throw meaningless
+												// line exception.
+				currentLineType = null;
+			}
+
+			switch (currentLineType) {
+			case NON_METHOD_BLOCK:
+				ScopeCounter++;
+				break;
+
+			case METHOD_DECLERATION:
+				ScopeCounter++;
+				break;
+
+			case CLOSING_BLOCK:
+				ScopeCounter--;
+				if (ScopeCounter == 0) {
+					return curLineIndex;
+				}
+				break;
+
+			default:
+				break;
+			}
 		}
 		return -1;
 	}
