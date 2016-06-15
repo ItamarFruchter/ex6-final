@@ -8,6 +8,7 @@ import oop.ex6.error.IllegalCodeException;
 import oop.ex6.fileprocessing.ReservedWord;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
+import oop.ex6.variables.Type;
 
 /**
  * this class represents a method block
@@ -20,17 +21,16 @@ public class MethodBlock extends Block {
 	private String name;
 	private Member[] arguments;
 
-	public MethodBlock(String type, String name, String arguments,
-			String[] content, LinkedList<Member> higherScopeMembers)
-			throws IllegalCodeException {
+	public MethodBlock(String type, String name, String arguments, String[] content,
+			LinkedList<Member> higherScopeMembers) throws IllegalCodeException {
 		this.type = BlockType.blockTypeFromString(type);
 		if (checkName(name)) {
 			this.name = name;
 			LinkedList<Member> methodArguments = new LinkedList<Member>();
 			String[] argumentsArray = arguments.split(",");
 			for (String argument : argumentsArray) {
-				methodArguments.addAll(MemberFactory.createMembers(argument,
-						higherScopeMembers, methodArguments));
+				methodArguments.addAll(
+						MemberFactory.createMembers(argument, higherScopeMembers, methodArguments));
 			}
 			this.arguments = methodArguments.toArray(new Member[methodArguments.size()]);
 			this.localMembers.addAll(methodArguments);
@@ -48,11 +48,27 @@ public class MethodBlock extends Block {
 	private boolean checkName(String name) {
 		String trimmedName = name.trim();
 		Matcher nameMatcher = NAME_PATTERN.matcher(trimmedName);
-		return (nameMatcher.matches()
-				&& !ReservedWord.isReservedWord(trimmedName));
+		return (nameMatcher.matches() && !ReservedWord.isReservedWord(trimmedName));
 	}
-	
-	
+
+	/**
+	 * @param inputArguments the arguments the method is called with
+	 * @return true if the arguments are valid, false otherwise
+	 */
+	public boolean isVallidMethodCall(Member[] inputArguments) {
+		if (arguments.length != inputArguments.length) {
+			return false;
+		}
+		boolean isValid = true;
+		for (int i = 0; i < arguments.length; i++) {
+			isValid = Type.canBeCasted(arguments[i].getType(), inputArguments[i].getType());
+			if (!isValid) {
+				break;
+			}
+		}
+		return isValid;
+
+	}
 
 	/**
 	 * A getter for this method's name.
