@@ -98,11 +98,11 @@ public class MemberFactory {
 		return listOfMembers;
 	}
 
-	public Type[] createArgumentsType(String[] argumentsDescription,
+	public static Type[] createArgumentsType(String[] argumentsDescription,
 			LinkedList<Member> relevantMembers) {
 		Type[] listOfTypes = new Type[argumentsDescription.length];
 		for (int i = 0; i < listOfTypes.length; i++){
-			boolea
+			boolean isName = false;
 			String nameToCheck = argumentsDescription[i].trim();
 			for (Member member: relevantMembers){
 				if (member.getName().equals(nameToCheck)){
