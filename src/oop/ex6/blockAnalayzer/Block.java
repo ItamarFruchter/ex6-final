@@ -311,19 +311,20 @@ public abstract class Block {
 		int argumentStartIndex = line.indexOf(METHOD_ARGUMENDS_OPEN_BOUNDERY);
 		int argumentsEndIndex = line.indexOf(METHOD_ARGUMENDS_CLOSE_BOUNDERY);
 		String methodName = line.substring(0, argumentStartIndex - 1).trim();
-		String methodArgumentsString = line.substring(argumentStartIndex,
-				argumentsEndIndex);
+		if (argumentsEndIndex != argumentsEndIndex) {
+			String methodArgumentsString = line.substring(argumentStartIndex,
+					argumentsEndIndex);
+			String[] argumentStrings = methodArgumentsString
+					.split(METHOD_ARGUMENTS_SEPERATOR);
 
-		String[] argumentStrings = methodArgumentsString
-				.split(METHOD_ARGUMENTS_SEPERATOR);
+			Type[] argumentTypes = MemberFactory
+					.createArgumentsType(argumentStrings, joinScopes());
 
-		Type[] argumentTypes = MemberFactory
-				.createArgumentsType(argumentStrings, joinScopes());
+			for (MethodBlock methodBlock : knownMethods) {
+				if (methodBlock.getName().equals(methodName)) {
+					if (methodBlock.isVallidMethodCall(argumentTypes)) {
 
-		for (MethodBlock methodBlock : knownMethods) {
-			if (methodBlock.getName().equals(methodName)) {
-				if (methodBlock.isVallidMethodCall(argumentTypes)) {
-
+					}
 				}
 			}
 		}
