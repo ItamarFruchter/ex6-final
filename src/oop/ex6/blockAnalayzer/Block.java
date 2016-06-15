@@ -356,25 +356,26 @@ public abstract class Block {
 		jointScopeMembers.addAll(localMembers);
 		Iterator<Member> higherScopeMemberIterator = higherScopeMembers
 				.iterator();
-		Member currentHigherScopeMember = higherScopeMemberIterator.next();
-		//NULL POINTER EXCEPTION
-		while (higherScopeMemberIterator.hasNext()) {
-			boolean alreadyExist = false;
-			Iterator<Member> localMemberIterator = localMembers.iterator();
-			Member currentMember = localMemberIterator.next();
-			while (localMemberIterator.hasNext() && !alreadyExist) {
-				if (currentMember.getName()
-						.equals(currentHigherScopeMember.getName())) {
-					alreadyExist = true;
+		if (higherScopeMemberIterator.hasNext()) {
+			Member currentHigherScopeMember = higherScopeMemberIterator.next();
+			while (currentHigherScopeMember != null) {
+				boolean alreadyExist = false;
+				Iterator<Member> localMemberIterator = localMembers.iterator();
+				Member currentMember = localMemberIterator.next();
+				while (currentMember != null && !alreadyExist) {
+					if (currentMember.getName()
+							.equals(currentHigherScopeMember.getName())) {
+						alreadyExist = true;
+					}
+					currentMember = localMemberIterator.next();
 				}
-				currentMember = localMemberIterator.next();
+				if (!alreadyExist) {
+					jointScopeMembers.add(currentHigherScopeMember);
+				}
+				currentHigherScopeMember = higherScopeMemberIterator.next();
 			}
-
-			if (!alreadyExist) {
-				jointScopeMembers.add(currentHigherScopeMember);
-			}
-			currentHigherScopeMember = higherScopeMemberIterator.next();
 		}
+		
 		return jointScopeMembers;
 	}
 
