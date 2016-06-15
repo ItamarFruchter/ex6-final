@@ -81,9 +81,9 @@ public class MemberFactory {
 				allRelevantMembers.addAll(localMembers);
 				allRelevantMembers.addAll(outerScopeMembers);
 				for (Member memberToCheck : allRelevantMembers) {
-					if (error.getName().equals(memberToCheck.name)
+					if (error.getName().equals(memberToCheck.getName())
 							&& Type.canBeCasted(Type.findType(type), error.getType())
-							&& memberToCheck.hasValue) {
+							&& memberToCheck.isInitiallized()) {
 						memberParameters.value = memberToCheck.getType().getDefaultValue();
 						listOfMembers.add(new Member(memberParameters.name, type,
 								memberParameters.value, modifier));
@@ -98,25 +98,42 @@ public class MemberFactory {
 		return listOfMembers;
 	}
 
+	/**
+	 * @param argumentsDescription
+	 *            array containing all the calls of the function
+	 * @param relevantMembers
+	 *            variables that can affect the validity of the given call
+	 * @return an array containing all the types of the calls, in the right
+	 *         order
+	 * @throws IllegalCodeException
+	 */
 	public static Type[] createArgumentsType(String[] argumentsDescription,
-			LinkedList<Member> relevantMembers) {
+			LinkedList<Member> relevantMembers) throws IllegalCodeException {
 		Type[] listOfTypes = new Type[argumentsDescription.length];
-		for (int i = 0; i < listOfTypes.length; i++){
+		for (int i = 0; i < listOfTypes.length; i++) {
 			boolean isName = false;
-			String nameToCheck = argumentsDescription[i].trim();
-			for (Member member: relevantMembers){
-				if (member.getName().equals(nameToCheck)){
-					
+			String nameOrValueToCheck = argumentsDescription[i].trim();
+			for (Member member : relevantMembers) {
+				if (member.getName().equals(nameOrValueToCheck)) {
+					isName = true;
+					listOfTypes[i] = member.getType();
+					break;
 				}
+			}
+			if (!isName) {
+				listOfTypes[i] = Type.typeOfValue(nameOrValueToCheck);
 			}
 		}
 		return listOfTypes;
 	}
 
+	/*
+	 * checking if the name already exists in the local scope
+	 */
 	private static boolean isNewMember(String name, LinkedList<Member> localMembers) {
 		boolean isNew = true;
 		for (Member member : localMembers) {
-			if (name.equals(member.name)) {
+			if (name.equals(member.getName())) {
 				isNew = false;
 			}
 		}
