@@ -183,7 +183,11 @@ public abstract class Block {
 			Block currentContainedBlock = containedBlockIterator.next();
 			while (currentContainedBlock != null) {
 				currentContainedBlock.process();
-				currentContainedBlock = containedBlockIterator.next();
+				if (containedBlockIterator.hasNext()) {
+					currentContainedBlock = containedBlockIterator.next();
+				} else {
+					currentContainedBlock = null;
+				}
 			}
 		}
 	}
