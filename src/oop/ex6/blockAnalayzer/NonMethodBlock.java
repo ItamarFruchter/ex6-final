@@ -6,9 +6,7 @@ import java.util.regex.Pattern;
 
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.variables.Member;
-import oop.ex6.variables.MemberFactory;
 import oop.ex6.variables.Type;
-import oop.ex6.fileprocessing.LineType;
 
 /**
  * A non-method block. In the current build - an if block or while block.

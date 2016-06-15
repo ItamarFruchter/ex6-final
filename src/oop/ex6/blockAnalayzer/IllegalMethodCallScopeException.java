@@ -7,6 +7,7 @@ import oop.ex6.error.IllegalCodeException;
  */
 public class IllegalMethodCallScopeException extends IllegalCodeException {
 
+	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE = "Can't call methods from the "
 			+ "highest scope.";
 

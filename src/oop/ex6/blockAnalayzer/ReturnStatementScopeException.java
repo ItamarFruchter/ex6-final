@@ -7,6 +7,7 @@ import oop.ex6.error.IllegalCodeException;
  */
 public class ReturnStatementScopeException extends IllegalCodeException {
 	
+	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE = "A return statement is out of a method block.";
 
 	public ReturnStatementScopeException() {

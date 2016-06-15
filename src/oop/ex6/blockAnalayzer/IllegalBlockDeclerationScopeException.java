@@ -9,6 +9,7 @@ import oop.ex6.error.IllegalCodeException;
 public class IllegalBlockDeclerationScopeException
 		extends IllegalCodeException {
 
+	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE = "Can't declare a non-method "
 			+ "block from the highest scope.";
 

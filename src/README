@@ -23,6 +23,32 @@ FILE DESCRIPTION:
 =    Answers to questions   =
 =============================
 
+
+error handling:
+	first, we created a general type of error - IllegalCodeException which has a field for
+	holding an informative message, an empty constructor (which is never used) and a constructor 
+	that gets an error of its own type and a line number, that update the informative message to
+	show both informative reason for why the code is illegal and also in what line is the first
+	problem. now you are probably wondering from where we get our informative messages.
+	for each end every possible reason for the code being illegal we created an exception of 
+	it's own that, as you probably already guessed, extends IllegalCodeException. each
+	of those exception holds it's own informative message and when we create an error of its
+	type we set this message as the informative message of the IllegaCodeException he is.
+	afterwards, the line is thrown up to a place that can tell her from which line it was
+	created, and then we catch it, constructs a new error via the constructor of 
+	IllegalCodeException with the line number, which holds the informative message from
+	the "lower" exception and adds to it the line number. then, we throw the exception up 
+	until it gets to our main methods, then we print via system.out 1 and via system.err
+	the informative message we got from the exception creating process.		
+
+objected oriented design:
+	in order to modify our code to new types of value all we have to do is to create another
+	instance of type in the Type enum class. that mean we will have to create a regEx 
+	pattern that holds the pattern of how a value looks like, a string representation,
+	a default value and handle some cases in the Type enum class. we won't have to touch
+	any other class.
+	
+	
 two main regEx use:
 1.	when we tried to analyze for each line what type of line it is, we created a regEx 
 	pattern	that describes what each type of line should contain. for example, a line 
@@ -34,7 +60,9 @@ two main regEx use:
 2.	when we wanted to check if a certain value is a valid value of a certain type of 
 	value we used a regEx pattern of each type's value demands. for example, for the type
 	Boolean we used the pattern: "\\s*((-?\\d+(\\.\\d+)?)|true|false)\\s*".
-	this pattern say "[as many spaces as we want](['-' char, maybe] 
-	
-
-	
+	this pattern say "[as many spaces as we want](['-' char, maybe]([at least one digit ([
+	'.' char followed by at least one digit], maybe)){handle the case of int or double} or
+	([true]){reserved word} or ([false]){reserved word}"
+as we can understand from the description only, the regEx saved us a lot of line code in
+those parts in particular, and in all the code in general. 
+		
