@@ -10,86 +10,39 @@ import oop.ex6.error.IllegalCodeException;
  * check whether a given string represents a legal value for the said type.
  */
 public enum Type {
-	STRING("\"\"") {
-		@Override
-		public boolean isValidValue(String value) {
-			Matcher STRING_MATCHER = STRING_PATTERN.matcher(value);
-			if (!STRING_MATCHER.matches()) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-	},
-	CHAR("'A'") {
-		@Override
-		public boolean isValidValue(String value) {
-			Matcher CHAR_MATCHER = CHAR_PATTERN.matcher(value);
-			if (!CHAR_MATCHER.matches()) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-	},
-	INT("0") {
-		@Override
-		public boolean isValidValue(String value) {
-			Matcher INT_MATCHER = INT_PATTERN.matcher(value);
-			if (!INT_MATCHER.matches()) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-	},
-	DOUBLE("0") {
-		@Override
-		public boolean isValidValue(String value) {
-			Matcher DOUBLE_MATCHER = DOUBLE_PATTERN.matcher(value);
-			if (!DOUBLE_MATCHER.matches()) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-	},
-	BOOLEAN("true") {
-		@Override
-		public boolean isValidValue(String value) {
-			Matcher BOOLEAN_MATCHER = BOOLEAN_PATTERN.matcher(value);
-			if (!BOOLEAN_MATCHER.matches()) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-	};
+	STRING("String", "\\s*\".*\"\\s*", "\"\""), CHAR("char", "\\s*\'.\'\\s*",
+			"'A'"), INT("int", "\\s*-?\\d+\\s*", "0"), DOUBLE("double",
+					"\\s*-?\\d+(\\.\\d+)?\\s*", "0"), BOOLEAN("boolean",
+							"\\s*((-?\\d+(\\.\\d+)?)|true|false)\\s*", "true");
 
+	private String stringRepresentation;
+	private Pattern valuePattern;
 	private String defaultValue;
 
-	private Type(String defaultValue) {
+	private Type(String stringRepresentation, String valueRegex,
+			String defaultValue) {
+		this.stringRepresentation = stringRepresentation;
+		this.valuePattern = Pattern.compile(valueRegex);
 		this.defaultValue = defaultValue;
 	}
 
+	/**
+	 * Returns a default value of this type.
+	 * 
+	 * @return The defined default value.
+	 */
 	public String getDefaultValue() {
 		return defaultValue;
 	}
 
-	// The declaration representation of the types.
-	private static final String STRING_STRING = "String", CHAR_STRING = "char", INT_STRING = "int",
-			DOUBLE_STRING = "double", BOOLEAN_STRING = "boolean";
-
-	// The regular expression patterns for each variable.
-	private static final String STRING_REGEX = "\\s*\".*\"\\s*", CHAR_REGEX = "\\s*\'.\'\\s*",
-			INT_REGEX = "\\s*-?\\d+\\s*", DOUBLE_REGEX = "\\s*-?\\d+(\\.\\d+)?\\s*",
-			BOOLEAN_REGEX = "\\s*((-?\\d+(\\.\\d+)?)|true|false)\\s*";
-
-	// The patterns.
-	private static final Pattern STRING_PATTERN = Pattern.compile(STRING_REGEX),
-			CHAR_PATTERN = Pattern.compile(CHAR_REGEX), INT_PATTERN = Pattern.compile(INT_REGEX),
-			DOUBLE_PATTERN = Pattern.compile(DOUBLE_REGEX),
-			BOOLEAN_PATTERN = Pattern.compile(BOOLEAN_REGEX);
+	/**
+	 * A getter method for this type's string representation.
+	 * 
+	 * @return This type's string representation.
+	 */
+	public String getStringRepresentation() {
+		return stringRepresentation;
+	}
 
 	/**
 	 * Checks if a given value fits the variable specifications.
@@ -98,7 +51,10 @@ public enum Type {
 	 *            String representation of the desired value.
 	 * @return true iff the value given fit's the type.
 	 */
-	public abstract boolean isValidValue(String value);
+	public boolean isValidValue(String value) {
+		Matcher valueMatcher = valuePattern.matcher(value);
+		return valueMatcher.matches();
+	}
 
 	/**
 	 * Returns the type object fitting for this string.
@@ -110,42 +66,21 @@ public enum Type {
 	 * @throws InvalidTypeException
 	 */
 	public static Type findType(String typeString) throws InvalidTypeException {
-		switch (typeString) {
-		case STRING_STRING:
-			return STRING;
-		case CHAR_STRING:
-			return CHAR;
-		case INT_STRING:
-			return INT;
-		case DOUBLE_STRING:
-			return DOUBLE;
-		case BOOLEAN_STRING:
-			return BOOLEAN;
-		default:
-			throw new InvalidTypeException();
+		for (Type type : Type.values()) {
+			if (type.stringRepresentation.equals(typeString)) {
+				return type;
+			}
 		}
+		throw new InvalidTypeException(); // If non were found.
 	}
 
 	public static Type typeOfValue(String value) throws IllegalCodeException {
-		Type type = null;
-		if (INT.isValidValue(value)) {
-			type = INT;
-		} else if (DOUBLE.isValidValue(value)) {
-			type = DOUBLE;
-		} else if (BOOLEAN.isValidValue(value)){
-			type = BOOLEAN;
-		} else if (STRING.isValidValue(value)){
-			type = STRING;
-		} else if (CHAR.isValidValue(value)){
-			type = CHAR;
+		for (Type type : Type.values()) {
+			if (type.isValidValue(value)) {
+				return type;
+			}
 		}
-		if (type == null){
-			throw new ValueWithoutTypeException();
-		} else {
-			return type;
-		}
-		
-
+		throw new ValueWithoutTypeException();
 	}
 
 	/**
@@ -164,7 +99,8 @@ public enum Type {
 			}
 			break;
 		case BOOLEAN:
-			if (givenType.equals(BOOLEAN) || givenType.equals(INT) || givenType.equals(DOUBLE)) {
+			if (givenType.equals(BOOLEAN) || givenType.equals(INT)
+					|| givenType.equals(DOUBLE)) {
 				matched = true;
 			}
 			break;

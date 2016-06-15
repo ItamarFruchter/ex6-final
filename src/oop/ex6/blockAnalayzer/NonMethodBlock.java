@@ -87,7 +87,7 @@ public class NonMethodBlock extends Block {
 				} else if (memberNameMatcher.matches()) {
 					boolean foundKnownMember = false;
 					for (Member knownMember : higherScopeMembers) {
-						if (knownMember.getName().equals(conditionString)) {
+						if (knownMember.getName().equals(conditionString.trim())) {
 							if (Type.canBeCasted(CONDITION_DEFAULT_TYPE,
 									knownMember.getType())) {
 								if (knownMember.isInitiallized()) {

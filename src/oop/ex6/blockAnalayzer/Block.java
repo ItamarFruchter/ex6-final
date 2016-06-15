@@ -352,7 +352,8 @@ public abstract class Block {
 	 */
 	private LinkedList<Member> joinScopes() {
 		LinkedList<Member> jointScopeMembers = new LinkedList<Member>();
-
+		//LinkedList<Member> copiedHigherScope = ;
+		
 		if (localMembers.isEmpty()) {
 			jointScopeMembers.addAll(higherScopeMembers);
 			return jointScopeMembers;
