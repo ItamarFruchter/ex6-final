@@ -142,11 +142,13 @@ public abstract class Block {
 			LineType currentLineType = LineType.fitType(line);
 			switch (currentLineType) {
 			case NON_METHOD_BLOCK:
-			case METHOD_DECLERATION: // Works for both (or).
 				int blockEndIndex = findBlockEnd(curLineIndex);
 				String[] blockLines = cutBlockFromContent(curLineIndex, blockEndIndex);
-				LinkedList<Member> newOuterScope = ; 
-				BlockFactory.createNonMethodBlock(blockLines, newOuterScope);
+				LinkedList<Member> newOuterScope = joinScopes(); 
+				BlockFactory.createNonMethodBlock(blockLines, newOuterScope, knownMethods);
+				break;
+				
+			case METHOD_DECLERATION:
 				break;
 
 			case METHOD_CALLING:
@@ -310,9 +312,15 @@ public abstract class Block {
 		}
 		return blockLines;
 	}
-	
+
+	/*
+	 * Returns the joint scope - a linkedList of this scope's and all previous
+	 * scopes members.
+	 */
 	private LinkedList<Member> joinScopes() {
-		LinkedList<Member> currentScope = localMembers.clone();
-		LinkedList<Member> higherScope = higherScopeMembers.clone();
+		LinkedList<Member> jointScopeMembers = new LinkedList<Member>();
+		jointScopeMembers.addAll(higherScopeMembers);
+		jointScopeMembers.addAll(localMembers);
+		return jointScopeMembers;
 	}
 }
