@@ -128,7 +128,7 @@ public abstract class Block {
 					if (blockEndIndex == -1) {
 						throw new UnclosedBlockException();
 					} else {
-						lineCounter = blockEndIndex + 1;
+						lineCounter = blockEndIndex;
 					}
 					break;
 
@@ -141,7 +141,7 @@ public abstract class Block {
 					if (methodEndIndex < 0) {
 						throw new UnclosedBlockException();
 					} else {
-						lineCounter = methodEndIndex + 1;
+						lineCounter = methodEndIndex;
 					}
 					break;
 
