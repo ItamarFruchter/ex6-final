@@ -2,6 +2,9 @@ package oop.ex6.main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import oop.ex6.blockAnalayzer.MainBlock;
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.fileprocessing.FileProcessor;

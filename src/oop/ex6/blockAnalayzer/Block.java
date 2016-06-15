@@ -73,11 +73,9 @@ public abstract class Block {
 			METHOD_ARGUMENDS_OPEN_BOUNDERY = ")",
 			METHOD_ARGUMENDS_CLOSE_BOUNDERY = "(";
 
-	private static final char SPACE = ' ',
-			SEMICOLON = ';';
+	private static final char SPACE = ' ', SEMICOLON = ';';
 	private static final int ILLEGAL_END_INDEX = -1;
-			
-	
+
 	// this block's type.
 	protected BlockType type;
 	/** The known local members this block (scope wise). */
@@ -139,7 +137,7 @@ public abstract class Block {
 
 				case METHOD_DECLERATION:
 					int methodEndIndex = findBlockEnd(lineCounter);
-					if (methodEndIndex == ILLEGAL_END_INDEX){
+					if (methodEndIndex == ILLEGAL_END_INDEX) {
 						throw new UnclosedBlockException();
 					}
 					String[] innerMethodContent = cutBlockFromContent(
@@ -251,7 +249,8 @@ public abstract class Block {
 	protected void handleAssignment(String line) throws IllegalCodeException {
 		String[] lineArguments = line.split(ASSIGNMENT_SEPERATOR);
 		String memberName = lineArguments[MEMBER_INDEX];
-		String valueString = lineArguments[VALUE_INDEX].replace(SEMICOLON, SPACE);
+		String valueString = lineArguments[VALUE_INDEX].replace(SEMICOLON,
+				SPACE);
 
 		Member memberFound = isKnownMember(memberName);
 
@@ -353,29 +352,31 @@ public abstract class Block {
 	 */
 	private LinkedList<Member> joinScopes() {
 		LinkedList<Member> jointScopeMembers = new LinkedList<Member>();
-		jointScopeMembers.addAll(localMembers);
-		Iterator<Member> higherScopeMemberIterator = higherScopeMembers
-				.iterator();
-		if (higherScopeMemberIterator.hasNext()) {
-			Member currentHigherScopeMember = higherScopeMemberIterator.next();
-			while (currentHigherScopeMember != null) {
-				boolean alreadyExist = false;
-				Iterator<Member> localMemberIterator = localMembers.iterator();
-				Member currentMember = localMemberIterator.next();
-				while (currentMember != null && !alreadyExist) {
-					if (currentMember.getName()
-							.equals(currentHigherScopeMember.getName())) {
-						alreadyExist = true;
+
+		if (localMembers.isEmpty()) {
+			jointScopeMembers.addAll(higherScopeMembers);
+			return jointScopeMembers;
+		} else {
+			if (higherScopeMembers.isEmpty()) {
+				jointScopeMembers.addAll(localMembers);
+				return jointScopeMembers;
+			} else {
+				jointScopeMembers.addAll(localMembers);
+				for (Member higherScope : higherScopeMembers) {
+					boolean alreadyExist = false;
+					for (Member localScope : localMembers) {
+						if (localScope.getName()
+								.equals(higherScope.getName())) {
+							alreadyExist = true;
+							break;
+						}
 					}
-					currentMember = localMemberIterator.next();
+					if (!alreadyExist) {
+						jointScopeMembers.add(higherScope);
+					}
 				}
-				if (!alreadyExist) {
-					jointScopeMembers.add(currentHigherScopeMember);
-				}
-				currentHigherScopeMember = higherScopeMemberIterator.next();
 			}
 		}
-		
 		return jointScopeMembers;
 	}
 

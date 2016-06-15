@@ -14,7 +14,7 @@ import oop.ex6.variables.Type;
 public class NonMethodBlock extends Block {
 	// A regular expression for the structure of condition.
 	private static final String MEMBER_NAME_REGEX = "\\s*\\w+\\s*",
-			RAW_MEMBER_REGEX = "\\s*((-?\\d+(.\\d+)?)|true|false)\\s*";
+			RAW_MEMBER_REGEX = "\\s*((-?\\d+(.\\d+)?)|(\\s*true\\s*)|(\\s*false\\s*))\\s*";
 	private static final String CONDITION_REGEX = "(" + MEMBER_NAME_REGEX + "|"
 			+ RAW_MEMBER_REGEX + ")(((\\|\\|)|(\\&\\&))(" + MEMBER_NAME_REGEX
 			+ "|" + RAW_MEMBER_REGEX + "))*";
@@ -24,7 +24,7 @@ public class NonMethodBlock extends Block {
 			MEMBER_NAME_PATTERN = Pattern.compile(MEMBER_NAME_REGEX);
 
 	// The regular expression for condition splitters.
-	private static final String CONDITION_SEPERATOR_REGEX = "(\\|\\|)|(\\&\\&)";
+	private static final String CONDITION_SEPERATOR_REGEX = "((\\|\\|)|(\\&\\&))";
 
 	// The condition type (boolean at this build. includes int and double).
 	private String DEFAULT_TYPE_STRING = "boolean";
@@ -46,6 +46,7 @@ public class NonMethodBlock extends Block {
 			LinkedList<Member> higherScopeMembers,
 			LinkedList<MethodBlock> knownMethods, int startingLine)
 			throws IllegalCodeException {
+		this.localMembers = new LinkedList<Member>();
 		this.startingLine = startingLine;
 		this.type = BlockType.blockTypeFromString(type); // May throw
 															// UnknownBlockTypeException.
@@ -75,9 +76,9 @@ public class NonMethodBlock extends Block {
 					.split(CONDITION_SEPERATOR_REGEX);
 			for (String conditionString : conditionVariables) {
 				Matcher rawMemberMatcher = RAW_MEMBER_PATTERN
-						.matcher(condition);
+						.matcher(conditionString);
 				Matcher memberNameMatcher = MEMBER_NAME_PATTERN
-						.matcher(condition);
+						.matcher(conditionString);
 				if (rawMemberMatcher.matches()) {
 					if (!CONDITION_DEFAULT_TYPE
 							.isValidValue(conditionString.trim())) {
@@ -89,7 +90,9 @@ public class NonMethodBlock extends Block {
 						if (knownMember.getName().equals(conditionString)) {
 							if (Type.canBeCasted(CONDITION_DEFAULT_TYPE,
 									knownMember.getType())) {
-								foundKnownMember = true;
+								if (knownMember.isInitiallized()) {
+									foundKnownMember = true;
+								}
 							}
 						}
 					}
