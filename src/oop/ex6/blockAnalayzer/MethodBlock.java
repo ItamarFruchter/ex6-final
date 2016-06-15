@@ -20,6 +20,9 @@ public class MethodBlock extends Block {
 
 	private static final Pattern EMPTY_STRING_PATTERN = Pattern.compile("\\s*");
 
+	// The separator char between two arguments.
+	private static final String ARGUMENT_SEPERATOR = ",";
+
 	// This method's name.
 	private String name;
 	private Member[] arguments;
@@ -34,11 +37,16 @@ public class MethodBlock extends Block {
 		this.localMembers = new LinkedList<Member>();
 		if (checkName(name)) {
 			this.name = name;
-			Matcher emptyStringMatcher = EMPTY_STRING_PATTERN.matcher(arguments);
+			Matcher emptyStringMatcher = EMPTY_STRING_PATTERN
+					.matcher(arguments);
 			if (!emptyStringMatcher.matches()) {
 				LinkedList<Member> methodArguments = new LinkedList<Member>();
-				methodArguments.addAll(MemberFactory.createMembers(arguments,
-						higherScopeMembers, localMembers));
+				String[] argumentStrings = arguments.split(ARGUMENT_SEPERATOR);
+				for (String argumentString : argumentStrings) {
+					methodArguments
+							.addAll(MemberFactory.createMembers(argumentString,
+									higherScopeMembers, methodArguments));
+				}
 				for (Member argument : methodArguments) {
 					argument.setValue(argument.getType().getDefaultValue());
 				}
