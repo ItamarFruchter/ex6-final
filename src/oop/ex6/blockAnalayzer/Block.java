@@ -145,8 +145,8 @@ public abstract class Block {
 			case METHOD_DECLERATION: // Works for both (or).
 				int blockEndIndex = findBlockEnd(curLineIndex);
 				String[] blockLines = cutBlockFromContent(curLineIndex, blockEndIndex);
-				LinkedList<Member> newOuterScope = localMembers.addAll(c); 
-				BlockFactory.createNonMethodBlock(blockLines, outerScope);
+				LinkedList<Member> newOuterScope = ; 
+				BlockFactory.createNonMethodBlock(blockLines, newOuterScope);
 				break;
 
 			case METHOD_CALLING:
@@ -309,5 +309,10 @@ public abstract class Block {
 			blockLines[curLineIndex - startLine] = content[curLineIndex];
 		}
 		return blockLines;
+	}
+	
+	private LinkedList<Member> joinScopes() {
+		LinkedList<Member> currentScope = localMembers.clone();
+		LinkedList<Member> higherScope = higherScopeMembers.clone();
 	}
 }
