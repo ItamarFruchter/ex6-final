@@ -47,6 +47,12 @@ public class Member {
 			this.name = nameString.trim();
 			this.type = Type.findType(typeString); // May throw invalid type
 													// exception.
+			Modifier modifier = Modifier.modifierFromString(modifierString);
+			if (modifier != null) {
+				this.modifier = modifier;
+			} else {
+				throw new InvalidModifierException();
+			}
 
 			if (valueString != null) {
 				this.hasValue = true; // Is always initialized as true, and will
@@ -55,14 +61,11 @@ public class Member {
 					throw new NonValidValueException(type, valueString.trim());
 				}
 			} else {
-				this.hasValue = false;
-			}
-
-			Modifier modifier = Modifier.modifierFromString(modifierString);
-			if (modifier != null) {
-				this.modifier = modifier;
-			} else {
-				throw new InvalidModifierException();
+				if (modifier.equals(Modifier.FINAL)) {
+					throw new NonInitiallizedFinalMemberException();
+				} else {
+					this.hasValue = false;
+				}
 			}
 		} else {
 			throw new IllegalNameException();
