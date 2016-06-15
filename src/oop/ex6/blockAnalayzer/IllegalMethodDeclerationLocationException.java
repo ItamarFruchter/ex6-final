@@ -7,6 +7,8 @@ import oop.ex6.error.IllegalCodeException;
  */
 public class IllegalMethodDeclerationLocationException
 		extends IllegalCodeException {
+	
+	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE = "Can't create a method not from the highest scope.";
 
 	public IllegalMethodDeclerationLocationException() {

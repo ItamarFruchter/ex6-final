@@ -7,4 +7,10 @@ import oop.ex6.error.IllegalCodeException;
  */
 public class InvalidMethodName extends IllegalCodeException {
 
+	private static final long serialVersionUID = 1L;
+	private static final String MESSAGE = "the name method is not valid.";
+	
+	public InvalidMethodName() {
+		this.meaningfulMessage = MESSAGE;
+	}
 }
