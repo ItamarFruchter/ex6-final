@@ -84,13 +84,9 @@ public class MethodBlock extends Block {
 		String trimmedName = name.trim();
 		Matcher nameMatcher = NAME_PATTERN.matcher(trimmedName);
 		boolean isKnownMethod = false;
-		Iterator<MethodBlock> knownMethodsIterator = knownMethods.iterator();
-		if (knownMethodsIterator.hasNext()) {
-			MethodBlock currentMethod = knownMethodsIterator.next();
-			while (knownMethodsIterator.hasNext()) {
-				if (currentMethod.getName().equals(trimmedName)) {
-					isKnownMethod = true;
-				}
+		for (MethodBlock knownMethod : knownMethods) {
+			if (knownMethod.getName().equals(name)) {
+				isKnownMethod = true;
 			}
 		}
 		return (nameMatcher.matches()
