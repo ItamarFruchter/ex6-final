@@ -102,28 +102,18 @@ public abstract class Block {
 	protected void shallowProcessing() throws IllegalCodeException {
 		for (int lineCounter = 0; lineCounter < content.length; lineCounter++) {
 			String line = content[lineCounter];
-			LineType currentLineType = LineType.fitType(line);
-			switch (currentLineType) {
-			case DECLERATION:
-				try {
+			try {
+				LineType currentLineType = LineType.fitType(line);
+				switch (currentLineType) {
+				case DECLERATION:
 					handleDecleration(line);
-				} catch (IllegalCodeException e) {
-					throw new IllegalCodeException(e,
-							relativeLine(lineCounter));
-				}
-				break;
+					break;
 
-			case ASSIGNMENT:
-				try {
+				case ASSIGNMENT:
 					handleAssignment(line);
-				} catch (IllegalCodeException e) {
-					throw new IllegalCodeException(e,
-							relativeLine(lineCounter));
-				}
-				break;
+					break;
 
-			case NON_METHOD_BLOCK:
-				try {
+				case NON_METHOD_BLOCK:
 					int blockEndIndex = findBlockEnd(lineCounter);
 					String[] innerBlockContent = cutBlockFromContent(
 							lineCounter, blockEndIndex);
@@ -134,14 +124,9 @@ public abstract class Block {
 					} else {
 						lineCounter = blockEndIndex + 1;
 					}
-				} catch (IllegalCodeException e) {
-					throw new IllegalCodeException(e,
-							relativeLine(lineCounter));
-				}
-				break;
+					break;
 
-			case METHOD_DECLERATION:
-				try {
+				case METHOD_DECLERATION:
 					int methodEndIndex = findBlockEnd(lineCounter);
 					String[] innerMethodContent = cutBlockFromContent(
 							lineCounter, methodEndIndex);
@@ -152,31 +137,28 @@ public abstract class Block {
 					} else {
 						lineCounter = methodEndIndex + 1;
 					}
-				} catch (IllegalCodeException e) {
-					throw new IllegalCodeException(e,
-							relativeLine(lineCounter));
+					break;
+
+				case CLOSING_BLOCK:
+					if (lineCounter != content.length - 1) {
+						throw new NonValidBlockClosingException();
+						// Iff it is not the last line.
+					}
+					break;
+
+				case METHOD_CALLING:
+					handleMethodCall(line);
+					break;
+
+				case RETURN_STATEMENT:
+					handleReturnStatement();
+					break;
+
+				default:
+					break;
 				}
-				break;
-
-			case CLOSING_BLOCK:
-				if (lineCounter != content.length - 1) {
-					IllegalCodeException e = new NonValidBlockClosingException();
-					throw new IllegalCodeException(e,
-							relativeLine(lineCounter));
-					// Iff it is not the last line.
-				}
-				break;
-
-			case METHOD_CALLING:
-				handleMethodCall(line);
-				break;
-
-			case RETURN_STATEMENT:
-				handleReturnStatement();
-				break;
-
-			default:
-				break;
+			} catch (IllegalCodeException e) {
+				throw new IllegalCodeException(e, lineCounter);
 			}
 		}
 	}
@@ -198,7 +180,7 @@ public abstract class Block {
 				currentContainedBlock = containedBlockIterator.next();
 			}
 		}
-		
+
 		/*
 		 * for (int curLineIndex = 0; curLineIndex < content.length;
 		 * curLineIndex++) { String line = content[curLineIndex]; LineType
