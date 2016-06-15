@@ -8,7 +8,7 @@ import oop.ex6.error.IllegalCodeException;
 import oop.ex6.variables.Member;
 
 /**
- * this class can generate block objects
+ * this class can generate block objects.
  */
 public class BlockFactory {
 
@@ -18,13 +18,15 @@ public class BlockFactory {
 	private static final int ADJUST_INDEX_1 = 1;
 	private static final int ADJUST_INDEX_2 = 2;
 
-	/**
+	/*
 	 * we don't want instances of this class
 	 */
 	private BlockFactory() {
 	}
 
 	/**
+	 * Creates a method block.
+	 * 
 	 * @param blockLines
 	 *            the lines of the code in an array, line by line
 	 * @param outerScope
@@ -46,6 +48,8 @@ public class BlockFactory {
 	}
 
 	/**
+	 * Creates a non method block.
+	 * 
 	 * @param blockLines
 	 *            the lines of the code in an array, line by line
 	 * @param outerScope
@@ -64,7 +68,17 @@ public class BlockFactory {
 				codeMethods, startingLine);
 	}
 
-	public static MainBlock createMainBlock(String[] codeLines) throws IllegalCodeException {
+	/**
+	 * Creates a main block.
+	 * 
+	 * @param codeLines
+	 *            The lines of the code in an array, line by line
+	 * 
+	 * @return A main block object.
+	 * @throws IllegalCodeException
+	 */
+	public static MainBlock createMainBlock(String[] codeLines)
+			throws IllegalCodeException {
 		return new MainBlock(codeLines);
 	}
 

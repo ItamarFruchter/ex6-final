@@ -125,15 +125,14 @@ public abstract class Block {
 
 				case NON_METHOD_BLOCK:
 					int blockEndIndex = findBlockEnd(lineCounter);
+					if (blockEndIndex == ILLEGAL_END_INDEX) {
+						throw new UnclosedBlockException();
+					}
 					String[] innerBlockContent = cutBlockFromContent(
 							lineCounter, blockEndIndex);
 					handleNonMethodBlockDecleration(innerBlockContent,
 							relativeLine(lineCounter));
-					if (blockEndIndex == -1) {
-						throw new UnclosedBlockException();
-					} else {
-						lineCounter = blockEndIndex;
-					}
+					lineCounter = blockEndIndex;
 					break;
 
 				case METHOD_DECLERATION:
@@ -145,11 +144,7 @@ public abstract class Block {
 							lineCounter, methodEndIndex);
 					handleMethodBlockDecleration(innerMethodContent,
 							relativeLine(lineCounter));
-					if (methodEndIndex < 0) {
-						throw new UnclosedBlockException();
-					} else {
-						lineCounter = methodEndIndex;
-					}
+					lineCounter = methodEndIndex;
 					break;
 
 				case CLOSING_BLOCK:

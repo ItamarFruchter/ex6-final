@@ -71,9 +71,10 @@ public class MethodBlock extends Block {
 	 *            All of the known methods in this code.
 	 * @throws IllegalCodeException
 	 */
-	public void informMethod(LinkedList<MethodBlock> knownMethods)
-			throws IllegalCodeException {
+	public void informMethod(LinkedList<MethodBlock> knownMethods,
+			LinkedList<Member> globalMembers) throws IllegalCodeException {
 		this.knownMethods = knownMethods;
+		this.higherScopeMembers = deepCopyMembers(globalMembers);
 	}
 
 	/*
@@ -111,7 +112,7 @@ public class MethodBlock extends Block {
 			throw new IllegalCodeException(e, startingLine);
 		}
 	}
-	
+
 	/**
 	 * @param inputArguments
 	 *            the arguments the method is called with

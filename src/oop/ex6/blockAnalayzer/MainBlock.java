@@ -35,7 +35,7 @@ public class MainBlock extends Block {
 	 */
 	private void informAllMethods() throws IllegalCodeException {
 		for (MethodBlock method : knownMethods) {
-			method.informMethod(knownMethods);
+			method.informMethod(knownMethods, localMembers);
 		}
 	}
 
