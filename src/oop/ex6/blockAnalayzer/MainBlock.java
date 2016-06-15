@@ -13,6 +13,9 @@ public class MainBlock extends Block {
 		
 	}
 	
-	
+	@Override
+	public void deepProcessing() {
+		// declare all the methods.
+	}
 
 }

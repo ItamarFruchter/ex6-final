@@ -63,6 +63,11 @@ public abstract class Block {
 	private static final String ASSIGNMENT_SEPERATOR = "=";
 	private static final int MEMBER_INDEX = 0, VALUE_INDEX = 1;
 
+	// Constants meant to help with handling method call.
+	private static final String METHOD_ARGUMENTS_SEPERATOR = ",",
+			METHOD_ARGUMENDS_OPEN_BOUNDERY = ")",
+			METHOD_ARGUMENDS_CLOSE_BOUNDERY = "(";
+
 	// this block's type.
 	protected BlockType type;
 	/** The known local members this block (scope wise). */
@@ -123,6 +128,10 @@ public abstract class Block {
 				}
 				break;
 
+			case METHOD_CALLING:
+				handleMethodCall()
+				break;
+				
 			case RETURN_STATEMENT:
 				handleReturnStatement();
 				break;
@@ -143,15 +152,16 @@ public abstract class Block {
 			switch (currentLineType) {
 			case NON_METHOD_BLOCK:
 				int blockEndIndex = findBlockEnd(curLineIndex);
-				String[] blockLines = cutBlockFromContent(curLineIndex, blockEndIndex);
-				LinkedList<Member> newOuterScope = joinScopes(); 
-				BlockFactory.createNonMethodBlock(blockLines, newOuterScope, knownMethods);
-				break;
-				
-			case METHOD_DECLERATION:
+				String[] blockLines = cutBlockFromContent(curLineIndex,
+						blockEndIndex);
+				LinkedList<Member> newOuterScope = joinScopes();
+				BlockFactory.createNonMethodBlock(blockLines, newOuterScope,
+						knownMethods);
+				curLineIndex = blockEndIndex + 1;
 				break;
 
-			case METHOD_CALLING:
+			case METHOD_DECLERATION:
+				handleMethodBlockDecleration(line);
 				break;
 
 			default:
@@ -257,6 +267,54 @@ public abstract class Block {
 	}
 
 	/**
+	 * Dose nothing except for the main block.
+	 */
+	protected void handleReturnStatement() throws IllegalCodeException {
+
+	}
+
+	/**
+	 * Handles a call to a method.
+	 * 
+	 * @param line
+	 *            The method call line to check.
+	 */
+	protected void handleMethodCall(String line) {
+		int argumentStartIndex = line.indexOf(METHOD_ARGUMENDS_OPEN_BOUNDERY);
+		int argumentsEndIndex = line.indexOf(METHOD_ARGUMENDS_CLOSE_BOUNDERY);
+		String methodName = line.substring(0, argumentStartIndex - 1).trim();
+		String methodArgumentsString = line.substring(argumentStartIndex,
+				argumentsEndIndex);
+		
+		
+		for (MethodBlock methodBlock : knownMethods) {
+			if (methodBlock.getName().equals(methodName)) {
+				if (methodBlock.isValidMethodCall())
+			}
+		}
+	}
+
+	// Cuts the block.
+	private String[] cutBlockFromContent(int startLine, int endLine) {
+		String[] blockLines = new String[(endLine + 1) - startLine];
+		for (int curLineIndex = startLine; curLineIndex <= endLine; curLineIndex++) {
+			blockLines[curLineIndex - startLine] = content[curLineIndex];
+		}
+		return blockLines;
+	}
+
+	/*
+	 * Returns the joint scope - a linkedList of this scope's and all previous
+	 * scopes members.
+	 */
+	private LinkedList<Member> joinScopes() {
+		LinkedList<Member> jointScopeMembers = new LinkedList<Member>();
+		jointScopeMembers.addAll(higherScopeMembers);
+		jointScopeMembers.addAll(localMembers);
+		return jointScopeMembers;
+	}
+
+	/**
 	 * Finds the end of the block declared in the given line. Returns -1 if the
 	 * block was never closed.
 	 * 
@@ -295,32 +353,5 @@ public abstract class Block {
 			}
 		}
 		return -1;
-	}
-
-	/**
-	 * Dose nothing except for the main block.
-	 */
-	protected void handleReturnStatement() {
-
-	}
-
-	// Cuts the block.
-	private String[] cutBlockFromContent(int startLine, int endLine) {
-		String[] blockLines = new String[(endLine + 1) - startLine];
-		for (int curLineIndex = startLine; curLineIndex <= endLine; curLineIndex++) {
-			blockLines[curLineIndex - startLine] = content[curLineIndex];
-		}
-		return blockLines;
-	}
-
-	/*
-	 * Returns the joint scope - a linkedList of this scope's and all previous
-	 * scopes members.
-	 */
-	private LinkedList<Member> joinScopes() {
-		LinkedList<Member> jointScopeMembers = new LinkedList<Member>();
-		jointScopeMembers.addAll(higherScopeMembers);
-		jointScopeMembers.addAll(localMembers);
-		return jointScopeMembers;
 	}
 }
