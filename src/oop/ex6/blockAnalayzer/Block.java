@@ -136,21 +136,21 @@ public abstract class Block {
 	/**
 	 * Checks the content of the block (it's code lines).
 	 */
-	public void deepProcessing(MethodBlock[] knownMethods)
-			throws IllegalCodeException {
-		for (String line : content) {
+	public void deepProcessing() throws IllegalCodeException {
+		for (int curLineIndex = 0; curLineIndex < content.length; curLineIndex++) {
+			String line = content[curLineIndex];
 			LineType currentLineType = LineType.fitType(line);
 			switch (currentLineType) {
 			case NON_METHOD_BLOCK:
+			case METHOD_DECLERATION: // Works for both (or).
+				int blockEndIndex = findBlockEnd(curLineIndex);
+				String[] blockLines = cutBlockFromContent(curLineIndex, blockEndIndex);
+				LinkedList<Member> newOuterScope = localMembers.addAll(c); 
 				BlockFactory.createNonMethodBlock(blockLines, outerScope);
-				break;
-
-			case METHOD_DECLERATION:
 				break;
 
 			case METHOD_CALLING:
 				break;
-
 
 			default:
 				break;
@@ -294,10 +294,20 @@ public abstract class Block {
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * Dose nothing except for the main block.
 	 */
-	protected void handleReturnStatement () {
+	protected void handleReturnStatement() {
+
+	}
+
+	// Cuts the block.
+	private String[] cutBlockFromContent(int startLine, int endLine) {
+		String[] blockLines = new String[(endLine + 1) - startLine];
+		for (int curLineIndex = startLine; curLineIndex <= endLine; curLineIndex++) {
+			blockLines[curLineIndex - startLine] = content[curLineIndex];
+		}
+		return blockLines;
 	}
 }

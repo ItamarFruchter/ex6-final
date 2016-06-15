@@ -35,6 +35,7 @@ public class MethodBlock extends Block {
 		} else {
 			throw new InvalidMethodName();
 		}
+		this.knownMethods = null;
 	}
 
 	/*
