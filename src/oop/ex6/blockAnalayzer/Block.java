@@ -23,7 +23,7 @@ public abstract class Block {
 
 		// A flag field.
 		private static String MAIN_STRING_REPRESENTATION = "MAIN";
-		
+
 		// The string representation of this block type.
 		private String stringRepresentation;
 
@@ -388,19 +388,16 @@ public abstract class Block {
 	 * block was never closed.
 	 * 
 	 * @param startLineNumber
-	 * @return
+	 * @return returns the index of the line (in this block) which closes the
+	 *         block.
+	 * @throws IllegalCodeException
 	 */
-	protected int findBlockEnd(int startLineNumber) {
+	protected int findBlockEnd(int startLineNumber)
+			throws IllegalCodeException {
 		int ScopeCounter = 0;
 		for (int curLineIndex = startLineNumber; curLineIndex < content.length; curLineIndex++) {
 			LineType currentLineType;
-			try {
-				currentLineType = LineType.fitType(content[curLineIndex]);
-			} catch (IllegalCodeException e) { // Can only throw meaningless
-												// line exception.
-				currentLineType = null;
-			}
-
+			currentLineType = LineType.fitType(content[curLineIndex]);
 			switch (currentLineType) {
 			case NON_METHOD_BLOCK:
 				ScopeCounter++;

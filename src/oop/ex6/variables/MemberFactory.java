@@ -113,22 +113,22 @@ public class MemberFactory {
 	 */
 	public static Type[] createArgumentsType(String[] argumentsDescription,
 			LinkedList<Member> relevantMembers) throws IllegalCodeException {
-		Type[] listOfTypes = new Type[argumentsDescription.length];
-		for (int i = 0; i < listOfTypes.length; i++) {
+		Type[] arrayOfTypes = new Type[argumentsDescription.length];
+		for (int i = 0; i < arrayOfTypes.length; i++) {
 			boolean isName = false;
 			String nameOrValueToCheck = argumentsDescription[i].trim();
 			for (Member member : relevantMembers) {
 				if (member.getName().equals(nameOrValueToCheck)) {
 					isName = true;
-					listOfTypes[i] = member.getType();
+					arrayOfTypes[i] = member.getType();
 					break;
 				}
 			}
 			if (!isName) {
-				listOfTypes[i] = Type.typeOfValue(nameOrValueToCheck);
+				arrayOfTypes[i] = Type.typeOfValue(nameOrValueToCheck);
 			}
 		}
-		return listOfTypes;
+		return arrayOfTypes;
 	}
 
 	/*

@@ -18,6 +18,8 @@ public class MethodBlock extends Block {
 	// A name pattern for a method's name.
 	private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z]\\w*");
 
+	private static final Pattern EMPTY_STRING_PATTERN = Pattern.compile("\\s*");
+
 	// This method's name.
 	private String name;
 	private Member[] arguments;
@@ -29,20 +31,23 @@ public class MethodBlock extends Block {
 		this.startingLine = startingLine;
 		this.type = BlockType.blockTypeFromString(type);
 		this.knownMethods = previousCreatedMethods;
+		this.localMembers = new LinkedList<Member>();
 		if (checkName(name)) {
 			this.name = name;
-			LinkedList<Member> methodArguments = new LinkedList<Member>();
-			String[] argumentsArray = arguments.split(",");
-			for (String argument : argumentsArray) {
-				methodArguments.addAll(MemberFactory.createMembers(argument,
-						higherScopeMembers, methodArguments));
+			Matcher emptyStringMatcher = EMPTY_STRING_PATTERN.matcher(arguments);
+			if (!emptyStringMatcher.matches()) {
+				LinkedList<Member> methodArguments = new LinkedList<Member>();
+				methodArguments.addAll(MemberFactory.createMembers(arguments,
+						higherScopeMembers, localMembers));
+				for (Member argument : methodArguments) {
+					argument.setValue(argument.getType().getDefaultValue());
+				}
+				this.arguments = methodArguments
+						.toArray(new Member[methodArguments.size()]);
+				if (methodArguments != null) {
+					this.localMembers.addAll(methodArguments);
+				}
 			}
-			for (Member argument : methodArguments) {
-				argument.setValue(argument.getType().getDefaultValue());
-			}
-			this.arguments = methodArguments
-					.toArray(new Member[methodArguments.size()]);
-			this.localMembers.addAll(methodArguments);
 			this.higherScopeMembers = higherScopeMembers;
 			this.containedBlocks = new LinkedList<Block>();
 		} else {
@@ -70,10 +75,12 @@ public class MethodBlock extends Block {
 		Matcher nameMatcher = NAME_PATTERN.matcher(trimmedName);
 		boolean isKnownMethod = false;
 		Iterator<MethodBlock> knownMethodsIterator = knownMethods.iterator();
-		MethodBlock currentMethod = knownMethodsIterator.next();
-		while (knownMethodsIterator.hasNext()) {
-			if (currentMethod.getName().equals(trimmedName)) {
-				isKnownMethod = true;
+		if (knownMethodsIterator.hasNext()) {
+			MethodBlock currentMethod = knownMethodsIterator.next();
+			while (knownMethodsIterator.hasNext()) {
+				if (currentMethod.getName().equals(trimmedName)) {
+					isKnownMethod = true;
+				}
 			}
 		}
 		return (nameMatcher.matches()
