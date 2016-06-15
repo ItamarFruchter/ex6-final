@@ -23,6 +23,7 @@ public class Sjavac {
 	 * @param args - array of size 1 - contains the path to the file
 	 */
 	public static void main(String[] args) {
+		boolean isLegal = true;
 		try {
 			File codeFile = new File(args[FILE_LOCATION]);
 			String[] codeLines = FileProcessor.readFile(codeFile);
@@ -30,10 +31,14 @@ public class Sjavac {
 		} catch (IOException e) {
 			System.out.println(IO_EXCEPTION);
 			System.err.println(INFORMATIVE_IO_MESSAGE);
+			isLegal = false;
 		} catch (IllegalCodeException e){
 			System.out.println(ILLEGAL_CODE);
 			System.err.println(e.getMessage());
+			isLegal = false;
 		}
-		System.out.println(LEGAL_CODE);
+		if (isLegal){
+			System.out.println(LEGAL_CODE);
+		}
 	}
 }
