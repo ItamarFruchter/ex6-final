@@ -319,7 +319,7 @@ public abstract class Block {
 		int argumentStartIndex = line.indexOf(METHOD_ARGUMENDS_OPEN_BOUNDERY);
 		int argumentsEndIndex = line.indexOf(METHOD_ARGUMENDS_CLOSE_BOUNDERY);
 		String methodName = line.substring(0, argumentStartIndex - 1).trim();
-		if (argumentStartIndex != argumentsEndIndex) {
+		if (argumentStartIndex <= argumentsEndIndex) {
 			String methodArgumentsString = line.substring(argumentStartIndex,
 					argumentsEndIndex);
 			String[] argumentStrings = methodArgumentsString
