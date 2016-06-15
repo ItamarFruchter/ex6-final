@@ -181,30 +181,11 @@ public abstract class Block {
 		Iterator<Block> containedBlockIterator = containedBlocks.iterator();
 		if (containedBlockIterator.hasNext()) {
 			Block currentContainedBlock = containedBlockIterator.next();
-			while (containedBlockIterator.hasNext()) {
+			while (currentContainedBlock != null) {
 				currentContainedBlock.process();
 				currentContainedBlock = containedBlockIterator.next();
 			}
 		}
-
-		/*
-		 * for (int curLineIndex = 0; curLineIndex < content.length;
-		 * curLineIndex++) { String line = content[curLineIndex]; LineType
-		 * currentLineType = LineType.fitType(line); switch (currentLineType) {
-		 * case NON_METHOD_BLOCK: currentContainedBlock.process();
-		 * currentContainedBlock = containedBlockIterator.next(); int
-		 * blockEndIndex = findBlockEnd(curLineIndex); if (blockEndIndex == -1)
-		 * { throw new UnclosedBlockException(); } else { curLineIndex =
-		 * blockEndIndex + 1; } break;
-		 * 
-		 * case METHOD_DECLERATION: currentContainedBlock.process();
-		 * currentContainedBlock = containedBlockIterator.next(); int
-		 * methodEndIndex = findBlockEnd(curLineIndex); if (methodEndIndex ==
-		 * -1) { throw new UnclosedBlockException(); } else { curLineIndex =
-		 * methodEndIndex + 1; } break;
-		 * 
-		 * default: break; } }
-		 */
 	}
 
 	/**

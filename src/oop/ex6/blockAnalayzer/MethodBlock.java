@@ -32,6 +32,7 @@ public class MethodBlock extends Block {
 			String[] content, LinkedList<Member> higherScopeMembers,
 			LinkedList<MethodBlock> previousCreatedMethods, int startingLine)
 			throws IllegalCodeException {
+		this.content = content;
 		this.startingLine = startingLine;
 		this.type = BlockType.blockTypeFromString(type);
 		this.knownMethods = previousCreatedMethods;
