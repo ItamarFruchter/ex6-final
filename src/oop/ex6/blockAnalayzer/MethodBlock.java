@@ -32,6 +32,9 @@ public class MethodBlock extends Block {
 				methodArguments.addAll(
 						MemberFactory.createMembers(argument, higherScopeMembers, methodArguments));
 			}
+			for (Member argument : methodArguments){
+				argument.setValue(argument.getType().getDefaultValue());
+			}
 			this.arguments = methodArguments.toArray(new Member[methodArguments.size()]);
 			this.localMembers.addAll(methodArguments);
 			this.higherScopeMembers = higherScopeMembers;
@@ -55,19 +58,18 @@ public class MethodBlock extends Block {
 	 * @param inputArguments the arguments the method is called with
 	 * @return true if the arguments are valid, false otherwise
 	 */
-	public boolean isVallidMethodCall(Member[] inputArguments) {
-		if (arguments.length != inputArguments.length) {
+	public boolean isVallidMethodCall(Type[] argumentsType) {
+		if (arguments.length != argumentsType.length) {
 			return false;
 		}
 		boolean isValid = true;
 		for (int i = 0; i < arguments.length; i++) {
-			isValid = Type.canBeCasted(arguments[i].getType(), inputArguments[i].getType());
+			isValid = Type.canBeCasted(arguments[i].getType(), argumentsType[i]);
 			if (!isValid) {
 				break;
 			}
 		}
 		return isValid;
-
 	}
 
 	/**

@@ -69,10 +69,10 @@ public class MemberFactory {
 		MemberParameters[] members = extractMembers(tempString);
 		for (MemberParameters memberParameters : members) {
 			try {
-				if (isNewMember(memberParameters.name, localMembers)){
-					listOfMembers.add(new Member(memberParameters.name, type, memberParameters.value, modifier));
-				}
-				else {
+				if (isNewMember(memberParameters.name, localMembers)) {
+					listOfMembers.add(new Member(memberParameters.name, type,
+							memberParameters.value, modifier));
+				} else {
 					throw new MemberAlreadyExistsException();
 				}
 			} catch (NonValidValueException error) {
@@ -85,7 +85,8 @@ public class MemberFactory {
 							&& Type.canBeCasted(Type.findType(type), error.getType())
 							&& memberToCheck.hasValue) {
 						memberParameters.value = memberToCheck.getType().getDefaultValue();
-						listOfMembers.add(new Member(memberParameters.name, type, memberParameters.value, modifier));
+						listOfMembers.add(new Member(memberParameters.name, type,
+								memberParameters.value, modifier));
 						fixed = true;
 					}
 				}
@@ -97,10 +98,25 @@ public class MemberFactory {
 		return listOfMembers;
 	}
 
+	public Type[] createArgumentsType(String[] argumentsDescription,
+			LinkedList<Member> relevantMembers) {
+		Type[] listOfTypes = new Type[argumentsDescription.length];
+		for (int i = 0; i < listOfTypes.length; i++){
+			boolea
+			String nameToCheck = argumentsDescription[i].trim();
+			for (Member member: relevantMembers){
+				if (member.getName().equals(nameToCheck)){
+					
+				}
+			}
+		}
+		return listOfTypes;
+	}
+
 	private static boolean isNewMember(String name, LinkedList<Member> localMembers) {
 		boolean isNew = true;
-		for (Member member : localMembers){
-			if (name.equals(member.name)){
+		for (Member member : localMembers) {
+			if (name.equals(member.name)) {
 				isNew = false;
 			}
 		}
