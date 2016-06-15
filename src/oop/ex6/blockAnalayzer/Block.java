@@ -105,18 +105,18 @@ public abstract class Block {
 			LineType currentLineType = LineType.fitType(line);
 			switch (currentLineType) {
 			case DECLERATION:
-				handleDecleration(line);
+				handleDecleration(line, lineCounter);
 				break;
 
 			case ASSIGNMENT:
-				handleAssignment(line);
+				handleAssignment(line, lineCounter);
 				break;
 
 			case NON_METHOD_BLOCK:
 				int blockEndIndex = findBlockEnd(lineCounter);
 				String[] innerBlockContent = cutBlockFromContent(lineCounter,
 						blockEndIndex);
-				handleNonMethodBlockDecleration(innerBlockContent);
+				handleNonMethodBlockDecleration(innerBlockContent, lineCounter);
 				if (blockEndIndex == -1) {
 					throw new UnclosedBlockException();
 				} else {
@@ -128,7 +128,7 @@ public abstract class Block {
 				int methodEndIndex = findBlockEnd(lineCounter);
 				String[] innerMethodContent = cutBlockFromContent(lineCounter,
 						methodEndIndex);
-				handleMethodBlockDecleration(innerMethodContent);
+				handleMethodBlockDecleration(innerMethodContent, lineCounter);
 				if (methodEndIndex < 0) {
 					throw new UnclosedBlockException();
 				} else {
@@ -144,11 +144,11 @@ public abstract class Block {
 				break;
 
 			case METHOD_CALLING:
-				handleMethodCall(line);
+				handleMethodCall(line, lineCounter);
 				break;
 
 			case RETURN_STATEMENT:
-				handleReturnStatement();
+				handleReturnStatement(lineCounter);
 				break;
 
 			default:
@@ -162,37 +162,29 @@ public abstract class Block {
 	 */
 	protected void deepProcessing() throws IllegalCodeException {
 		Iterator<Block> containedBlockIterator = containedBlocks.iterator();
-		Block curretnContainedBlock = containedBlockIterator.next();
-		for (int curLineIndex = 0; curLineIndex < content.length; curLineIndex++) {
-			String line = content[curLineIndex];
-			LineType currentLineType = LineType.fitType(line);
-			switch (currentLineType) {
-			case NON_METHOD_BLOCK:
-				curretnContainedBlock.process();
-				curretnContainedBlock = containedBlockIterator.next();
-				int blockEndIndex = findBlockEnd(curLineIndex);
-				if (blockEndIndex == -1) {
-					throw new UnclosedBlockException();
-				} else {
-					curLineIndex = blockEndIndex + 1;
-				}
-				break;
-
-			case METHOD_DECLERATION:
-				curretnContainedBlock.process();
-				curretnContainedBlock = containedBlockIterator.next();
-				int methodEndIndex = findBlockEnd(curLineIndex);
-				if (methodEndIndex == -1) {
-					throw new UnclosedBlockException();
-				} else {
-					curLineIndex = methodEndIndex + 1;
-				}
-				break;
-
-			default:
-				break;
-			}
+		Block currentContainedBlock = containedBlockIterator.next();
+		while (containedBlockIterator.hasNext()) {
+			currentContainedBlock.process();
+			currentContainedBlock = containedBlockIterator.next();
 		}
+		/*
+		 * for (int curLineIndex = 0; curLineIndex < content.length;
+		 * curLineIndex++) { String line = content[curLineIndex]; LineType
+		 * currentLineType = LineType.fitType(line); switch (currentLineType) {
+		 * case NON_METHOD_BLOCK: currentContainedBlock.process();
+		 * currentContainedBlock = containedBlockIterator.next(); int
+		 * blockEndIndex = findBlockEnd(curLineIndex); if (blockEndIndex == -1)
+		 * { throw new UnclosedBlockException(); } else { curLineIndex =
+		 * blockEndIndex + 1; } break;
+		 * 
+		 * case METHOD_DECLERATION: currentContainedBlock.process();
+		 * currentContainedBlock = containedBlockIterator.next(); int
+		 * methodEndIndex = findBlockEnd(curLineIndex); if (methodEndIndex ==
+		 * -1) { throw new UnclosedBlockException(); } else { curLineIndex =
+		 * methodEndIndex + 1; } break;
+		 * 
+		 * default: break; } }
+		 */
 	}
 
 	/**
@@ -226,7 +218,8 @@ public abstract class Block {
 	 *            The line to check.
 	 * @throws IllegalCodeException
 	 */
-	protected void handleDecleration(String line) throws IllegalCodeException {
+	protected void handleDecleration(String line, int lineNumber)
+			throws IllegalCodeException {
 		LinkedList<Member> newMembers = MemberFactory.createMembers(line,
 				higherScopeMembers, localMembers);
 		for (Member newMember : newMembers) {
@@ -241,7 +234,8 @@ public abstract class Block {
 	 *            The assignment line to validate.
 	 * @throws IllegalCodeException
 	 */
-	protected void handleAssignment(String line) throws IllegalCodeException {
+	protected void handleAssignment(String line, int lineNumber)
+			throws IllegalCodeException {
 		String[] lineArguments = line.split(ASSIGNMENT_SEPERATOR);
 		String memberName = lineArguments[MEMBER_INDEX];
 		String valueString = lineArguments[VALUE_INDEX];
@@ -275,8 +269,8 @@ public abstract class Block {
 	 *            The content of this block, including the deceleration line.
 	 * @throws IllegalCodeException
 	 */
-	protected void handleNonMethodBlockDecleration(String[] content)
-			throws IllegalCodeException {
+	protected void handleNonMethodBlockDecleration(String[] content,
+			int lineNumber) throws IllegalCodeException {
 		LinkedList<Member> relevantScope = joinScopes();
 		containedBlocks.add(BlockFactory.createNonMethodBlock(content,
 				relevantScope, knownMethods));
@@ -289,15 +283,16 @@ public abstract class Block {
 	 *            The content of this block, including the deceleration line.
 	 * @throws IllegalCodeException
 	 */
-	protected void handleMethodBlockDecleration(String[] content)
-			throws IllegalCodeException {
+	protected void handleMethodBlockDecleration(String[] content,
+			int lineNumber) throws IllegalCodeException {
 		throw new IllegalMethodDeclerationLocationException();
 	}
 
 	/**
 	 * Dose nothing except for the main block.
 	 */
-	protected void handleReturnStatement() throws IllegalCodeException {
+	protected void handleReturnStatement(int lineNumber)
+			throws IllegalCodeException {
 
 	}
 
@@ -306,8 +301,10 @@ public abstract class Block {
 	 * 
 	 * @param line
 	 *            The method call line to check.
+	 * @throws IllegalCodeException
 	 */
-	protected void handleMethodCall(String line) {
+	protected void handleMethodCall(String line, int lineNumber)
+			throws IllegalCodeException {
 		int argumentStartIndex = line.indexOf(METHOD_ARGUMENDS_OPEN_BOUNDERY);
 		int argumentsEndIndex = line.indexOf(METHOD_ARGUMENDS_CLOSE_BOUNDERY);
 		String methodName = line.substring(0, argumentStartIndex - 1).trim();

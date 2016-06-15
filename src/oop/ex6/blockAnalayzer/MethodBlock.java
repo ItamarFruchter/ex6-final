@@ -51,17 +51,15 @@ public class MethodBlock extends Block {
 	}
 
 	/**
-	 * Sets all the known methods to this method block and checks the validity
-	 * of it's content.
+	 * Sets all the known methods to this method block.
 	 * 
 	 * @param knownMethods
 	 *            All of the known methods in this code.
 	 * @throws IllegalCodeException
 	 */
-	public void informMethods(LinkedList<MethodBlock> knownMethods)
+	public void informMethod(LinkedList<MethodBlock> knownMethods)
 			throws IllegalCodeException {
 		this.knownMethods = knownMethods;
-		process();
 	}
 
 	/*
