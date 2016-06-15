@@ -18,7 +18,8 @@ public abstract class Block {
 	 * All of the possible block types. Currently - only while, if and void.
 	 */
 	protected enum BlockType {
-		IF("if", false), WHILE("while", false), VOID("void", true);
+		IF("if", false), WHILE("while", false), VOID("void", true), MAIN(null,
+				false);
 
 		// The string representation of this block type.
 		private String stringRepresentation;
@@ -73,36 +74,52 @@ public abstract class Block {
 	protected LinkedList<Block> containedBlocks;
 
 	/**
-	 * Initializes all the members in this block's scope.
+	 * Initializes all the members in this block's scope, checks validity of the
+	 * creation of inner blocks (but dose not create them), checks the block
+	 * structure.
 	 * 
 	 * @throws IllegalCodeException
 	 */
-	public void initializesAllMembers() throws IllegalCodeException {
+	public void shellowProcessing() throws IllegalCodeException {
 		int ScopeCounter = 0;
-		for (String line : content) {
+		for (int lineCounter = 0; lineCounter < content.length; lineCounter++) {
+			String line = content[lineCounter];
 			LineType currentLineType = LineType.fitType(line);
 			switch (currentLineType) {
 			case DECLERATION:
-				handleDecleration(line);
+				if (ScopeCounter == 0) {
+					handleDecleration(line);
+				}
 				break;
 
 			case ASSIGNMENT:
-				handleAssignment(line);
+				if (ScopeCounter == 0) {
+					handleAssignment(line);
+				}
 				break;
 
 			case NON_METHOD_BLOCK:
 				ScopeCounter++;
-				break;
-				CONTINUE FROM HERE
-			// Consider noting the index of the lines in which the blocks start
-			// and end.
-			case METHOD_DECLERATION:
-				ScopeCounter++;
+				handleNonMethodBlockDecleration(line);
 				break;
 
+			case METHOD_DECLERATION:
+				ScopeCounter++;
+				handleMethodBlockDecleration(line);
+				break;
+
+			case CLOSING_BLOCK:
+				ScopeCounter--;
+				if (ScopeCounter < 0) {
+					throw new NonValidBlockClosingException();
+				}
 			default:
 				break;
 			}
+		}
+
+		if (ScopeCounter > 0) {
+			throw new UnclosedBlockException();
 		}
 	}
 
@@ -206,10 +223,10 @@ public abstract class Block {
 		try {
 			memberFound.setValue(valueString);
 		} catch (NonValidValueException e) {
-			Member knownMember = isKnownMember(e.name);
+			Member knownMember = isKnownMember(e.getName());
 			if (knownMember != null) {
-				if (knownMember.hasValue
-						&& Type.canBeCasted(e.type, knownMember.getType())) {
+				if (knownMember.hasValue && Type.canBeCasted(e.getType(),
+						knownMember.getType())) {
 					memberFound
 							.setValue(knownMember.getType().getDefaultValue());
 				}
@@ -220,12 +237,33 @@ public abstract class Block {
 	}
 
 	/**
-	 * Handles a creation of an inner block.
+	 * Handles deceleration of a non method block inside this block.
 	 * 
 	 * @param line
-	 *            The decleration line for this block.
+	 *            The deceleration line for this block.
+	 * @throws IllegalCodeException
 	 */
 	protected void handleNonMethodBlockDecleration(String line) {
 
+	}
+
+	/**
+	 * Handles deceleration of a method block inside this block.
+	 * 
+	 * @param line
+	 *            The deceleration line for this block.
+	 * @throws IllegalCodeException
+	 */
+	protected void handleMethodBlockDecleration(String line)
+			throws IllegalCodeException {
+		throw new IllegalMethodDeclerationLocationException();
+	}
+
+	private int findBlockEnd(int startLineNumber) {
+		ScopeCounter
+		for (int curLine = startLineNumber; curLine < content.length; curLine++) {
+			
+		}
+		return -1;
 	}
 }
