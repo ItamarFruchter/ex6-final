@@ -24,16 +24,16 @@ public class MethodBlock extends Block {
 			String[] content, LinkedList<Member> higherScopeMembers)
 			throws IllegalCodeException {
 		this.type = BlockType.blockTypeFromString(type);
-		this.arguments = new LinkedList<Member>();
 		if (checkName(name)) {
 			this.name = name;
+			LinkedList<Member> methodArguments = new LinkedList<Member>();
 			String[] argumentsArray = arguments.split(",");
 			for (String argument : argumentsArray) {
-				this.arguments.addAll(MemberFactory.createMembers(argument,
-						higherScopeMembers, this.arguments));
+				methodArguments.addAll(MemberFactory.createMembers(argument,
+						higherScopeMembers, methodArguments));
 			}
-			this.arguments = this
-			this.localMembers.addAll(this.arguments);
+			this.arguments = methodArguments.toArray(new Member[methodArguments.size()]);
+			this.localMembers.addAll(methodArguments);
 			this.higherScopeMembers = higherScopeMembers;
 			this.containedBlocks = new LinkedList<Block>();
 		} else {
