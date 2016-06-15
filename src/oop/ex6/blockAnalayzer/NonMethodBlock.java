@@ -45,8 +45,9 @@ public class NonMethodBlock extends Block {
 	 * @throws IllegalCodeException
 	 */
 	public NonMethodBlock(String type, String condition, String[] content,
-			LinkedList<Member> higherScopeMembers) throws IllegalCodeException {
-		
+			LinkedList<Member> higherScopeMembers,
+			LinkedList<MethodBlock> knownMethods) throws IllegalCodeException {
+
 		this.type = BlockType.blockTypeFromString(type); // May throw
 															// UnknownBlockTypeException.
 		this.higherScopeMembers = higherScopeMembers;
@@ -54,9 +55,10 @@ public class NonMethodBlock extends Block {
 		if (!checkCondition(condition)) {
 			throw new NonValidConditionException();
 		}
-
+		
 		this.content = content;
 		this.containedBlocks = new LinkedList<Block>();
+		this.knownMethods = knownMethods;
 	}
 
 	/*
@@ -100,11 +102,5 @@ public class NonMethodBlock extends Block {
 		} else {
 			return false;
 		}
-	}
-
-	@Override
-	public void checkContent(MethodBlock[] knownMethods)
-			throws IllegalCodeException {
-
 	}
 }

@@ -73,6 +73,8 @@ public abstract class Block {
 	protected String[] content;
 	/** The contained blocks within this block. */
 	protected LinkedList<Block> containedBlocks;
+	/** All the methods available. */
+	protected LinkedList<MethodBlock> knownMethods;
 
 	/**
 	 * Initializes all the members in this block's scope, checks validity of the
@@ -81,7 +83,7 @@ public abstract class Block {
 	 * 
 	 * @throws IllegalCodeException
 	 */
-	public void shellowProcessing() throws IllegalCodeException {s
+	public void shellowProcessing() throws IllegalCodeException {
 		for (int lineCounter = 0; lineCounter < content.length; lineCounter++) {
 			String line = content[lineCounter];
 			LineType currentLineType = LineType.fitType(line);
@@ -96,17 +98,35 @@ public abstract class Block {
 
 			case NON_METHOD_BLOCK:
 				handleNonMethodBlockDecleration(line);
+				int blockEndIndex = findBlockEnd(lineCounter);
+				if (blockEndIndex == -1) {
+					throw new UnclosedBlockException();
+				} else {
+					lineCounter = blockEndIndex + 1;
+				}
 				break;
 
 			case METHOD_DECLERATION:
 				handleMethodBlockDecleration(line);
+				int MethodEndIndex = findBlockEnd(lineCounter);
+				if (MethodEndIndex < 0) {
+					throw new UnclosedBlockException();
+				} else {
+					lineCounter = MethodEndIndex + 1;
+				}
 				break;
 
 			case CLOSING_BLOCK:
-				if (lineCounter == content.)
-				throw new NonValidBlockClosingException();
+				if (lineCounter != content.length - 1) {
+					throw new NonValidBlockClosingException();
+					// Iff it is not the last line.
+				}
 				break;
-				
+
+			case RETURN_STATEMENT:
+				handleReturnStatement();
+				break;
+
 			default:
 				break;
 			}
@@ -116,20 +136,13 @@ public abstract class Block {
 	/**
 	 * Checks the content of the block (it's code lines).
 	 */
-	public void checkContent(MethodBlock[] knownMethods)
+	public void deepProcessing(MethodBlock[] knownMethods)
 			throws IllegalCodeException {
 		for (String line : content) {
 			LineType currentLineType = LineType.fitType(line);
 			switch (currentLineType) {
-			case DECLERATION:
-				handleDecleration(line);
-				break;
-
-			case ASSIGNMENT:
-				handleAssignment(line);
-				break;
-
 			case NON_METHOD_BLOCK:
+				BlockFactory.createNonMethodBlock(blockLines, outerScope);
 				break;
 
 			case METHOD_DECLERATION:
@@ -138,14 +151,6 @@ public abstract class Block {
 			case METHOD_CALLING:
 				break;
 
-			case IGNORABLE_LINE:
-				break;
-
-			case CLOSING_BLOCK:
-				break;
-
-			case RETURN_STATEMENT:
-				break;
 
 			default:
 				break;
@@ -288,5 +293,11 @@ public abstract class Block {
 			}
 		}
 		return -1;
+	}
+	
+	/**
+	 * Dose nothing except for the main block.
+	 */
+	protected void handleReturnStatement () {
 	}
 }

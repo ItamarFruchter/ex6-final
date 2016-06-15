@@ -55,10 +55,4 @@ public class MethodBlock extends Block {
 	public String getName() {
 		return name;
 	}
-
-	@Override
-	public void checkContent(MethodBlock[] knownMethods)
-			throws IllegalCodeException {
-
-	}
 }
