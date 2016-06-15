@@ -25,37 +25,42 @@ public class BlockFactory {
 	}
 
 	/**
-	 * @param blockLines the lines of the code in an array, line by line
-	 * @param outerScope the members from outer scopes
+	 * @param blockLines
+	 *            the lines of the code in an array, line by line
+	 * @param outerScope
+	 *            the members from outer scopes
 	 * @return a method block object
 	 * @throws IllegalCodeException
 	 */
-	public static MethodBlock createMethodBlock(String[] blockLines,
-			LinkedList<Member> outerScope, LinkedList<MethodBlock> codeMethods) throws IllegalCodeException {
+	public static MethodBlock createMethodBlock(String[] blockLines, LinkedList<Member> outerScope)
+			throws IllegalCodeException {
 		String blockDecleration = new String(blockLines[BLOCK_DECELERATION]);
 		String type = getType(blockDecleration);
 		String name = getName(blockDecleration);
 		String arguments = getInBrackets(blockDecleration);
 		String[] content = getContent(blockLines);
-		return new MethodBlock(type, name, arguments, content, outerScope, codeMethods);
+		return new MethodBlock(type, name, arguments, content, outerScope);
 	}
 
 	/**
-	 * @param blockLines the lines of the code in an array, line by line
-	 * @param outerScope the members from outer scopes
+	 * @param blockLines
+	 *            the lines of the code in an array, line by line
+	 * @param outerScope
+	 *            the members from outer scopes
 	 * @return a non-method block object
 	 * @throws IllegalCodeException
 	 */
 	public static NonMethodBlock createNonMethodBlock(String[] blockLines,
-			LinkedList<Member> outerScope) throws IllegalCodeException {
+			LinkedList<Member> outerScope, LinkedList<MethodBlock> codeMethods)
+			throws IllegalCodeException {
 		String blockDecleration = new String(blockLines[BLOCK_DECELERATION]);
 		String type = getType(blockDecleration);
 		String condition = getInBrackets(blockDecleration);
 		String[] content = getContent(blockLines);
-		return new NonMethodBlock(type, condition, content, outerScope);
+		return new NonMethodBlock(type, condition, content, outerScope, codeMethods);
 	}
-	
-	public static MainBlock createMainBlock(String[] codeLines){
+
+	public static MainBlock createMainBlock(String[] codeLines) {
 		return new MainBlock(codeLines);
 	}
 
@@ -65,8 +70,7 @@ public class BlockFactory {
 	private static String getType(String blockDecleration) {
 		Matcher wordMatcher = WORD.matcher(blockDecleration);
 		wordMatcher.find();
-		return blockDecleration.substring(wordMatcher.start(),
-				wordMatcher.end());
+		return blockDecleration.substring(wordMatcher.start(), wordMatcher.end());
 	}
 
 	/*
@@ -76,8 +80,7 @@ public class BlockFactory {
 		Matcher wordMatcher = WORD.matcher(blockDecleration);
 		wordMatcher.find();
 		wordMatcher.find();
-		return blockDecleration.substring(wordMatcher.start(),
-				wordMatcher.end());
+		return blockDecleration.substring(wordMatcher.start(), wordMatcher.end());
 	}
 
 	/*
@@ -86,8 +89,7 @@ public class BlockFactory {
 	private static String getInBrackets(String blockDecleration) {
 		Matcher conditionMatcher = IN_BRACKETS.matcher(blockDecleration);
 		conditionMatcher.find();
-		return blockDecleration.substring(
-				conditionMatcher.start() + ADJUST_INDEX_1,
+		return blockDecleration.substring(conditionMatcher.start() + ADJUST_INDEX_1,
 				conditionMatcher.end() - ADJUST_INDEX_1);
 	}
 
