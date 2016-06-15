@@ -212,7 +212,7 @@ public abstract class Block {
 		Member memberFound = isKnownMember(memberName);
 
 		if (memberFound == null) {
-			throw new UnknownMemberName();
+			throw new UnknownMemberNameException();
 		}
 
 		try {
