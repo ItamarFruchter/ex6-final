@@ -18,18 +18,22 @@ public class MethodBlock extends Block {
 
 	// This method's name.
 	private String name;
+	private Member[] arguments;
 
 	public MethodBlock(String type, String name, String arguments,
 			String[] content, LinkedList<Member> higherScopeMembers)
 			throws IllegalCodeException {
 		this.type = BlockType.blockTypeFromString(type);
+		this.arguments = new LinkedList<Member>();
 		if (checkName(name)) {
 			this.name = name;
 			String[] argumentsArray = arguments.split(",");
 			for (String argument : argumentsArray) {
-				localMembers.addAll(MemberFactory.createMembers(argument,
-						higherScopeMembers));
+				this.arguments.addAll(MemberFactory.createMembers(argument,
+						higherScopeMembers, this.arguments));
 			}
+			this.arguments = this
+			this.localMembers.addAll(this.arguments);
 			this.higherScopeMembers = higherScopeMembers;
 			this.containedBlocks = new LinkedList<Block>();
 		} else {
@@ -47,6 +51,8 @@ public class MethodBlock extends Block {
 		return (nameMatcher.matches()
 				&& !ReservedWord.isReservedWord(trimmedName));
 	}
+	
+	
 
 	/**
 	 * A getter for this method's name.
