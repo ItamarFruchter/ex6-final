@@ -7,7 +7,7 @@ import oop.ex6.variables.Member;
 
 public class MainBlock extends Block {
 	// The default starting line number.
-	private static final int DEFAULT_STARTING_LINE = 0;
+	private static final int DEFAULT_STARTING_LINE = 1;
 
 	/**
 	 * Creates a main block type. Checks all it's content straight away.

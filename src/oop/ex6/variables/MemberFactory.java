@@ -138,7 +138,7 @@ public class MemberFactory {
 		boolean isNew = true;
 		if (localMembers != null) {
 			for (Member member : localMembers) {
-				if (member.getName().equals(name)) {
+				if (member.getName().equals(name.trim())) {
 					isNew = false;
 				}
 			}

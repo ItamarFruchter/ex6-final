@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import oop.ex6.error.IllegalCodeException;
+import oop.ex6.fileprocessing.LineType;
 import oop.ex6.fileprocessing.ReservedWord;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
@@ -95,6 +96,20 @@ public class MethodBlock extends Block {
 				&& !ReservedWord.isReservedWord(trimmedName) && !isKnownMethod);
 	}
 
+	@Override
+	protected void shallowProcessing() throws IllegalCodeException {
+		super.shallowProcessing();
+		for (int lineIndex = content.length - 1; lineIndex >= 0; lineIndex--) {
+			String line = content[lineIndex];
+			Matcher emptyLineMatcher = EMPTY_STRING_PATTERN.matcher(line);
+			if (!emptyLineMatcher.matches()) {
+				if (!LineType.fitType(line).equals(LineType.RETURN_STATEMENT)) {
+					throw new MissingReturnStatementException();
+				}
+			}
+		}
+	}
+	
 	/**
 	 * @param inputArguments
 	 *            the arguments the method is called with

@@ -164,7 +164,7 @@ public abstract class Block {
 					break;
 				}
 			} catch (IllegalCodeException e) {
-				throw new IllegalCodeException(e, lineCounter);
+				throw new IllegalCodeException(e, relativeLine(lineCounter));
 			}
 		}
 	}
