@@ -1,13 +1,9 @@
 package oop.ex6.blockAnalayzer;
 
-import java.util.AbstractSequentialList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
-
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.fileprocessing.LineType;
-import oop.ex6.fileprocessing.MeaninglessLineException;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
 import oop.ex6.variables.NonValidValueException;
@@ -83,6 +79,18 @@ public abstract class Block {
 	protected LinkedList<Block> containedBlocks;
 	/** All the methods available. */
 	protected LinkedList<MethodBlock> knownMethods;
+	/** The starting line for this block. */
+	protected int startingLine;
+
+	/**
+	 * Processes the content of this block.
+	 * 
+	 * @throws IllegalCodeException
+	 */
+	protected void process() throws IllegalCodeException {
+		shallowProcessing();
+		deepProcessing();
+	}
 
 	/**
 	 * Initializes all the members in this block's scope, checks validity of the
@@ -91,7 +99,7 @@ public abstract class Block {
 	 * 
 	 * @throws IllegalCodeException
 	 */
-	public void shellowProcessing() throws IllegalCodeException {
+	protected void shallowProcessing() throws IllegalCodeException {
 		for (int lineCounter = 0; lineCounter < content.length; lineCounter++) {
 			String line = content[lineCounter];
 			LineType currentLineType = LineType.fitType(line);
@@ -105,8 +113,10 @@ public abstract class Block {
 				break;
 
 			case NON_METHOD_BLOCK:
-				handleNonMethodBlockDecleration(line);
 				int blockEndIndex = findBlockEnd(lineCounter);
+				String[] innerBlockContent = cutBlockFromContent(lineCounter,
+						blockEndIndex);
+				handleNonMethodBlockDecleration(innerBlockContent);
 				if (blockEndIndex == -1) {
 					throw new UnclosedBlockException();
 				} else {
@@ -115,12 +125,14 @@ public abstract class Block {
 				break;
 
 			case METHOD_DECLERATION:
-				handleMethodBlockDecleration(line);
-				int MethodEndIndex = findBlockEnd(lineCounter);
-				if (MethodEndIndex < 0) {
+				int methodEndIndex = findBlockEnd(lineCounter);
+				String[] innerMethodContent = cutBlockFromContent(lineCounter,
+						methodEndIndex);
+				handleMethodBlockDecleration(innerMethodContent);
+				if (methodEndIndex < 0) {
 					throw new UnclosedBlockException();
 				} else {
-					lineCounter = MethodEndIndex + 1;
+					lineCounter = methodEndIndex + 1;
 				}
 				break;
 
@@ -134,7 +146,7 @@ public abstract class Block {
 			case METHOD_CALLING:
 				handleMethodCall(line);
 				break;
-				
+
 			case RETURN_STATEMENT:
 				handleReturnStatement();
 				break;
@@ -148,23 +160,33 @@ public abstract class Block {
 	/**
 	 * Checks the content of the block (it's code lines).
 	 */
-	public void deepProcessing() throws IllegalCodeException {
+	protected void deepProcessing() throws IllegalCodeException {
+		Iterator<Block> containedBlockIterator = containedBlocks.iterator();
+		Block curretnContainedBlock = containedBlockIterator.next();
 		for (int curLineIndex = 0; curLineIndex < content.length; curLineIndex++) {
 			String line = content[curLineIndex];
 			LineType currentLineType = LineType.fitType(line);
 			switch (currentLineType) {
 			case NON_METHOD_BLOCK:
+				curretnContainedBlock.process();
+				curretnContainedBlock = containedBlockIterator.next();
 				int blockEndIndex = findBlockEnd(curLineIndex);
-				String[] blockLines = cutBlockFromContent(curLineIndex,
-						blockEndIndex);
-				LinkedList<Member> newOuterScope = joinScopes();
-				BlockFactory.createNonMethodBlock(blockLines, newOuterScope,
-						knownMethods);
-				curLineIndex = blockEndIndex + 1;
+				if (blockEndIndex == -1) {
+					throw new UnclosedBlockException();
+				} else {
+					curLineIndex = blockEndIndex + 1;
+				}
 				break;
 
 			case METHOD_DECLERATION:
-				handleMethodBlockDecleration(line);
+				curretnContainedBlock.process();
+				curretnContainedBlock = containedBlockIterator.next();
+				int methodEndIndex = findBlockEnd(curLineIndex);
+				if (methodEndIndex == -1) {
+					throw new UnclosedBlockException();
+				} else {
+					curLineIndex = methodEndIndex + 1;
+				}
 				break;
 
 			default:
@@ -205,11 +227,11 @@ public abstract class Block {
 	 * @throws IllegalCodeException
 	 */
 	protected void handleDecleration(String line) throws IllegalCodeException {
-		/*
-		 * LinkedList<Member> newMembers = MemberFactory.createMembers(line,
-		 * higherScopeMembers); for (Member newMember : newMembers) {
-		 * localMembers.add(newMember); }
-		 */
+		LinkedList<Member> newMembers = MemberFactory.createMembers(line,
+				higherScopeMembers, localMembers);
+		for (Member newMember : newMembers) {
+			localMembers.add(newMember);
+		}
 	}
 
 	/**
@@ -235,8 +257,8 @@ public abstract class Block {
 		} catch (NonValidValueException e) {
 			Member knownMember = isKnownMember(e.getName());
 			if (knownMember != null) {
-				if (knownMember.isInitiallized() && Type.canBeCasted(e.getType(),
-						knownMember.getType())) {
+				if (knownMember.isInitiallized() && Type
+						.canBeCasted(e.getType(), knownMember.getType())) {
 					memberFound
 							.setValue(knownMember.getType().getDefaultValue());
 				}
@@ -249,22 +271,25 @@ public abstract class Block {
 	/**
 	 * Handles deceleration of a non method block inside this block.
 	 * 
-	 * @param line
-	 *            The deceleration line for this block.
+	 * @param content
+	 *            The content of this block, including the deceleration line.
 	 * @throws IllegalCodeException
 	 */
-	protected void handleNonMethodBlockDecleration(String line) {
-
+	protected void handleNonMethodBlockDecleration(String[] content)
+			throws IllegalCodeException {
+		LinkedList<Member> relevantScope = joinScopes();
+		containedBlocks.add(BlockFactory.createNonMethodBlock(content,
+				relevantScope, knownMethods));
 	}
 
 	/**
 	 * Handles deceleration of a method block inside this block.
 	 * 
-	 * @param line
-	 *            The deceleration line for this block.
+	 * @param content
+	 *            The content of this block, including the deceleration line.
 	 * @throws IllegalCodeException
 	 */
-	protected void handleMethodBlockDecleration(String line)
+	protected void handleMethodBlockDecleration(String[] content)
 			throws IllegalCodeException {
 		throw new IllegalMethodDeclerationLocationException();
 	}
@@ -298,7 +323,7 @@ public abstract class Block {
 		for (MethodBlock methodBlock : knownMethods) {
 			if (methodBlock.getName().equals(methodName)) {
 				if (methodBlock.isVallidMethodCall(argumentTypes)) {
-					
+
 				}
 			}
 		}
@@ -334,7 +359,7 @@ public abstract class Block {
 				}
 				currentMember = localMemberIterator.next();
 			}
-			
+
 			if (!alreadyExist) {
 				jointScopeMembers.add(currentHigherScopeMember);
 			}
@@ -350,7 +375,7 @@ public abstract class Block {
 	 * @param startLineNumber
 	 * @return
 	 */
-	private int findBlockEnd(int startLineNumber) {
+	protected int findBlockEnd(int startLineNumber) {
 		int ScopeCounter = 0;
 		for (int curLineIndex = startLineNumber; curLineIndex < content.length; curLineIndex++) {
 			LineType currentLineType;

@@ -46,8 +46,9 @@ public class NonMethodBlock extends Block {
 	 */
 	public NonMethodBlock(String type, String condition, String[] content,
 			LinkedList<Member> higherScopeMembers,
-			LinkedList<MethodBlock> knownMethods) throws IllegalCodeException {
-
+			LinkedList<MethodBlock> knownMethods, int startingLine)
+			throws IllegalCodeException {
+		this.startingLine = startingLine;
 		this.type = BlockType.blockTypeFromString(type); // May throw
 															// UnknownBlockTypeException.
 		this.higherScopeMembers = higherScopeMembers;
@@ -55,7 +56,7 @@ public class NonMethodBlock extends Block {
 		if (!checkCondition(condition)) {
 			throw new NonValidConditionException();
 		}
-		
+
 		this.content = content;
 		this.containedBlocks = new LinkedList<Block>();
 		this.knownMethods = knownMethods;
@@ -87,7 +88,7 @@ public class NonMethodBlock extends Block {
 				} else if (memberNameMatcher.matches()) {
 					boolean foundKnownMember = false;
 					for (Member knownMember : higherScopeMembers) {
-						if (knownMember.name.equals(conditionString)) {
+						if (knownMember.getName().equals(conditionString)) {
 							foundKnownMember = true;
 						}
 					}
