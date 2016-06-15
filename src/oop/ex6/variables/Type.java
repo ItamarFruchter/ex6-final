@@ -82,8 +82,8 @@ public enum Type {
 
 	// The regular expression patterns for each variable.
 	private static final String STRING_REGEX = "\\s*\".*\"\\s*", CHAR_REGEX = "\\s*\'.\'\\s*",
-			INT_REGEX = "\\s*-?\\d+\\s*", DOUBLE_REGEX = "\\s*-?\\d+(.\\d+)?\\s*",
-			BOOLEAN_REGEX = "\\s*((-?\\d+(.\\d+)?)|true|false)\\s*";
+			INT_REGEX = "\\s*-?\\d+\\s*", DOUBLE_REGEX = "\\s*-?\\d+(\\.\\d+)?\\s*",
+			BOOLEAN_REGEX = "\\s*((-?\\d+(\\.\\d+)?)|true|false)\\s*";
 
 	// The patterns.
 	private static final Pattern STRING_PATTERN = Pattern.compile(STRING_REGEX),
