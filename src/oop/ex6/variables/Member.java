@@ -99,7 +99,7 @@ public class Member {
 	/**
 	 * Returns true iff this member has value.
 	 */
-	public boolean HasValue() {
+	public boolean isInitiallized() {
 		return hasValue;
 	}
 

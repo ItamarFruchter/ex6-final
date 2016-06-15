@@ -132,7 +132,7 @@ public abstract class Block {
 				break;
 
 			case METHOD_CALLING:
-				handleMethodCall()
+				handleMethodCall(line);
 				break;
 				
 			case RETURN_STATEMENT:
@@ -183,13 +183,13 @@ public abstract class Block {
 	 */
 	protected Member isKnownMember(String nameToCheck) {
 		for (Member knownMember : localMembers) {
-			if (knownMember.name.equals(nameToCheck)) {
+			if (knownMember.getName().equals(nameToCheck)) {
 				return knownMember;
 			}
 		}
 
 		for (Member knownGlobalMember : higherScopeMembers) {
-			if (knownGlobalMember.name.equals(nameToCheck)) {
+			if (knownGlobalMember.getName().equals(nameToCheck)) {
 				return knownGlobalMember;
 			}
 		}
@@ -235,7 +235,7 @@ public abstract class Block {
 		} catch (NonValidValueException e) {
 			Member knownMember = isKnownMember(e.getName());
 			if (knownMember != null) {
-				if (knownMember.hasValue && Type.canBeCasted(e.getType(),
+				if (knownMember.isInitiallized() && Type.canBeCasted(e.getType(),
 						knownMember.getType())) {
 					memberFound
 							.setValue(knownMember.getType().getDefaultValue());
@@ -291,8 +291,9 @@ public abstract class Block {
 
 		String[] argumentStrings = methodArgumentsString
 				.split(METHOD_ARGUMENTS_SEPERATOR);
-		
-		Type[] argumentTypes = MemberFactory(argumentStrings, relevantMembers);
+
+		Type[] argumentTypes = MemberFactory
+				.createArgumentsType(argumentStrings, joinScopes());
 
 		for (MethodBlock methodBlock : knownMethods) {
 			if (methodBlock.getName().equals(methodName)) {
@@ -319,16 +320,23 @@ public abstract class Block {
 	private LinkedList<Member> joinScopes() {
 		LinkedList<Member> jointScopeMembers = new LinkedList<Member>();
 		jointScopeMembers.addAll(localMembers);
-		Iterator<Member> higherScopeMemberIterator = higherScopeMembers.iterator();
+		Iterator<Member> higherScopeMemberIterator = higherScopeMembers
+				.iterator();
 		Member currentHigherScopeMember = higherScopeMemberIterator.next();
 		while (higherScopeMemberIterator.hasNext()) {
+			boolean alreadyExist = false;
 			Iterator<Member> localMemberIterator = localMembers.iterator();
 			Member currentMember = localMemberIterator.next();
-			while (localMemberIterator.hasNext()) {
-				if (currentMember.getName().equals(anObject)) {
-					
+			while (localMemberIterator.hasNext() && !alreadyExist) {
+				if (currentMember.getName()
+						.equals(currentHigherScopeMember.getName())) {
+					alreadyExist = true;
 				}
 				currentMember = localMemberIterator.next();
+			}
+			
+			if (!alreadyExist) {
+				jointScopeMembers.add(currentHigherScopeMember);
 			}
 			currentHigherScopeMember = higherScopeMemberIterator.next();
 		}
