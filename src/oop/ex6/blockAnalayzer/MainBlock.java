@@ -38,17 +38,17 @@ public class MainBlock extends Block {
 	}
 
 	@Override
-	protected void handleMethodBlockDecleration(String[] content)
-			throws IllegalCodeException {
+	protected void handleMethodBlockDecleration(String[] content,
+			int blockStartingLine) throws IllegalCodeException {
 		MethodBlock newMethod = BlockFactory.createMethodBlock(content,
-				localMembers);
+				localMembers, knownMethods, blockStartingLine);
 		knownMethods.add(newMethod);
 		containedBlocks.add(newMethod);
 	}
 
 	@Override
-	protected void handleNonMethodBlockDecleration(String[] content)
-			throws IllegalCodeException {
+	protected void handleNonMethodBlockDecleration(String[] content,
+			int blockStartingLine) throws IllegalCodeException {
 		throw new IllegalBlockDeclerationScopeException();
 	}
 

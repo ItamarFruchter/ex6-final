@@ -108,7 +108,8 @@ public abstract class Block {
 				try {
 					handleDecleration(line);
 				} catch (IllegalCodeException e) {
-					throw new IllegalCodeException(e, lineCounter);
+					throw new IllegalCodeException(e,
+							relativeLine(lineCounter));
 				}
 				break;
 
@@ -116,7 +117,8 @@ public abstract class Block {
 				try {
 					handleAssignment(line);
 				} catch (IllegalCodeException e) {
-					throw new IllegalCodeException(e, lineCounter);
+					throw new IllegalCodeException(e,
+							relativeLine(lineCounter));
 				}
 				break;
 
@@ -125,14 +127,16 @@ public abstract class Block {
 					int blockEndIndex = findBlockEnd(lineCounter);
 					String[] innerBlockContent = cutBlockFromContent(
 							lineCounter, blockEndIndex);
-					handleNonMethodBlockDecleration(innerBlockContent);
+					handleNonMethodBlockDecleration(innerBlockContent,
+							relativeLine(lineCounter));
 					if (blockEndIndex == -1) {
 						throw new UnclosedBlockException();
 					} else {
 						lineCounter = blockEndIndex + 1;
 					}
 				} catch (IllegalCodeException e) {
-					throw new IllegalCodeException(e, lineCounter);
+					throw new IllegalCodeException(e,
+							relativeLine(lineCounter));
 				}
 				break;
 
@@ -141,21 +145,24 @@ public abstract class Block {
 					int methodEndIndex = findBlockEnd(lineCounter);
 					String[] innerMethodContent = cutBlockFromContent(
 							lineCounter, methodEndIndex);
-					handleMethodBlockDecleration(innerMethodContent);
+					handleMethodBlockDecleration(innerMethodContent,
+							relativeLine(lineCounter));
 					if (methodEndIndex < 0) {
 						throw new UnclosedBlockException();
 					} else {
 						lineCounter = methodEndIndex + 1;
 					}
 				} catch (IllegalCodeException e) {
-					throw new IllegalCodeException(e, lineCounter);
+					throw new IllegalCodeException(e,
+							relativeLine(lineCounter));
 				}
 				break;
 
 			case CLOSING_BLOCK:
 				if (lineCounter != content.length - 1) {
 					IllegalCodeException e = new NonValidBlockClosingException();
-					throw new IllegalCodeException(e, lineCounter);
+					throw new IllegalCodeException(e,
+							relativeLine(lineCounter));
 					// Iff it is not the last line.
 				}
 				break;
@@ -172,6 +179,11 @@ public abstract class Block {
 				break;
 			}
 		}
+	}
+
+	// returns the relative line.
+	private int relativeLine(int lineCounter) {
+		return lineCounter + startingLine;
 	}
 
 	/**
@@ -284,11 +296,11 @@ public abstract class Block {
 	 *            The content of this block, including the deceleration line.
 	 * @throws IllegalCodeException
 	 */
-	protected void handleNonMethodBlockDecleration(String[] content)
-			throws IllegalCodeException {
+	protected void handleNonMethodBlockDecleration(String[] content,
+			int blockStartingLine) throws IllegalCodeException {
 		LinkedList<Member> relevantScope = joinScopes();
 		containedBlocks.add(BlockFactory.createNonMethodBlock(content,
-				relevantScope, knownMethods));
+				relevantScope, knownMethods, blockStartingLine));
 	}
 
 	/**
@@ -298,8 +310,8 @@ public abstract class Block {
 	 *            The content of this block, including the deceleration line.
 	 * @throws IllegalCodeException
 	 */
-	protected void handleMethodBlockDecleration(String[] content)
-			throws IllegalCodeException {
+	protected void handleMethodBlockDecleration(String[] content,
+			int blockStartingLine) throws IllegalCodeException {
 		throw new IllegalMethodDeclerationLocationException();
 	}
 
