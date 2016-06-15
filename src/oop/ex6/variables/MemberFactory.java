@@ -78,8 +78,12 @@ public class MemberFactory {
 			} catch (NonValidValueException error) {
 				boolean fixed = false;
 				LinkedList<Member> allRelevantMembers = new LinkedList<Member>();
-				allRelevantMembers.addAll(localMembers);
-				allRelevantMembers.addAll(outerScopeMembers);
+				if(localMembers != null) {
+					allRelevantMembers.addAll(localMembers);
+				}
+				if(outerScopeMembers != null) {
+					allRelevantMembers.addAll(outerScopeMembers);
+				}
 				for (Member memberToCheck : allRelevantMembers) {
 					if (error.getName().equals(memberToCheck.getName())
 							&& Type.canBeCasted(Type.findType(type), error.getType())
@@ -132,9 +136,11 @@ public class MemberFactory {
 	 */
 	private static boolean isNewMember(String name, LinkedList<Member> localMembers) {
 		boolean isNew = true;
-		for (Member member : localMembers) {
-			if (name.equals(member.getName())) {
-				isNew = false;
+		if (localMembers != null) {
+			for (Member member : localMembers) {
+				if (member.getName().equals(name)) {
+					isNew = false;
+				}
 			}
 		}
 		return isNew;

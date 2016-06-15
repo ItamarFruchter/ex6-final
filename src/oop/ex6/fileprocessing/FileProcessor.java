@@ -23,9 +23,10 @@ public class FileProcessor {
 		LinkedList<String> lines = new LinkedList<String>();
 		BufferedReader br;
 		br = new BufferedReader(new FileReader(file));
-		String str = br.readLine();
-		while (str != null){
-			lines.add(str);
+		String line = br.readLine();
+		while (line != null){
+			lines.add(line);
+			line = br.readLine();
 		}
 		br.close();
 		return lines.toArray(new String[lines.size()]);

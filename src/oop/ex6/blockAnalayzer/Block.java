@@ -191,11 +191,14 @@ public abstract class Block {
 	 */
 	protected void deepProcessing() throws IllegalCodeException {
 		Iterator<Block> containedBlockIterator = containedBlocks.iterator();
-		Block currentContainedBlock = containedBlockIterator.next();
-		while (containedBlockIterator.hasNext()) {
-			currentContainedBlock.process();
-			currentContainedBlock = containedBlockIterator.next();
+		if (containedBlockIterator.hasNext()) {
+			Block currentContainedBlock = containedBlockIterator.next();
+			while (containedBlockIterator.hasNext()) {
+				currentContainedBlock.process();
+				currentContainedBlock = containedBlockIterator.next();
+			}
 		}
+		
 		/*
 		 * for (int curLineIndex = 0; curLineIndex < content.length;
 		 * curLineIndex++) { String line = content[curLineIndex]; LineType
@@ -250,8 +253,10 @@ public abstract class Block {
 	protected void handleDecleration(String line) throws IllegalCodeException {
 		LinkedList<Member> newMembers = MemberFactory.createMembers(line,
 				higherScopeMembers, localMembers);
-		for (Member newMember : newMembers) {
-			localMembers.add(newMember);
+		if (newMembers != null) {
+			for (Member newMember : newMembers) {
+				localMembers.add(newMember);
+			}
 		}
 	}
 

@@ -3,6 +3,7 @@ package oop.ex6.blockAnalayzer;
 import java.util.LinkedList;
 
 import oop.ex6.error.IllegalCodeException;
+import oop.ex6.variables.Member;
 
 public class MainBlock extends Block {
 	// The default starting line number.
@@ -19,6 +20,7 @@ public class MainBlock extends Block {
 		this.startingLine = DEFAULT_STARTING_LINE;
 		this.type = BlockType.MAIN;
 		this.content = codeLines;
+		this.localMembers = new LinkedList<Member>();
 		this.higherScopeMembers = null;
 		this.containedBlocks = new LinkedList<Block>();
 		this.knownMethods = new LinkedList<MethodBlock>();
