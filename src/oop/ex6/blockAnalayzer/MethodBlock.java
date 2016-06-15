@@ -100,14 +100,20 @@ public class MethodBlock extends Block {
 	@Override
 	protected void shallowProcessing() throws IllegalCodeException {
 		super.shallowProcessing();
+		boolean foundReturnStatement = false;
 		for (int lineIndex = content.length - 1; lineIndex >= 0; lineIndex--) {
 			String line = content[lineIndex];
 			Matcher emptyLineMatcher = EMPTY_STRING_PATTERN.matcher(line);
 			if (!emptyLineMatcher.matches()) {
-				if (!LineType.fitType(line).equals(LineType.RETURN_STATEMENT)) {
-					throw new MissingReturnStatementException();
+				if (LineType.fitType(line).equals(LineType.RETURN_STATEMENT)) {
+					foundReturnStatement = true;
+					break;
 				}
 			}
+		}
+		if (!foundReturnStatement) {
+			IllegalCodeException e = new MissingReturnStatementException();
+			throw new IllegalCodeException(e, startingLine);
 		}
 	}
 	
