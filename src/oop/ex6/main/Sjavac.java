@@ -2,11 +2,14 @@ package oop.ex6.main;
 
 import java.io.File;
 import java.io.IOException;
-
 import oop.ex6.blockAnalayzer.MainBlock;
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.fileprocessing.FileProcessor;
 
+/**
+ * the class that holds the main method. determines whether the give code file
+ * is compilable 
+ */
 public class Sjavac {
 
 	private static final int FILE_LOCATION = 0, 
@@ -16,6 +19,9 @@ public class Sjavac {
 	
 	private static final String INFORMATIVE_IO_MESSAGE = "problem in accessing the file.";
 
+	/**
+	 * @param args - array of size 1 - contains the path to the file
+	 */
 	public static void main(String[] args) {
 		try {
 			File codeFile = new File(args[FILE_LOCATION]);
@@ -29,20 +35,5 @@ public class Sjavac {
 			System.err.println(e.getMessage());
 		}
 		System.out.println(LEGAL_CODE);
-
-		/**
-		 * String line = "boolean a, b ,c , d = true, e, f = 5;"; try { Member[]
-		 * members = MemberFactory.createMembers(line); for (Member member :
-		 * members){ System.out.println(member.name);
-		 * System.out.println(member.hasValue); } } catch (IllegalCodeException
-		 * e) { System.out.println("ERROR"); }
-		 * 
-		 * String Memb = "\\s*\\w+\\s*"; String Var =
-		 * "\\s*((-?\\d+(.\\d+)?)|true|false)\\s*"; Pattern p =
-		 * Pattern.compile("("+Memb+"|"+Var+")(((\\|\\|)|(\\&\\&))("+Memb+"|"+
-		 * Var+"))*"); Matcher m = p.matcher(" a || && 0.2");
-		 * System.out.println(m.matches()); System.out.println("\'");
-		 */
 	}
-
 }
