@@ -21,6 +21,9 @@ public abstract class Block {
 		IF("if", false), WHILE("while", false), VOID("void", true), MAIN(null,
 				false);
 
+		// A flag field.
+		private static String MAIN_STRING_REPRESENTATION = "MAIN";
+		
 		// The string representation of this block type.
 		private String stringRepresentation;
 
@@ -33,6 +36,9 @@ public abstract class Block {
 		}
 
 		private String getRepresentation() {
+			if (stringRepresentation == null) {
+				stringRepresentation = MAIN_STRING_REPRESENTATION;
+			}
 			return stringRepresentation;
 		}
 
