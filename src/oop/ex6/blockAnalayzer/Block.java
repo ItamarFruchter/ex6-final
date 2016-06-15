@@ -73,6 +73,11 @@ public abstract class Block {
 			METHOD_ARGUMENDS_OPEN_BOUNDERY = ")",
 			METHOD_ARGUMENDS_CLOSE_BOUNDERY = "(";
 
+	private static final char SPACE = ' ',
+			SEMICOLON = ';';
+	private static final int ILLEGAL_END_INDEX = -1;
+			
+	
 	// this block's type.
 	protected BlockType type;
 	/** The known local members this block (scope wise). */
@@ -134,6 +139,9 @@ public abstract class Block {
 
 				case METHOD_DECLERATION:
 					int methodEndIndex = findBlockEnd(lineCounter);
+					if (methodEndIndex == ILLEGAL_END_INDEX){
+						throw new UnclosedBlockException();
+					}
 					String[] innerMethodContent = cutBlockFromContent(
 							lineCounter, methodEndIndex);
 					handleMethodBlockDecleration(innerMethodContent,
@@ -202,13 +210,13 @@ public abstract class Block {
 	 */
 	protected Member isKnownMember(String nameToCheck) {
 		for (Member knownMember : localMembers) {
-			if (knownMember.getName().equals(nameToCheck)) {
+			if (knownMember.getName().equals(nameToCheck.trim())) {
 				return knownMember;
 			}
 		}
 
 		for (Member knownGlobalMember : higherScopeMembers) {
-			if (knownGlobalMember.getName().equals(nameToCheck)) {
+			if (knownGlobalMember.getName().equals(nameToCheck.trim())) {
 				return knownGlobalMember;
 			}
 		}
@@ -243,7 +251,7 @@ public abstract class Block {
 	protected void handleAssignment(String line) throws IllegalCodeException {
 		String[] lineArguments = line.split(ASSIGNMENT_SEPERATOR);
 		String memberName = lineArguments[MEMBER_INDEX];
-		String valueString = lineArguments[VALUE_INDEX];
+		String valueString = lineArguments[VALUE_INDEX].replace(SEMICOLON, SPACE);
 
 		Member memberFound = isKnownMember(memberName);
 
@@ -311,7 +319,7 @@ public abstract class Block {
 		int argumentStartIndex = line.indexOf(METHOD_ARGUMENDS_OPEN_BOUNDERY);
 		int argumentsEndIndex = line.indexOf(METHOD_ARGUMENDS_CLOSE_BOUNDERY);
 		String methodName = line.substring(0, argumentStartIndex - 1).trim();
-		if (argumentsEndIndex != argumentsEndIndex) {
+		if (argumentStartIndex != argumentsEndIndex) {
 			String methodArgumentsString = line.substring(argumentStartIndex,
 					argumentsEndIndex);
 			String[] argumentStrings = methodArgumentsString
@@ -349,6 +357,7 @@ public abstract class Block {
 		Iterator<Member> higherScopeMemberIterator = higherScopeMembers
 				.iterator();
 		Member currentHigherScopeMember = higherScopeMemberIterator.next();
+		//NULL POINTER EXCEPTION
 		while (higherScopeMemberIterator.hasNext()) {
 			boolean alreadyExist = false;
 			Iterator<Member> localMemberIterator = localMembers.iterator();

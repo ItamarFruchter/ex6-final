@@ -8,7 +8,7 @@ import oop.ex6.error.IllegalCodeException;
 public class UnknownMemberNameException extends IllegalCodeException {
 
 	private static final long serialVersionUID = 1L;
-	private static final String MESSAGE = "the variable we want to asiign does not exists";
+	private static final String MESSAGE = "The variable we want to assign does not exists.";
 
 	public UnknownMemberNameException() {
 		this.meaningfulMessage = MESSAGE;

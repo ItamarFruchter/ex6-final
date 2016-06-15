@@ -33,6 +33,7 @@ public class MethodBlock extends Block {
 			LinkedList<MethodBlock> previousCreatedMethods, int startingLine)
 			throws IllegalCodeException {
 		this.content = content;
+		this.higherScopeMembers = higherScopeMembers;
 		this.startingLine = startingLine;
 		this.type = BlockType.blockTypeFromString(type);
 		this.knownMethods = previousCreatedMethods;
@@ -58,7 +59,6 @@ public class MethodBlock extends Block {
 					this.localMembers.addAll(methodArguments);
 				}
 			}
-			this.higherScopeMembers = higherScopeMembers;
 			this.containedBlocks = new LinkedList<Block>();
 		} else {
 			throw new InvalidMethodNameException();
