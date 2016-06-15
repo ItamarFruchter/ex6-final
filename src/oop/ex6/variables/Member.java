@@ -114,15 +114,13 @@ public class Member {
 	 */
 	public void setValue(String newValue) throws IllegalCodeException {
 		if (modifier.equals(Modifier.FINAL)) {
-			if (hasValue) {
-				throw new ChangeFinalMemberValueException();
-			} else {
-				if (newValue != null) {
-					this.hasValue = true;
-					if (!type.isValidValue(newValue)) {
-						throw new NonValidValueException(type, newValue.trim());
-					}
+			throw new ChangeFinalMemberValueException();
+		} else {
+			if (newValue != null) {
+				if (!type.isValidValue(newValue)) {
+					throw new NonValidValueException(type, newValue.trim());
 				}
+				this.hasValue = true;
 			}
 		}
 	}
