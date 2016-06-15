@@ -11,7 +11,9 @@ public class IllegalCodeException extends Exception {
 		return meaningfulMessage;
 	}
 
-	public IllegalCodeException() {}
+	public IllegalCodeException() {
+		
+	}
 
 	public IllegalCodeException(IllegalCodeException error, int lineNumber) {
 		this.meaningfulMessage = error.getMessage() + LINE_NUMBER_MESSAGE

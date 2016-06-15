@@ -1,10 +1,8 @@
 package oop.ex6.blockAnalayzer;
 
-import java.nio.channels.IllegalBlockingModeException;
 import java.util.LinkedList;
 
 import oop.ex6.error.IllegalCodeException;
-import oop.ex6.variables.Member;
 
 public class MainBlock extends Block {
 	// The default starting line number.
@@ -40,8 +38,10 @@ public class MainBlock extends Block {
 	}
 
 	@Override
-	protected void handleMethodBlockDecleration(String[] content) throws IllegalCodeException {
-		MethodBlock newMethod = BlockFactory.createMethodBlock(content, localMembers);
+	protected void handleMethodBlockDecleration(String[] content)
+			throws IllegalCodeException {
+		MethodBlock newMethod = BlockFactory.createMethodBlock(content,
+				localMembers);
 		knownMethods.add(newMethod);
 		containedBlocks.add(newMethod);
 	}
@@ -49,16 +49,16 @@ public class MainBlock extends Block {
 	@Override
 	protected void handleNonMethodBlockDecleration(String[] content)
 			throws IllegalCodeException {
-		throw new IllegalBlockDeclerationScope(lineNumber)
+		throw new IllegalBlockDeclerationScopeException();
 	}
 
 	@Override
-	protected void handleMethodCall(String line) {
-		
+	protected void handleMethodCall(String line) throws IllegalCodeException {
+		throw new IllegalMethodCallScopeException();
 	}
 
 	@Override
 	protected void handleReturnStatement() throws IllegalCodeException {
-		super.handleReturnStatement();
+		throw new ReturnStatementScopeException();
 	}
 }

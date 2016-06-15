@@ -46,7 +46,7 @@ public class MethodBlock extends Block {
 			this.higherScopeMembers = higherScopeMembers;
 			this.containedBlocks = new LinkedList<Block>();
 		} else {
-			throw new InvalidMethodName();
+			throw new InvalidMethodNameException();
 		}
 	}
 
