@@ -1,6 +1,9 @@
 package oop.ex6.blockAnalayzer;
 
+import java.util.AbstractSequentialList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 import oop.ex6.error.IllegalCodeException;
 import oop.ex6.fileprocessing.LineType;
@@ -285,11 +288,17 @@ public abstract class Block {
 		String methodName = line.substring(0, argumentStartIndex - 1).trim();
 		String methodArgumentsString = line.substring(argumentStartIndex,
 				argumentsEndIndex);
+
+		String[] argumentStrings = methodArgumentsString
+				.split(METHOD_ARGUMENTS_SEPERATOR);
 		
-		
+		Type[] argumentTypes = MemberFactory(argumentStrings, relevantMembers);
+
 		for (MethodBlock methodBlock : knownMethods) {
 			if (methodBlock.getName().equals(methodName)) {
-				if (methodBlock.isValidMethodCall())
+				if (methodBlock.isVallidMethodCall(argumentTypes)) {
+					
+				}
 			}
 		}
 	}
@@ -309,8 +318,20 @@ public abstract class Block {
 	 */
 	private LinkedList<Member> joinScopes() {
 		LinkedList<Member> jointScopeMembers = new LinkedList<Member>();
-		jointScopeMembers.addAll(higherScopeMembers);
 		jointScopeMembers.addAll(localMembers);
+		Iterator<Member> higherScopeMemberIterator = higherScopeMembers.iterator();
+		Member currentHigherScopeMember = higherScopeMemberIterator.next();
+		while (higherScopeMemberIterator.hasNext()) {
+			Iterator<Member> localMemberIterator = localMembers.iterator();
+			Member currentMember = localMemberIterator.next();
+			while (localMemberIterator.hasNext()) {
+				if (currentMember.getName().equals(anObject)) {
+					
+				}
+				currentMember = localMemberIterator.next();
+			}
+			currentHigherScopeMember = higherScopeMemberIterator.next();
+		}
 		return jointScopeMembers;
 	}
 

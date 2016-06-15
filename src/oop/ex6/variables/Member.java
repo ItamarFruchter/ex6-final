@@ -18,13 +18,13 @@ public class Member {
 	private final Type type;
 
 	/** A string representation of this member's value. */
-	public boolean hasValue;
+	private boolean hasValue;
 
 	/** This member's name. */
-	public final String name;
+	private final String name;
 
 	/** This member's modifier. */
-	public final Modifier modifier;
+	private final Modifier modifier;
 
 	/**
 	 * Creates a member.
@@ -125,11 +125,20 @@ public class Member {
 	}
 
 	/**
-	 * A getter for the type
+	 * A getter for the type of the Member.
 	 * 
-	 * @return
+	 * @return This member's type.
 	 */
 	public Type getType() {
 		return type;
+	}
+
+	/**
+	 * A getter for the name of the Member.
+	 * 
+	 * @return This member's name.
+	 */
+	public String getName() {
+		return name;
 	}
 }
