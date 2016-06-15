@@ -31,13 +31,13 @@ public class BlockFactory {
 	 * @throws IllegalCodeException
 	 */
 	public static MethodBlock createMethodBlock(String[] blockLines,
-			LinkedList<Member> outerScope) throws IllegalCodeException {
+			LinkedList<Member> outerScope, LinkedList<MethodBlock> codeMethods) throws IllegalCodeException {
 		String blockDecleration = new String(blockLines[BLOCK_DECELERATION]);
 		String type = getType(blockDecleration);
 		String name = getName(blockDecleration);
 		String arguments = getInBrackets(blockDecleration);
 		String[] content = getContent(blockLines);
-		return new MethodBlock(type, name, arguments, content, outerScope);
+		return new MethodBlock(type, name, arguments, content, outerScope, codeMethods);
 	}
 
 	/**
