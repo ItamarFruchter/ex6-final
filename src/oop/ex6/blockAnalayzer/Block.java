@@ -35,6 +35,7 @@ public abstract class Block {
 			this.stringRepresentation = stringRepresentation;
 		}
 
+		// returns the representation of this block type.
 		private String getRepresentation() {
 			if (stringRepresentation == null) {
 				stringRepresentation = MAIN_STRING_REPRESENTATION;
@@ -301,10 +302,10 @@ public abstract class Block {
 	}
 
 	/**
-	 * Dose nothing except for the main block.
+	 * Handles the creation of return statements.
 	 */
 	protected void handleReturnStatement() throws IllegalCodeException {
-
+		// Purposely empty :)
 	}
 
 	/**
@@ -350,9 +351,8 @@ public abstract class Block {
 	 * Returns the joint scope - a linkedList of this scope's and all previous
 	 * scopes members.
 	 */
-	private LinkedList<Member> joinScopes() {
+	private LinkedList<Member> joinScopes() throws IllegalCodeException {
 		LinkedList<Member> jointScopeMembers = new LinkedList<Member>();
-		//LinkedList<Member> copiedHigherScope = ;
 		
 		if (localMembers.isEmpty()) {
 			jointScopeMembers.addAll(higherScopeMembers);
@@ -417,5 +417,14 @@ public abstract class Block {
 			}
 		}
 		return -1;
+	}
+	
+	protected LinkedList<Member> deepCopyMembers(
+			LinkedList<Member> originalList) throws IllegalCodeException {
+		LinkedList<Member> copiedList = new LinkedList<Member>();
+		for (Member member : originalList) {
+			copiedList.add(member.deepCopy());
+		}
+		return copiedList;
 	}
 }

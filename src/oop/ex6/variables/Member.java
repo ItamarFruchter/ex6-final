@@ -9,7 +9,7 @@ import oop.ex6.error.IllegalCodeException;
 /**
  * A variable in Sjava.
  */
-public class Member implements Cloneable {
+public class Member {
 	// The pattern of a legal name.
 	private static final Pattern NAME_PATTERN = Pattern
 			.compile("(_\\w+|[A-Za-z])\\w*");
@@ -107,18 +107,26 @@ public class Member implements Cloneable {
 			}
 		}
 	}
-	
-	@Override
-	protected Member clone() throws CloneNotSupportedException {
+
+	/**
+	 * Creates a deep copy of this member.
+	 * 
+	 * @return A deep copied member.
+	 * @throws IllegalCodeException
+	 */
+	public Member deepCopy() throws IllegalCodeException {
 		String nameString = new String(name);
 		String typeString = new String(type.getStringRepresentation());
-		String valueString = new String(type.getDefaultValue());
-		String modifierString = new String(modifier.getStringRepresentation());
-		try {
-			return new Member(nameString, typeString, valueString, modifierString);
-		} catch (IllegalCodeException e) {
-			throw new CloneNotSupportedException();
+		String valueString = null;
+		if (hasValue) {
+			valueString = new String(type.getDefaultValue());
 		}
+		String originalModifierString = modifier.getStringRepresentation();
+		String modifierString = null;
+		if (originalModifierString != null) {
+			modifierString = new String(modifier.getStringRepresentation());
+		}
+		return new Member(nameString, typeString, valueString, modifierString);
 	}
 
 	/**

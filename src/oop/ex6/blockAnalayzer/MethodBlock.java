@@ -1,6 +1,5 @@
 package oop.ex6.blockAnalayzer;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,7 +32,7 @@ public class MethodBlock extends Block {
 			LinkedList<MethodBlock> previousCreatedMethods, int startingLine)
 			throws IllegalCodeException {
 		this.content = content;
-		this.higherScopeMembers = higherScopeMembers;
+		this.higherScopeMembers = deepCopyMembers(higherScopeMembers);
 		this.startingLine = startingLine;
 		this.type = BlockType.blockTypeFromString(type);
 		this.knownMethods = previousCreatedMethods;

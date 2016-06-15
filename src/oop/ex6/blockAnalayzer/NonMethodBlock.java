@@ -50,7 +50,7 @@ public class NonMethodBlock extends Block {
 		this.startingLine = startingLine;
 		this.type = BlockType.blockTypeFromString(type); // May throw
 															// UnknownBlockTypeException.
-		this.higherScopeMembers = higherScopeMembers;
+		this.higherScopeMembers = deepCopyMembers(higherScopeMembers);
 
 		if (!checkCondition(condition)) {
 			throw new NonValidConditionException();
