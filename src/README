@@ -1,0 +1,40 @@
+ohadbenor
+itamar.f
+
+FILE DESCRIPTION:
+
+
+=============================
+=      File description     =
+=============================
+
+
+=============================
+=          Design           =
+=============================
+
+
+=============================
+=  Implementation details   =
+=============================
+
+
+=============================
+=    Answers to questions   =
+=============================
+
+two main regEx use:
+1.	when we tried to analyze for each line what type of line it is, we created a regEx 
+	pattern	that describes what each type of line should contain. for example, a line 
+	that assigns value to a member of our code is of the pattern: 
+	"\\s*\\w+\\s*=\\s*[\\w\"\\.']+\\s*;\\s*". this pattern says "[as many spaces as we want]
+	[at least one word char][as many spaces as we want]	['=' char][at least one value char]
+	[as many spaces as we want][';' char][as many spaces as we want]"
+
+2.	when we wanted to check if a certain value is a valid value of a certain type of 
+	value we used a regEx pattern of each type's value demands. for example, for the type
+	Boolean we used the pattern: "\\s*((-?\\d+(\\.\\d+)?)|true|false)\\s*".
+	this pattern say "[as many spaces as we want](['-' char, maybe] 
+	
+
+	
