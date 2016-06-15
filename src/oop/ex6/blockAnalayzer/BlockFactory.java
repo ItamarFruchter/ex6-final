@@ -25,10 +25,8 @@ public class BlockFactory {
 	}
 
 	/**
-	 * @param blockLines
-	 *            - the lines of the code in an array, line by line
-	 * @param outerScope
-	 *            - the members from outer scopes
+	 * @param blockLines the lines of the code in an array, line by line
+	 * @param outerScope the members from outer scopes
 	 * @return a method block object
 	 * @throws IllegalCodeException
 	 */
@@ -43,10 +41,8 @@ public class BlockFactory {
 	}
 
 	/**
-	 * @param blockLines
-	 *            - the lines of the code in an array, line by line
-	 * @param outerScope
-	 *            - the members from outer scopes
+	 * @param blockLines the lines of the code in an array, line by line
+	 * @param outerScope the members from outer scopes
 	 * @return a non-method block object
 	 * @throws IllegalCodeException
 	 */
@@ -57,6 +53,10 @@ public class BlockFactory {
 		String condition = getInBrackets(blockDecleration);
 		String[] content = getContent(blockLines);
 		return new NonMethodBlock(type, condition, content, outerScope);
+	}
+	
+	public static MainBlock createMainBlock(String[] codeLines){
+		return new MainBlock(codeLines);
 	}
 
 	/*
