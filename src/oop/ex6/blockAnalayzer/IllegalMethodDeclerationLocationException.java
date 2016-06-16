@@ -5,7 +5,7 @@ import oop.ex6.general.IllegalCodeException;
 /**
  * Arises whenever a method is declared not from the most global scope.
  */
-public class IllegalMethodDeclerationLocationException
+class IllegalMethodDeclerationLocationException
 		extends IllegalCodeException {
 	
 	private static final long serialVersionUID = 1L;

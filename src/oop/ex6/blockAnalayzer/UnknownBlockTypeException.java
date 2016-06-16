@@ -5,7 +5,7 @@ import oop.ex6.general.IllegalCodeException;
 /**
  * Arises whenever an unknown block is declared.
  */
-public class UnknownBlockTypeException extends IllegalCodeException {
+class UnknownBlockTypeException extends IllegalCodeException {
 
 	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE = "there is no such block on S-java.";

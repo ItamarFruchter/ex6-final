@@ -13,7 +13,7 @@ import oop.ex6.variables.Type;
 /**
  * this class represents a method block
  */
-public class MethodBlock extends Block {
+class MethodBlock extends Block {
 	// A name pattern for a method's name.
 	private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z]\\w*");
 

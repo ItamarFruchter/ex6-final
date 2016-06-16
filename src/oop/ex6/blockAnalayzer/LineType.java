@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 import oop.ex6.general.IllegalCodeException;
 
-public enum LineType {
+enum LineType {
 	CLOSING_BLOCK("\\s*\\}\\s*"), 
 	DECLERATION("\\s*\\w+(\\s+\\w+){1,2}(\\s*=\\s*([-\\w\"\\.']+|'.')\\s*)?((\\s*,\\s*\\w+)\\s*"
 					+ "(=\\s*([-\\w\"\\.']+|'.')\\s*)?)*?\\s*;\\s*"), 

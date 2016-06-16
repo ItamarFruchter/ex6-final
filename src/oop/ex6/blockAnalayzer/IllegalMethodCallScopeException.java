@@ -5,7 +5,7 @@ import oop.ex6.general.IllegalCodeException;
 /**
  * Arises whenever a method is called from the highest scope.
  */
-public class IllegalMethodCallScopeException extends IllegalCodeException {
+class IllegalMethodCallScopeException extends IllegalCodeException {
 
 	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE = "Can't call methods from the "
