@@ -1,4 +1,4 @@
-package oop.ex6.blockAnalayzer;
+package oop.ex6.blockAnalyzer;
 
 import oop.ex6.general.IllegalCodeException;
 

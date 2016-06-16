@@ -3,7 +3,7 @@ package oop.ex6.main;
 import java.io.File;
 import java.io.IOException;
 
-import oop.ex6.blockAnalayzer.MainBlock;
+import oop.ex6.blockAnalyzer.MainBlock;
 
 /**
  * the class that holds the main method. determines whether the given code file

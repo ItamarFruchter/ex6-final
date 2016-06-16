@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 import oop.ex6.general.IllegalCodeException;
 
 /**
- * this class creates samples of members from a given line
+ * this class creates samples of members
  */
 public class MemberFactory {
 

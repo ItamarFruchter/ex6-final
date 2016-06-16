@@ -1,4 +1,4 @@
-package oop.ex6.blockAnalayzer;
+package oop.ex6.blockAnalyzer;
 
 import java.util.LinkedList;
 import java.util.regex.Matcher;

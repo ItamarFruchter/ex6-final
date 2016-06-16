@@ -1,10 +1,13 @@
-package oop.ex6.blockAnalayzer;
+package oop.ex6.blockAnalyzer;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import oop.ex6.general.IllegalCodeException;
 
+/**
+ * holds all the possible line types in S-java and their regEx patterns.
+ */
 enum LineType {
 	CLOSING_BLOCK("\\s*\\}\\s*"), 
 	DECLERATION("\\s*\\w+(\\s+\\w+){1,2}(\\s*=\\s*([-\\w\"\\.']+|'.')\\s*)?((\\s*,\\s*\\w+)\\s*"

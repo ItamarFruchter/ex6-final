@@ -8,6 +8,92 @@ FILE DESCRIPTION:
 =      File description     =
 =============================
 
+package oop.ex6.main
+	
+	Sjavac.java - the class that holds the main method. should get as an input a file
+		source, and analyze whether it is a good Sjava file or not.
+	
+	FileProcessor.java - process files and turns their lines into array of Strings
+
+package oop.ex6.general 
+
+	IllegalCodeException.java - Represents any exception which should result in the S-java 
+		code not working.
+
+	ReservedWord.java - Represents all the reserved words in S-java.
+
+package oop.ex6.variables
+
+	Modifier.java -  enum. All the modifier types in S-java.
+
+	Type.java - enum. All the types of members in S-java.
+
+	Member.java - A variable in S-java.
+
+	MemberFactory.java - this class creates samples of members.
+
+	ChangeFinalMemberValueException.java - Arises whenever a code tries to modify a final 
+		member's value.
+
+	InvalidTypeException.java - Arises whenever an invalid type is entered.
+
+	InvalidModifierException.java - Arises whenever an illegal modifier is given.
+
+	IllegalNameException.java - Arises whenever a illegal name is given.
+
+	MemberAlreadyExistsException.java - Arises whenever we try to initiate a member that 
+		already exists in the local scope.
+
+	NonInitiallizedFinalMemberException.java - Arises whenever a final member is created 
+		without a value.
+
+	NonValidValueException.java - Arises when the value given to a parameter was not legal.
+
+	ValueWithoutTypeException.java - Arises when the value to assign is not a legal value of
+		any existing type.
+
+package oop.ex6.blockAnalayzer
+
+	Block.java - Represents any block in S-java.
+
+	MainBlock.java - Represents the whole code block.
+
+	MethodBlock.java - this class represents a method block.
+
+	NonMethodBlock.java - A non-method block. In the current build - an if block or while 
+		block.
+
+	BlockFactory.java - A factory class which can create any known block type.
+
+	LineType - enum. holds all the possible line types in S-java and their regEx patterns.
+
+	NonValidConditionException.java - Arises whenever a non valid condition is given to a non 
+		method block.
+
+	MissingReturnStatementException.java - Arises when there is no return statement at the end
+		of a method.
+
+	MeaninglessLineException.java - Arises whenever there is a line that don't fit any line type.
+
+	InvalidMethodNameException.java - Arises whenever a invalid name is given to a method.
+
+	IllegalBlockDeclerationScopeException.java - Arises whenever the code contains a deceleration 
+		of a non-method block in the highest scope.
+
+	IllegalMethodDeclerationLocationException.java - Arises whenever a method is declared not from 
+		the most global scope.
+
+	IllegalMethodCallScopeException.java - Arises whenever a method is called from the highest scope.
+
+	ReturnStatementScopeException.java - Arises whenever a return statement exist outside a method.
+
+	UnclosedBlockException.java - Arises whenever the code contains an unclosed block 
+		(not enough '}').
+
+	UnknownBlockTypeException.java - Arises whenever an unknown block is declared.
+
+	UnknownMemberNameException.java - Arises whenever an unknown member is accessed through 
+		assignment.
 
 =============================
 =          Design           =

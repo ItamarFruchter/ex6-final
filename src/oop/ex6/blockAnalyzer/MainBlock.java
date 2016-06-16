@@ -1,10 +1,13 @@
-package oop.ex6.blockAnalayzer;
+package oop.ex6.blockAnalyzer;
 
 import java.util.LinkedList;
 
 import oop.ex6.general.IllegalCodeException;
 import oop.ex6.variables.Member;
 
+/**
+ * Represents the whole code block.
+ */
 public class MainBlock extends Block {
 	// The default starting line number.
 	private static final int DEFAULT_STARTING_LINE = 1;
