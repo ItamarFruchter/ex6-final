@@ -27,6 +27,18 @@ to initialize some members with a default type of the right type only to make th
 
 The actual analysis of the code happens for each block separately, with two methods:
 shallowProcessing runs over all the code lines, creates all of this scope's variables and 
+inner blocks (with minimal processing - only checking the correctness of the deceleration line
+and the structure (ends with '}').
+deepProcessing runs over every inner block and runs it's shallow and then deep processing.
+This way, we created (using the given code lines) the mainBlock (one and only) which is the
+block of the full code. This block now can be processed - shallow processing it will generate
+all global variables and methods (after the creation sends them both the full method list and
+the full global members list). Deep processing the main block will start a chain creation and
+processing of the whole code.
+
+The way the shallow processing was implemented in Block (the general type) was meant to enhance
+the modularity too - this method calls sub methods ('handle____', which handles a line of type 
+'_____'), which if a certain block changes it's    
 
 The modules we chose to create and their purpose are:
 main -  Handles the input (file path), and extracts the text out of it (as a String[]).
