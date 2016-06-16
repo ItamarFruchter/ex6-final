@@ -13,7 +13,7 @@ FILE DESCRIPTION:
 =          Design           =
 =============================
 
-
+Type default value 
 =============================
 =  Implementation details   =
 =============================
@@ -43,10 +43,19 @@ error handling:
 
 objected oriented design:
 	in order to modify our code to new types of value all we have to do is to create another
-	instance of type in the Type enum class. that mean we will have to create a regEx 
+	instance of type in the Type enum. that mean we will have to create a regEx 
 	pattern that holds the pattern of how a value looks like, a string representation,
-	a default value and handle some cases in the Type enum class. we won't have to touch
+	a default value and handle some cases in the Type enum. we won't have to touch
 	any other class.
+	
+	importing methods and global variables from one s-Java to another one - 
+	in order to do so we will create a getter in the main block for the array of local members 
+	(which are the global of the whole file) array of itself and a getter for the array  
+	contained blocks which hold all the blocks that are in the main block and therefore define
+	methods. in order to perform the import itself, we will create another constructor for
+	main block which will receive in addition to its own code lines both of the getters we
+	explained about above, so he will initiate his relevant fields with them. to conclude,
+	all we have to do is to define two getters and a new constructor. WOW! WHAT A DESIGN!!
 	
 	
 two main regEx use:
