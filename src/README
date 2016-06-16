@@ -211,6 +211,8 @@ two main regEx use:
 	this pattern say "[as many spaces as we want](['-' char, maybe]([at least one digit ([
 	'.' char followed by at least one digit], maybe)){handle the case of int or double} or
 	([true]){reserved word} or ([false]){reserved word}"
-as we can understand from the description only, the regEx saved us a lot of line code in
-those parts in particular, and in all the code in general. 
+	
+	
+	as we can understand from the description only, the regEx saved us a lot of line code in
+	those parts in particular, and in all the code in general. 
 		
