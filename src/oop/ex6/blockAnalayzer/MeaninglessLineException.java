@@ -1,6 +1,6 @@
-package oop.ex6.fileprocessing;
+package oop.ex6.blockAnalayzer;
 
-import oop.ex6.error.IllegalCodeException;
+import oop.ex6.general.IllegalCodeException;
 
 public class MeaninglessLineException extends IllegalCodeException {
 

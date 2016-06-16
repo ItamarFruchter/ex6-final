@@ -1,9 +1,9 @@
-package oop.ex6.fileprocessing;
+package oop.ex6.blockAnalayzer;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import oop.ex6.error.IllegalCodeException;
+import oop.ex6.general.IllegalCodeException;
 
 public enum LineType {
 	CLOSING_BLOCK("\\s*\\}\\s*"), 

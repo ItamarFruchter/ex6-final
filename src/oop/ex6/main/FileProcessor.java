@@ -1,4 +1,4 @@
-package oop.ex6.fileprocessing;
+package oop.ex6.main;
 
 
 import java.io.BufferedReader;

@@ -3,7 +3,7 @@ package oop.ex6.variables;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import oop.ex6.error.IllegalCodeException;
+import oop.ex6.general.IllegalCodeException;
 
 /**
  * Every type is represented by an Enum in this class. Each holds a method to

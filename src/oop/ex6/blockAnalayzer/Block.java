@@ -2,8 +2,8 @@ package oop.ex6.blockAnalayzer;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import oop.ex6.error.IllegalCodeException;
-import oop.ex6.fileprocessing.LineType;
+
+import oop.ex6.general.IllegalCodeException;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
 import oop.ex6.variables.NonValidValueException;

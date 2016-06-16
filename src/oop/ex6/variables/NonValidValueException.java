@@ -1,6 +1,6 @@
 package oop.ex6.variables;
 
-import oop.ex6.error.IllegalCodeException;
+import oop.ex6.general.IllegalCodeException;
 
 /**
  * Occurs when the value given to a parameter was not legal. It might be another

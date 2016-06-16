@@ -1,6 +1,6 @@
 package oop.ex6.variables;
 
-import oop.ex6.error.IllegalCodeException;
+import oop.ex6.general.IllegalCodeException;
 
 /**
  * Arises whenever a illegal name is given.

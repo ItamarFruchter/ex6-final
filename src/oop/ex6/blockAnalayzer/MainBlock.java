@@ -2,7 +2,7 @@ package oop.ex6.blockAnalayzer;
 
 import java.util.LinkedList;
 
-import oop.ex6.error.IllegalCodeException;
+import oop.ex6.general.IllegalCodeException;
 import oop.ex6.variables.Member;
 
 public class MainBlock extends Block {

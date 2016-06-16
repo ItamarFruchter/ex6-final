@@ -4,9 +4,8 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import oop.ex6.error.IllegalCodeException;
-import oop.ex6.fileprocessing.LineType;
-import oop.ex6.fileprocessing.ReservedWord;
+import oop.ex6.general.IllegalCodeException;
+import oop.ex6.general.ReservedWord;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.MemberFactory;
 import oop.ex6.variables.Type;
@@ -33,7 +32,7 @@ public class MethodBlock extends Block {
 			throws IllegalCodeException {
 		this.content = content;
 		this.higherScopeMembers = deepCopyMembers(higherScopeMembers);
-		this.startingLine = startingLine;
+		this.startingLine = startingLine + 1;
 		this.type = BlockType.blockTypeFromString(type);
 		this.knownMethods = previousCreatedMethods;
 		this.localMembers = new LinkedList<Member>();

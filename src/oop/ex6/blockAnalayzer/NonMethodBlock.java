@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import oop.ex6.error.IllegalCodeException;
+import oop.ex6.general.IllegalCodeException;
 import oop.ex6.variables.Member;
 import oop.ex6.variables.Type;
 
@@ -47,7 +47,7 @@ public class NonMethodBlock extends Block {
 			LinkedList<MethodBlock> knownMethods, int startingLine)
 			throws IllegalCodeException {
 		this.localMembers = new LinkedList<Member>();
-		this.startingLine = startingLine;
+		this.startingLine = startingLine + 1;
 		this.type = BlockType.blockTypeFromString(type); // May throw
 															// UnknownBlockTypeException.
 		this.higherScopeMembers = deepCopyMembers(higherScopeMembers);

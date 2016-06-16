@@ -1,4 +1,4 @@
-package oop.ex6.fileprocessing;
+package oop.ex6.general;
 
 /**
  * Represents all the reserved words in S-java.

@@ -3,8 +3,8 @@ package oop.ex6.variables;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import oop.ex6.fileprocessing.ReservedWord;
-import oop.ex6.error.IllegalCodeException;
+import oop.ex6.general.IllegalCodeException;
+import oop.ex6.general.ReservedWord;
 
 /**
  * A variable in Sjava.

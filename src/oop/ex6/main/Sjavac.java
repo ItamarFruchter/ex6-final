@@ -2,12 +2,8 @@ package oop.ex6.main;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import oop.ex6.blockAnalayzer.MainBlock;
-import oop.ex6.error.IllegalCodeException;
-import oop.ex6.fileprocessing.FileProcessor;
 
 /**
  * the class that holds the main method. determines whether the give code file
@@ -35,7 +31,7 @@ public class Sjavac {
 			System.out.println(IO_EXCEPTION);
 			System.err.println(INFORMATIVE_IO_MESSAGE);
 			isLegal = false;
-		} catch (IllegalCodeException e){
+		} catch (Exception e){
 			System.out.println(ILLEGAL_CODE);
 			System.err.println(e.getMessage());
 			isLegal = false;

@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import oop.ex6.error.IllegalCodeException;
+import oop.ex6.general.IllegalCodeException;
 import oop.ex6.variables.Member;
 
 /**
- * this class can generate block objects.
+ * A factory class which can create any known block type.
  */
 public class BlockFactory {
 
