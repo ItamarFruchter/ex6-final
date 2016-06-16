@@ -38,7 +38,7 @@ processing of the whole code.
 
 The way the shallow processing was implemented in Block (the general type) was meant to enhance
 the modularity too - this method calls sub methods ('handle____', which handles a line of type 
-'_____'), which if a certain block changes it's    
+'_____'), which if we want to change the way a certain block handles the  
 
 The modules we chose to create and their purpose are:
 main -  Handles the input (file path), and extracts the text out of it (as a String[]).
