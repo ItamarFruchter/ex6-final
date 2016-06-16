@@ -16,7 +16,7 @@ public class IllegalCodeException extends Exception {
 	}
 
 	public IllegalCodeException() {
-
+		
 	}
 
 	public IllegalCodeException(IllegalCodeException error, int lineNumber) {

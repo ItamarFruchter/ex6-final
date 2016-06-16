@@ -348,7 +348,7 @@ public abstract class Block {
 	 */
 	private LinkedList<Member> joinScopes() throws IllegalCodeException {
 		LinkedList<Member> jointScopeMembers = new LinkedList<Member>();
-		
+
 		if (localMembers.isEmpty()) {
 			jointScopeMembers.addAll(higherScopeMembers);
 			return jointScopeMembers;
@@ -413,7 +413,15 @@ public abstract class Block {
 		}
 		return -1;
 	}
-	
+
+	/**
+	 * Creates a deep copy of the given members list..
+	 * 
+	 * @param originalList
+	 *            The list to copy.
+	 * @return the deep copied list.
+	 * @throws IllegalCodeException
+	 */
 	protected LinkedList<Member> deepCopyMembers(
 			LinkedList<Member> originalList) throws IllegalCodeException {
 		LinkedList<Member> copiedList = new LinkedList<Member>();
