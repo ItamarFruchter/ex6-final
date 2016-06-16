@@ -12,8 +12,33 @@ FILE DESCRIPTION:
 =============================
 =          Design           =
 =============================
+Our design of the S-java compiler was chosen with extra thought to the modularity principal,
+meaning our design was meant to make it easy to implement any new change to the S-java language
+and implement it in the compiler. For example, although currently the language supports only
+one type of modifier (final), we chose to handle modifiers as a enum which to we can add as 
+many new modifiers as we wish, only by adding them to the enum and adding their functionality
+to the Member class.
 
-Type default value 
+We chose to create objects to represent the code's variables, but we decided to hold only
+information relevant to the code checking. For example, we chose not to save the actual value
+of the variable, but instead just note whether it has a value or not. This decision lead us
+to initialize some members with a default type of the right type only to make them initialized
+(for lines such as 'int a = b' with b being an int already generated).
+
+The actual analysis of the code happens for each block separately, with two methods:
+shallowProcessing runs over all the code lines, creates all of this scope's variables and 
+
+The modules we chose to create and their purpose are:
+main -  Handles the input (file path), and extracts the text out of it (as a String[]).
+general - Few classes all the modules should know.
+variable - A module which holds everything needed to generate and handle variables in S-java.
+			Contains relevant classes, enums and exception types. It's main purpose is the 
+			Member.class class.
+blockAnalayzer - A module which holds every needed object to generate and handle block object.
+					Contains relevant classes, enums and exception types. It's main purpose
+					is the Block.class class and it's inheriting classes - MethodBlock, 
+					NonMethodBlock and MainBlock.
+ 
 =============================
 =  Implementation details   =
 =============================
@@ -22,8 +47,6 @@ Type default value
 =============================
 =    Answers to questions   =
 =============================
-
-
 error handling:
 	first, we created a general type of error - IllegalCodeException which has a field for
 	holding an informative message, an empty constructor (which is never used) and a constructor 
@@ -42,14 +65,14 @@ error handling:
 	the informative message we got from the exception creating process.		
 
 objected oriented design:
-	in order to modify our code to new types of value all we have to do is to create another
+	In order to modify our code to new types of value all we have to do is to create another
 	instance of type in the Type enum. that mean we will have to create a regEx 
 	pattern that holds the pattern of how a value looks like, a string representation,
 	a default value and handle some cases in the Type enum. we won't have to touch
 	any other class.
 	
-	importing methods and global variables from one s-Java to another one - 
-	in order to do so we will create a getter in the main block for the array of local members 
+	Importing methods and global variables from one s-Java to another one - 
+	In order to do so we will create a getter in the main block for the array of local members 
 	(which are the global of the whole file) array of itself and a getter for the array  
 	contained blocks which hold all the blocks that are in the main block and therefore define
 	methods. in order to perform the import itself, we will create another constructor for
@@ -57,6 +80,16 @@ objected oriented design:
 	explained about above, so he will initiate his relevant fields with them. to conclude,
 	all we have to do is to define two getters and a new constructor. WOW! WHAT A DESIGN!!
 	
+	Implementing Arrays to S-java - 
+	In order to create an general array (an array of any known primitive S-java type) we will
+	need to define a new class in the variable's package: The new class will contain an array
+	of members, a type, a size and a name. It will hold a methods for adding an element (member)
+	which will be possible only if the types match, according to location in the array (recieve
+	an int - the index in the array, and a member - the member to add). Another critical method
+	will be one that checks whether a specific cell is initialized with a value.
+	We will also need to add some line types we can recognize - a line for declaring an array,
+	retrieving members from an array (specifically make the regex which recognizes raw values
+	and names also allow brackets for lines like 'int a = A(1)').
 	
 two main regEx use:
 1.	when we tried to analyze for each line what type of line it is, we created a regEx 
