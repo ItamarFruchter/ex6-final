@@ -3,7 +3,7 @@ package oop.ex6.variables;
 /**
  * All the modifier types in S-java.
  */
-public enum Modifier {
+enum Modifier {
 	FINAL("final"), NO_MODIFIER(null);
 
 	// The string representation of the modifier.

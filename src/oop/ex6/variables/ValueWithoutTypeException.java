@@ -2,7 +2,7 @@ package oop.ex6.variables;
 
 import oop.ex6.general.IllegalCodeException;
 
-public class ValueWithoutTypeException extends IllegalCodeException {
+class ValueWithoutTypeException extends IllegalCodeException {
 
 	private static final long serialVersionUID = 1L;
 

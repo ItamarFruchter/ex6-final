@@ -10,7 +10,7 @@ import java.util.LinkedList;
 /**
  * this class process the file containing the code 
  */
-public class FileProcessor {	
+class FileProcessor {	
 		
 	private FileProcessor() {}
 	

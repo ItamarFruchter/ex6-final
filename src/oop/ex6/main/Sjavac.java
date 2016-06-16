@@ -6,7 +6,7 @@ import java.io.IOException;
 import oop.ex6.blockAnalayzer.MainBlock;
 
 /**
- * the class that holds the main method. determines whether the give code file
+ * the class that holds the main method. determines whether the given code file
  * is compilable 
  */
 public class Sjavac {

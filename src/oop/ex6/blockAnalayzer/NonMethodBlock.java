@@ -11,7 +11,7 @@ import oop.ex6.variables.Type;
 /**
  * A non-method block. In the current build - an if block or while block.
  */
-public class NonMethodBlock extends Block {
+class NonMethodBlock extends Block {
 	// A regular expression for the structure of condition.
 	private static final String MEMBER_NAME_REGEX = "\\s*\\w+\\s*",
 			RAW_MEMBER_REGEX = "\\s*((-?\\d+(.\\d+)?)|(\\s*true\\s*)|(\\s*false\\s*))\\s*";

@@ -12,7 +12,7 @@ import oop.ex6.variables.Type;
 /**
  * Represents any block in S-java.
  */
-public abstract class Block {
+abstract class Block {
 
 	/**
 	 * All of the possible block types. Currently - only while, if and void.

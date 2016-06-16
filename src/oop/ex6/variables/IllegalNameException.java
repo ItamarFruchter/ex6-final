@@ -5,7 +5,7 @@ import oop.ex6.general.IllegalCodeException;
 /**
  * Arises whenever a illegal name is given.
  */
-public class IllegalNameException extends IllegalCodeException {
+class IllegalNameException extends IllegalCodeException {
 
 	private static final long serialVersionUID = 1L;
 	

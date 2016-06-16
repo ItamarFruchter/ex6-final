@@ -6,7 +6,7 @@ import oop.ex6.general.IllegalCodeException;
  * Arises whenever the code contains a deceleration of a non-method block in the
  * highest scope.
  */
-public class IllegalBlockDeclerationScopeException
+class IllegalBlockDeclerationScopeException
 		extends IllegalCodeException {
 
 	private static final long serialVersionUID = 1L;

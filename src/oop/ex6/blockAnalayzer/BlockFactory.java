@@ -10,7 +10,7 @@ import oop.ex6.variables.Member;
 /**
  * A factory class which can create any known block type.
  */
-public class BlockFactory {
+class BlockFactory {
 
 	private static final int BLOCK_DECELERATION = 0;
 	private static final Pattern WORD = Pattern.compile("\\w+");

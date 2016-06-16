@@ -5,7 +5,7 @@ import oop.ex6.general.IllegalCodeException;
 /**
  * Arises whenever an illegal modifier is given.
  */
-public class InvalidModifierException extends IllegalCodeException{
+class InvalidModifierException extends IllegalCodeException{
 
 	private static final long serialVersionUID = 1L;
 	

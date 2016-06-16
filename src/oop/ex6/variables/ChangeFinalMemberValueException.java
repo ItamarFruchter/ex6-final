@@ -5,7 +5,7 @@ import oop.ex6.general.IllegalCodeException;
 /**
  * Arises whenever a code tries to modify a final member's value.
  */
-public class ChangeFinalMemberValueException extends IllegalCodeException {
+class ChangeFinalMemberValueException extends IllegalCodeException {
 
 	private final static String MESSAGE = "can not assign new value because variable is final.";
 
